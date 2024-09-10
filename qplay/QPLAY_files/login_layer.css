@@ -1,0 +1,75 @@
+﻿@charset "utf-8";
+.psLayerLogin div, .psLayerLogin span, .psLayerLogin h1, .psLayerLogin h2, .psLayerLogin h3, .psLayerLogin h4, .psLayerLogin p, .psLayerLogin a, .psLayerLogin img, .psLayerLogin strong, .psLayerLogin dl, .psLayerLogin dt, .psLayerLogin dd, .psLayerLogin ol, .psLayerLogin ul, .psLayerLogin li, .psLayerLogin fieldset, .psLayerLogin form, .psLayerLogin label, .psLayerLogin legend, .psLayerLogin button {margin:0;padding:0;border:0;vertical-align:baseline;background:transparent;font:12px/1.335 "malgun gothic","나눔고딕","NanumGothic","돋움","dotum","Segoe WP","Helvetica","sans serif";color:#666666;}
+.psLayerLogin ol, .psLayerLogin ul {list-style:none;}
+
+.psLayerLogin textarea, .psLayerLogin select, .psLayerLogin input, .psLayerLogin button {font:12px "돋움","dotum","Trebuchet MS","Lucida Grande","Tahoma","Helvetica","Arial",sans-serif;color:#555555;}
+.psLayerLogin a {color:#555555;text-decoration:none;}
+.psLayerLogin a:hover {color:#555555;text-decoration:none;}
+
+/* button reset */
+.psLayerLogin input, .psLayerLogin button {font:12px "malgun gothic","나눔고딕","NanumGothic","돋움","dotum","Segoe WP","Helvetica","sans serif";color:#666666;}
+.psLayerLogin button {position:relative;display:-moz-inline-stack;display:inline-block;text-decoration:none !important;white-space:nowrap;vertical-align:top;overflow:visible;cursor:pointer;_cursor:hand;}
+
+/* float clear */
+.psLayerLogin .floatClear {*zoom:1;}
+.psLayerLogin .floatClear:after {content:"";clear:both;display:block;} 
+
+.psLayerLoginDeco {z-index:210000;display:none;position:fixed;_position:absolute;top:50%;left:0;width:100%;text-align:center;}
+.psLayerLogin {position:relative;width:502px;height:302px;margin:-151px auto 0;text-align:left;line-height:15px;background:transparent url(https://web.archive.org/web/20141020100821im_/http://s.nx.com/S2/p3/login/bg_layer.png) no-repeat 0 0;}
+	.psLayerLogin .psContents {padding:1px;}
+	.psLayerLogin h4 {padding-top:33px;}
+		.psLayerLogin h4 img {margin-left:30px;vertical-align:top;}
+		.psLayerLogin legend {position:absolute;z-index:-1;visibility:hidden;}
+		.psLayerLogin .psLayerIdPass {overflow:hidden;height:109px;padding:62px 0 0 30px;_overflow:visible;}
+		.psLayerLogin .psLayerId {overflow:hidden;height:40px;background:transparent url(https://web.archive.org/web/20141020100821im_/http://s.nx.com/S2/p3/login/set_layer.gif) no-repeat 0 0;}
+		.psLayerLogin .psLayerPass {overflow:hidden;height:40px;background:transparent url(https://web.archive.org/web/20141020100821im_/http://s.nx.com/S2/p3/login/set_layer.gif) no-repeat 0 0;_overflow:visible;}
+		.psLayerLogin .psLayerFocus {background-position:0 -50px;}
+		.psLayerLogin .psLayerId span {font-size:12px;background:transparent url(https://web.archive.org/web/20141020100821im_/http://s.nx.com/S2/p3/login/set_layer.gif) no-repeat 0 -100px;}
+		.psLayerLogin .psLayerPass span {font-size:12px;background:transparent url(https://web.archive.org/web/20141020100821im_/http://s.nx.com/S2/p3/login/set_layer.gif) no-repeat 0 -150px;}
+		.psLayerLogin .psLayerId span, .psLayerLogin .psLayerPass span {width:357px;display:block;}
+		.psLayerLogin .psLayerId span.psCurrent, .psLayerLogin .psLayerPass span.psCurrent {background-image:none;}
+		.psLayerLogin .psInput01 {width:330px;height:24px;margin:2px 0 0 10px;border:1px solid #ffffff;font-size:16px;color:#666666;background:url(https://web.archive.org/web/20141020100821im_/http://s.nx.com/S2/p3/etc/blank.gif) no-repeat 0 0;}
+		.psLayerLogin .psLayerId .psInput01 {ime-mode:disabled;text-indent:2px;}
+			.psLayerLogin .psSaveid {position:absolute;top:101px;left:297px;width:100px;font-size:12px;background-image:none;_white-space:nowrap;}
+		.psLayerLogin .psLayerSecurity {position:absolute;top:101px;left:30px;width:250px;font-size:12px;}
+			.psLayerLogin .psLayerSecurity1 {position:absolute;top:0;left:0;width:89px;}
+			.psLayerLogin .psLayerSecurity2 {position:absolute;top:0;left:89px;width:89px;}		
+			.psLayerLogin .psLayerSecurity1 label, .psLayerLogin .psLayerSecurity2 label {_white-space:nowrap;}
+			.psLayerLogin .psCheckboxDeco input {position:absolute;top:0 !important;left:0 !important;width:14px !important;height:14px !important;margin:1px 0 0 1px !important;border:1px solid #ffffff !important;padding:2px !important;}
+			.psLayerLogin .psCheckboxDeco label {position:absolute;top:1px !important;left:1px !important;display:block;width:68px;height:18px;padding:0 0 0 22px;*height:14px;*padding:4px 0 0 22px;font-size:0.95em;line-height:1;letter-spacing:-1px;color:#777777;background:url(https://web.archive.org/web/20141020100821im_/http://s.nx.com/S2/p3/login/set_layer.gif) no-repeat 0 -200px;}
+			.psLayerLogin .psCheckboxDeco label.psChecked {background-position:-100px -200px;}
+		.psLayerLogin .psButton01 {position:absolute;top:134px;left:388px;width:83px;height:74px;background:url(https://web.archive.org/web/20141020100821im_/http://s.nx.com/S2/p3/login/set_layer.gif) no-repeat 0 -250px;}
+			.psLayerLogin .psButton01 span {position:absolute;z-index:-1;visibility:hidden;}
+		.psLayerLogin .psLoginMsg {position:absolute;top:215px;left:30px;width:400px;height:18px;}
+			.psLayerLogin .psLoginMsg span {font-size:11px;letter-spacing:-1px;color:#7488aa;}
+			.psLayerLogin .psLoginMsg a {font-size:11px;color:#7488aa;font-weight:bold;}
+		.psLayerLogin .psLoginPC {position:absolute;top:95px;left:388px;width:83px;height:32px;}
+			.psLayerLogin .psLoginPC a {display:block;width:83px;height:32px;background:url(https://web.archive.org/web/20141020100821im_/http://s.nx.com/S2/p3/login/set_layer.gif) no-repeat -150px -250px;}
+			.psLayerLogin .psLoginPC a span {position:absolute;z-index:-1;visibility:hidden;}	
+		.psLayerLogin .psLoginMenu {height:28px;padding:19px 0 10px 27px;color:#cccccc;font-size:12px;border-top:1px solid #ececec;background-color:#f5f5f5;_position:absolute;_bottom:1px;_left:1px;_width:500px;_padding-left:0;}
+			.psLayerLogin .psLoginMenu a {color:#888888;font-weight:bold;padding:0 2px 0 3px;font-size:12px;letter-spacing:0 !important;}
+			.psLayerLogin .psLoginMenu strong {position:absolute;top:263px;right:30px;font-size:12px;_top:19px;}
+			.psLayerLogin .psLoginMenu strong a {color:#939393;font-weight:normal;text-decoration:underline;}
+	.psLayerLogin .psBtClose {position:absolute;top:16px;right:15px;width:21px;height:21px;overflow:hidden;background:url(https://web.archive.org/web/20141020100821im_/http://s.nx.com/S2/p3/login/set_layer.gif) no-repeat -300px -250px;}
+		.psLayerLogin .psBtClose button {width:21px;height:21px;}
+		.psLayerLogin .psBtClose button span {position:absolute;z-index:-1;visibility:hidden;}
+/*
+     FILE ARCHIVED ON 10:08:21 Oct 20, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:35 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.761
+  exclusion.robots: 0.027
+  exclusion.robots.policy: 0.012
+  esindex: 0.015
+  cdx.remote: 12.097
+  LoadShardBlock: 51.464 (3)
+  PetaboxLoader3.datanode: 111.092 (5)
+  load_resource: 196.609 (2)
+  PetaboxLoader3.resolve: 119.431 (2)
+*/

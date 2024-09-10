@@ -1,0 +1,35 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+document.write('<a href="https://web.archive.org/web/20141031215239/http://ad.nexon.com/NetInsight/click/nexon/qplay.nexon.com/ros_box@left?cmpnno%3d2514%26adsno%3d2%26ctvno%3d18112%26locno%3d21%26clkno%3d18402%26" target="_blank"><img src="https://web.archive.org/web/20141031215239/http://adweb.nexon.com/images/201409/ROS BOX_elsword_al_20140918.jpg" width="200" height="170" border="0"></a>');
+
+}
+/*
+     FILE ARCHIVED ON 21:52:39 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:27 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.516
+  exclusion.robots: 0.019
+  exclusion.robots.policy: 0.008
+  esindex: 0.011
+  cdx.remote: 6.236
+  LoadShardBlock: 42.31 (3)
+  PetaboxLoader3.datanode: 63.933 (4)
+  load_resource: 176.587
+  PetaboxLoader3.resolve: 37.03
+*/

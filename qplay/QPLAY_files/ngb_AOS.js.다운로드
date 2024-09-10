@@ -1,0 +1,730 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+function __NgbAOS() 
+{
+    this.isWriteObject = false;      // ActiveX Object 생성여부 --> 실행 및 설치에 대한 WriteObject를 두번호출하지 않기 위함
+	this.isAutoRunning = false;      // 자동실행 --> 별도의 설치페이지 없이 접속하자마자, 보안제품을 설치 및 실행
+	this.isKeyDefenseUse = false;    // Anti-KeyLogger 사용여부
+	this.isFireWallUse = false;      // 방화벽 사용여부
+	
+	this.isAOSKeydefenceSetPopUp = true;    // Anti-KeyLogger 설치를 팝업형태로 할지 여부
+	this.isAOSFireWallSetPopUp = true;      // FireWall 설치를 팝업형태로 할지 여부
+
+    // Anti-KeyLogger 설치 및 WindowType
+	this.strKeyDefenseURL = "security/setup_keydefense.html";
+	this.strKeyDefenseWindowType = "width=488,height=460,toolbar=no,status=no,directories=no,scrollbars=no,location=no,resizable=no,menubar=no";
+
+    // 방화벽 설치 팝업URL 및 WindowType
+	this.strFireWallURL = "security/setup_firewall.html";
+	this.strFireWallWindowType = "width=488,height=445,toolbar=no,status=no,directories=no,scrollbars=no,location=no,resizable=no,menubar=no";
+	
+	// 설치가 완료될경우 이동해야 하는 페이지 경로
+	this.strSetUpCompleteURL = "https://web.archive.org/web/20141031214957/http://www.nexon.com";
+	
+	// AOS 종료시 Tray에 남아 있는 아이콘에 대해서 실제 실행은 안하기 때문에 안내 페이지를 팝업형태로 만들지 여부
+	this.isUseCloseAOSPopup = false;
+	
+	// 실행종료 팝업 URL 및 WindowType
+	this.strCloseInfoURL = "";
+	this.strCLoseInfoWindowType = "";
+
+	// *.nexon.com 을 사용하지 않는 싸이트에서 document.domain 셋팅을 위해 사용 (마비노기)
+	this.strDomain = "nexon.com";
+	
+	// AOS 제품코드
+	this.ProductCode = 
+	{
+	    KEYDEFENDER : "40"
+    ,   FIREWALL    : "e5"	    
+	},
+	// 실행가능 브라우저인지 파단해주는 Function 모음 ( UTIL )
+    this.AOSBrowser =
+    {
+        agt: navigator.userAgent.toLowerCase(),
+        check: function( browserName ) { return NgbAOS.AOSBrowser.agt.indexOf( browserName.toLowerCase() ) != -1 },
+        isUseNgbAOS: function() 
+        {
+            try 
+            {
+                // OS는 Windows만 지원.
+                if ( navigator.platform.indexOf( "Win" ) > -1 )
+                {
+                    if ( this.msie() ) 
+                    {
+						if ( Math.round( NgbAOS.AOSBrowser.agt.substring( NgbAOS.AOSBrowser.agt.toLowerCase().indexOf("msie") ).split(';')[0].split(' ')[1] ) >= 6 ) //IE 6 이상
+                            return true;
+                        else
+                            return false;
+                    }
+					else if ( this.trident() )  //ie 8이상
+                    {
+						return true;
+                    }
+                    else
+						return false;
+                }
+                else
+                    return false;
+            }
+            catch (e) { return false; }
+        },
+		
+        //Browser Name
+        msie        : function() { return NgbAOS.AOSBrowser.check("msie") },
+        msie5       : function() { return NgbAOS.AOSBrowser.check("msie 5") },
+        msie55      : function() { return NgbAOS.AOSBrowser.check("msie 5.5") },
+        msie6       : function() { return NgbAOS.AOSBrowser.check("msie 6") },
+        msie7       : function() { return NgbAOS.AOSBrowser.check("msie 7") },
+        msie8       : function() { return NgbAOS.AOSBrowser.check("msie 8") },
+		trident       : function() { return NgbAOS.AOSBrowser.check("trident") },
+
+        firefox     : function() { return NgbAOS.AOSBrowser.check("firefox") },
+        firefox15   : function() { return NgbAOS.AOSBrowser.check("firefox/1.5") },
+        firefox2    : function() { return NgbAOS.AOSBrowser.check("firefox/2") },
+        firefox3    : function() { return NgbAOS.AOSBrowser.check("firefox/3") },
+        firefox35   : function() { return NgbAOS.AOSBrowser.check("firefox/3.5") },
+
+        netscape    : function() { return NgbAOS.AOSBrowser.check("netscape") },
+
+        safari      : function() { return NgbAOS.AOSBrowser.check("safari") },
+        opera       : function() { return NgbAOS.AOSBrowser.check("opera") },
+        chrome      : function() { return NgbAOS.AOSBrowser.check("chrome") },
+
+        //Browser Engine
+        gecko       : function() { return NgbAOS.AOSBrowser.check("gecko") },
+        khtml       : function() { return NgbAOS.AOSBrowser.check("khtml") },
+
+        //OS
+        windows     : function() { return NgbAOS.AOSBrowser.check("windows") },
+        mac         : function() { return NgbAOS.AOSBrowser.check("mac") },
+        linux       : function() { return NgbAOS.AOSBrowser.check("linux") }
+    },
+    // 에러가 발생하였을 경우 사용제한
+	this.RaiseError = function()
+	{
+	    NgbAOS.Util.SetKeyDefenseSetUp( false );
+	    NgbAOS.Util.SetFireWallSetUp( false );
+	},
+	// 현재 URL을 비교하여, 설치페이지인지 여부 판단.
+	this.isSetupPage =
+	{
+	    KeySetupPage : function()
+	    {
+	        var strKeyDefenseURL = NgbAOS.strKeyDefenseURL.toLowerCase();
+	        
+	        if( strKeyDefenseURL.indexOf( "../../" ) != -1 )
+		        strKeyDefenseURL = strKeyDefenseURL.replace("../../","/");
+		    	
+		    if( location.href.toLowerCase().indexOf( strKeyDefenseURL ) != -1 )
+		        return true;
+		    else
+		        return false;
+	    },
+	    FirewallSetupPage : function()
+	    {
+	        var strFireWallURL = NgbAOS.strFireWallURL.toLowerCase();
+	        
+	        if( strFireWallURL.indexOf( "../../" ) != -1 )
+		        strFireWallURL = strFireWallURL.replace("../../","/");
+		        
+		    if( location.href.toLowerCase().indexOf( strFireWallURL ) != -1 )
+		        return true;
+		    else
+		        return false;
+	    }
+	},
+	// 외부에서 Ngb_AOS.js를 이용하여 AOS를 구동함수
+	this.Execute = function()
+	{
+	    if( NgbAOS.AOSBrowser.isUseNgbAOS() )
+	    {
+	        var isWriteObject = false;
+	        
+	        // KeySetup 페이지 이고, 키보안을 사용한다면, object생성
+	        if( NgbAOS.isSetupPage.KeySetupPage() && NgbAOS.Util.GetKeyDefense() == "1" )
+			{
+				NgbAOS.Util.SetKeyDefense( true );
+		        isWriteObject = true;
+			}
+			// FirewallSetup 페이지 이고, 방화벽을 사용한다면, object생성
+	        else if( NgbAOS.isSetupPage.FirewallSetupPage() && NgbAOS.Util.GetFireWall() == "1" )
+			{
+				NgbAOS.Util.SetFireWall( true );
+		        isWriteObject = true;
+			}
+			// 자동설치 및 자동실행일경우
+		    else if( NgbAOS.isAutoRunning )
+		    {
+		        if( !NgbAOS.CheckInstalled() )
+		            isWriteObject = true;
+		            
+		        NgbAOS.Util.SetKeyDefense( true );
+                NgbAOS.Util.SetFireWall( true );
+		    }
+        	
+        	// object를 써야 하고, AOS가 사용가능한 브라우져여야 하고, ActiveX가 인스톨이 안되어 있다면 ActiveX 인스톨
+	        if( isWriteObject && NgbAOS.AOSBrowser.isUseNgbAOS() && !NgbAOS.CheckInstalled() )
+	        {
+	            // SSL
+	            if( location.href.toLowerCase().indexOf( "https://" ) == 0 )
+	            {
+	                if (NgbAOS.AOSBrowser.msie())
+	                    aos_set_ssl_codebase( _g_aos_opt_arr["codebase"] );                // IE : ActiveX
+	                else
+	                    aos_set_ssl_xpi_installer( _g_aos_opt_arr["ff_installer"] );   // FF : Installer
+	            }
+		        else
+		        {
+		            if ( NgbAOS.AOSBrowser.msie() )
+                        aos_set_codebase( _g_aos_opt_arr["ssl_codebase"] );                        // IE : ActiveX
+                    else
+                        aos_set_xpi_installer( _g_aos_opt_arr["ff_ssl_installer"] );           // FF : Installer
+		        }
+		        
+		        // Object 생성
+		        aos_set_option( "obj_style", "hideout" );                           // Object를 쓸때 한칸 밀리는걸 방지 하기 위한 옵션
+		        aos_write_object();
+		        
+		        // object 생성여부 마킹
+		        NgbAOS.isWriteObject = true;
+		    
+		        if( NgbAOS.isAutoRunning || NgbAOS.isSetupPage.KeySetupPage() || NgbAOS.isSetupPage.FirewallSetupPage() )
+				{
+				    // 거의 실시간적으로 LodingCheck --> 자세한 내역은 LoadingCheck 주석 참조
+			        window.setTimeout( NgbAOS.LoadingCheck, 500 );
+				}
+			}
+            else
+                NgbAOS.LoadingCheck();
+        }
+        else
+        {
+            NgbAOS.Util.SetKeyDefenseSetUp( false );
+	        NgbAOS.Util.SetFireWallSetUp( false );
+        }
+	},
+	// 제품 인스톨 여부 판단 ( pd == null or String.Empty or "undefiend" 일경우 ActiveX설치여부 확인 )
+	this.CheckInstalled = function( pd )
+	{
+	    var pd = String( pd ).toLowerCase();
+        var isInstalled = false;
+
+        if( pd == null || pd == "" || pd == "undefined" )
+        {
+            isInstalled = aos_is_new();
+            isInstalled = ( isInstalled || isInstalled == 1 ) ? true : false;
+        }
+        else if( pd == NgbAOS.ProductCode.KEYDEFENDER || pd == NgbAOS.ProductCode.FIREWALL )
+        {
+            isInstalled = aos_isinstalled( pd );
+            isInstalled = ( isInstalled || isInstalled == 1 ) ? true : false;
+        }
+        return isInstalled;
+	},
+	// 제품이 현재 실행중인지 여부 판단
+	this.isRunning = function(pd) 
+	{
+	    var pd = String( pd ).toLowerCase();
+	    if( ( pd != null && pd != "undefined" ) && ( pd == NgbAOS.ProductCode.FIREWALL || pd == NgbAOS.ProductCode.KEYDEFENDER ) )
+	    {
+	        var isRunning = aos_isrunning( pd );
+	        if( isRunning || isRunning == 1 )
+	            return true;
+	    }
+	    return false;
+	},
+	this.LoadingCheck = function()
+	{
+	    /*
+	     Execute시에 ActiveX가 설치가 되어 있건 안되어 있건, 
+	     사용자가 AOS를 쓴다고 한다면 Execute에서 바로 LoadingCheck() 함수를 호출한다.
+	     만약 ActiveX가 설치가 안되어있을 경우 지속적으로 LoadingCheck() 함수를 호출하여 확인을 할것이고.
+	     키보안, 방화벽 설치페이지가 아닐경우는 Run 설치 페이지 일경우 MKD20Event에 update_compete 이벤트로 호출하여, 팝업을 닫는다.
+	     최초 설치시 각 설치페이지 ( 자동실행제외 )에서는 ActiveX만 설치를 하게 되고.
+	     각 제품군은 strComplteURL로 이동하여 설치를 하거나, 아니면, 팝업을 닫고 opener가 Reload되면서 설치를 하게 된다.
+	     FireWall 중복실행 제어를 위함
+	    */
+		if( !NgbAOS.isAutoRunning && NgbAOS.isSetupPage.KeySetupPage() && NgbAOS.Util.GetKeyDefense() == "1"  )
+		{
+			if( NgbAOS.CheckInstalled() )
+			{
+				NgbAOS.isKeyDefenseUse = true;
+				NgbAOS.Util.SetKeyDefense( true );
+				NgbAOS.MKD20Event( "update_complete", NgbAOS.ProductCode.KEYDEFENDER, "" );
+				return;
+			}
+			else
+	            window.setTimeout( NgbAOS.LoadingCheck, 500 ); 
+	    }
+		else if( !NgbAOS.isAutoRunning && NgbAOS.isSetupPage.FirewallSetupPage() && NgbAOS.Util.GetFireWall() == "1" )
+		{
+			if( NgbAOS.CheckInstalled() )
+			{
+				NgbAOS.isFireWallUse = true;
+				NgbAOS.Util.SetFireWall( true );
+				NgbAOS.MKD20Event( "update_complete", NgbAOS.ProductCode.FIREWALL, "" );
+				return;
+			}
+			else
+	            window.setTimeout( NgbAOS.LoadingCheck, 500 ); 
+		}
+	    else
+	    {
+			NgbAOS.Run();	
+	    }
+	},
+	// 내부적 Running 함수
+	this.Run = function()
+	{
+	    // 사용가능한 브라우저 이고, ActiveX가 있다고 한다면..
+	    if( NgbAOS.AOSBrowser.isUseNgbAOS() && NgbAOS.CheckInstalled() )
+        {
+            // AOS Option
+			aos_set_subclsid( "40","59B0298B-A7B5-4045-A34E-377EDF7BCB8E" );    // CAB Class ID
+	        aos_set_authinfo( "aosmgr_nexon.html" );                            // 넥슨 인증파일
+			aos_set_option( "uimode", true );
+			aos_set_option( "asyncmode", false );                               // 비동기
+			aos_set_option( "obj_style", "hideout" );                           // ActiveX에 대해서 1px밀리는 부분 제한.
+            aos_set_submimetype( "40","application/ahnlab/asp/npmkd25aos" );    // ActiveX MimeType --> KeyLogger 전용
+            aos_set_option( "mkd_protect_level", "default" );                   // Anti-KeyLogger 보호lv --> Defalue : Password 영역만 보호
+            aos_set_option( "aos_event_handler", NgbAOS.MKD20Event );           // AOS Event Handler 
+            aos_set_option( "mkd_inertinit", true );
+            
+	        // 이미 설치가 되어 object가 안쓰여져 있다고 한다면 다시 써야함.    
+	        if( !NgbAOS.isWriteObject )
+	        {
+	            aos_write_object();
+	            NgbAOS.isWriteObject = true;
+	        }
+	        
+	        // 둘다 사용한다고 하면은 그냥 한번에 둘다 실행을 한다.
+	        if( NgbAOS.isAutoRunning || ( NgbAOS.Util.GetKeyDefense() == "1" && NgbAOS.Util.GetFireWall() == "1" ) )
+	        {
+		        NgbAOS.isKeyDefenseUse = true;
+		        NgbAOS.isFireWallUse = true;
+		        aos_start( '40|e5' );
+	        }
+	        else
+	        {
+	            // 키보안 개별실행
+				if( NgbAOS.Util.GetKeyDefense() == "1" )//&& ) //!NgbAOS.isRunning( NgbAOS.ProductCode.KEYDEFENDER ) )
+	            {
+					NgbAOS.isKeyDefenseUse = true;
+					aos_start( NgbAOS.ProductCode.KEYDEFENDER );
+	            }
+	            // 방화벽 개별실행
+	            else if( NgbAOS.Util.GetFireWall() == "1" ) //&& !NgbAOS.isRunning( NgbAOS.ProductCode.FIREWALL ) )
+	            {
+					NgbAOS.isFireWallUse = true;
+					aos_start( NgbAOS.ProductCode.FIREWALL );
+	            }
+	        }
+	        
+	        /*
+			    FireFox에서는 FireFox가 동적으로 Object를 생성할때, 폼을 일부초기화 한다. ( By AhnLab )
+			    원래는 aos_start( pd ) 이후 바로 체크를 하여 처리를 해야 하지만,
+			    Firefox의 특수성으로 인하여, 제품이 MKD20Event의 update_complete 이후에 체크를 한다.
+			    IE는 기존방식대로 한다.
+			*/
+			NgbAOS.SetCheckBox();   
+        }
+		else
+		{
+			 // ActiveX가 없다면, 사용안함으로 돌림
+	        if( ( NgbAOS.Util.GetKeyDefense() == "1" || NgbAOS.Util.GetFireWall() == "1" ) && !NgbAOS.isSetupPage.KeySetupPage() && !NgbAOS.isSetupPage.FirewallSetupPage() )
+	        {
+		        NgbAOS.Util.SetKeyDefense( false );
+		        NgbAOS.Util.SetFireWall( false );
+	        }
+		}
+	},
+	// 구동페이지에서 키보안사용여부 파라미터 입력하여 호출
+	this.SetUseKeyDefense = function( isUse )
+	{
+	    NgbAOS.Util.SetKeyDefense( isUse );
+	    location.reload();
+	},
+	// 구동페이지에서 방화벽사용여부 파라미터 입력하여 호출
+	this.SetUseFireWall = function( isUse )
+	{
+	    NgbAOS.Util.SetFireWall( isUse );
+	    location.reload();
+	},
+    this.KeySetupWinOpen = null;
+    this.CheckKeySetup = function() {
+        if( NgbAOS.KeySetupWinOpen != null && NgbAOS.KeySetupWinOpen.closed) {
+            if( NgbAOS.Util.GetKeyDefenseSetUp() == "1" ) {
+                document.location.href = document.location.href;
+            }
+            
+            clearInterval(NgbAOS.CheckKeySetup_Interval);
+            NgbAOS.KeySetupWinOpen = null;
+            NgbAOS.CheckKeySetup_Interval = null;
+        }
+    }
+    this.CheckKeySetup_Interval = null;
+
+	// 설치페이지를 호출
+	this.SetUpKeyDefense = function( isCheckBox, strWiseLogParam )
+	{
+	    if( typeof( strWiseLogParam ) == 'undefined' )
+		    strWiseLogParam = "";
+
+		if( NgbAOS.AOSBrowser.isUseNgbAOS() )
+	    {
+		    if( typeof( document.forms ) == "object" && ( document.forms.length >= 0 ) )
+		    {
+				var isChecked = false;
+				if( NgbAOS.Util.GetKeyDefense() == "0" )
+				{
+					var KeyDefenseObjs = document.getElementsByName( 'NxCheckKeyDefense' );
+					for( var KeyDefenseIndex = 0; KeyDefenseIndex < KeyDefenseObjs.length; KeyDefenseIndex++ )
+					{
+						isChecked = isCheckBox ? KeyDefenseObjs[KeyDefenseIndex].checked : !KeyDefenseObjs[KeyDefenseIndex].checked;
+						if( isChecked )
+							break;
+					}
+				}
+				
+			    if( isChecked )
+			    {
+				    if( !NgbAOS.CheckInstalled( NgbAOS.ProductCode.KEYDEFENDER ) || NgbAOS.Util.GetKeyDefenseSetUp() != "1" )
+				    {
+				        if( NgbAOS.isAOSKeydefenceSetPopUp ) {
+                            if(NgbAOS.KeySetupWinOpen == null) {
+                                NgbAOS.KeySetupWinOpen = window.open( NgbAOS.strKeyDefenseURL + strWiseLogParam, 'SetupKeyDefense', NgbAOS.strKeyDefenseWindowType );
+                                NgbAOS.CheckKeySetup_Interval = setInterval("NgbAOS.CheckKeySetup()", 1000);
+                            }
+                        }
+					    else
+					        document.location.href = NgbAOS.strKeyDefenseURL + strWiseLogParam;
+					}
+				    else
+					    NgbAOS.SetUseKeyDefense( true );
+			    }
+			    else
+				    NgbAOS.SetUseKeyDefense( false );
+		    }
+	    }
+	    else
+	    {
+		    alert( '키보드보안을 사용할 수 없는 브라우저 입니다.' );
+		    return false;
+	    }
+	    return false;
+	},
+    this.FirewallSetupWinOpen = null;
+    this.CheckFirewallSetup = function() {
+        if( NgbAOS.FirewallSetupWinOpen != null && NgbAOS.FirewallSetupWinOpen.closed) {
+            if( NgbAOS.Util.GetFireWallSetUp() == "1" ) {
+                document.location.href = document.location.href;
+            }
+            
+            clearInterval(NgbAOS.CheckFirewallSetup_Interval);
+            NgbAOS.FirewallSetupWinOpen = null;
+            NgbAOS.CheckFirewallSetup_Interval = null;
+        }
+    }
+    this.CheckFirewallSetup_Interval = null;
+
+	// 설치페이지 호출
+	this.SetUpFireWall = function( isCheckBox, strWiseLogParam )
+	{
+	    if( typeof( strWiseLogParam ) == 'undefined' )
+		    strWiseLogParam = "";
+
+		if ( NgbAOS.AOSBrowser.isUseNgbAOS() )
+	    {
+		    if( typeof( document.forms ) == "object" && ( document.forms.length >= 0 ) )
+		    {
+				var isChecked = false;
+
+				if( NgbAOS.Util.GetFireWall() == "0" )
+				{
+					var FireWallObjs = document.getElementsByName( 'NxCheckFireWall' );
+					for( var FireWallIndex = 0; FireWallIndex < FireWallObjs.length; FireWallIndex++ )
+					{
+						isChecked = isCheckBox ? FireWallObjs[FireWallIndex].checked : !FireWallObjs[FireWallIndex].checked;
+						if( isChecked )
+							break;
+					}
+				}
+				
+			    if( isChecked )
+			    {
+				    if( !NgbAOS.CheckInstalled( NgbAOS.ProductCode.FIREWALL ) || NgbAOS.Util.GetFireWallSetUp() != "1" )
+				    {
+				        if( NgbAOS.isAOSFireWallSetPopUp ) {
+                            if(NgbAOS.FirewallSetupWinOpen == null) {
+                                NgbAOS.FirewallSetupWinOpen = window.open( NgbAOS.strFireWallURL + strWiseLogParam, 'SetupFireWall', NgbAOS.strFireWallWindowType ); ;
+                                NgbAOS.CheckFirewallSetup_Interval = setInterval("NgbAOS.CheckFirewallSetup()", 1000);
+                            }
+                        }
+					    else
+					        document.location.href = NgbAOS.strFireWallURL + strWiseLogParam;
+				    }
+				    else
+					    NgbAOS.SetUseFireWall( true );
+			    }
+			    else
+				    NgbAOS.SetUseFireWall( false );
+		    }
+	    }
+	    else
+	    {
+		    alert( '개인방화벽을 사용할 수 없는 브라우저 입니다.' );
+		    return false;
+	    }
+    	
+	    return false;
+	},
+	// 쿠키조작 Util
+	this.Util =
+	{
+	    GetKeyDefense : function()
+	    {
+	        var _use_KeyDefense = NgbCookie.GetCookie( "isUseMKDPlus" );
+	        return _use_KeyDefense.substring( 0, 1 );
+	    },
+	    GetKeyDefenseSetUp : function()
+	    {
+	        var _use_KeyDefense = NgbCookie.GetCookie( "isUseMKDPlus" );
+	        return _use_KeyDefense.substring( 2, 3 );
+	    },
+	    GetFireWall : function()
+	    {
+	        var _use_myfirewall = NgbCookie.GetCookie( "isUseMKDPlus" );
+	        return _use_myfirewall.substring( 4, 5 );
+	    },
+	    GetFireWallSetUp : function()
+	    {
+	        var _use_myfirewall = NgbCookie.GetCookie( "isUseMKDPlus" );
+	        return _use_myfirewall.substring( 6, 7 );
+	    },
+
+	    SetKeyDefense : function( isUse )
+	    {
+	        if( !isUse && NgbAOS.isRunning( NgbAOS.ProductCode.KEYDEFENDER ) )
+	        {
+	            if( NgbAOS.isAutoRunning )
+	            {
+	                alert( '키보드보안 해제를 지원하지 않습니다.' );
+					return false;
+	            }
+	            else
+	            {
+	                if( !NgbAOS.isUseCloseAOSPopup )
+					{
+						if( NgbAOS.isRunning( NgbAOS.ProductCode.KEYDEFENDER ) == false )
+						{
+							var NxCheckKeyDefenseObjs = document.getElementsByName( 'NxCheckKeyDefense' );
+							for( var KeyDefensIndex = 0; KeyDefensIndex < NxCheckKeyDefenseObjs.length; KeyDefensIndex++ )
+							{
+								NxCheckKeyDefenseObjs[KeyDefensIndex].checked = false;
+							}
+						}
+						alert( '보안설정을 해제하시기 위해서는\r인터넷 창을 모두 닫고 다시 접속해주시기 바랍니다.' );
+					}
+		            else
+		            {
+			            var windowOpen = window.open( NgbAOS.strCloseInfoURL + strWiseLogParam, 'CloseInfo', NgbAOS.strCLoseInfoWindowType );
+			            windowOpen.focus();
+			        }
+			    }
+	        }
+	        
+	        var _use_KeyDefense = NgbCookie.GetCookie( "isUseMKDPlus" );
+	        if( _use_KeyDefense.length != 7 )
+		        _use_KeyDefense = "0_0_0_0";
+        		
+	        _use_KeyDefense = ( isUse ? "1_" : "0_" ) + _use_KeyDefense.substring( 2, 7 );
+	        NgbCookie.setCookie_Permanent( "isUseMKDPlus", _use_KeyDefense, NgbAOS.strDomain);
+	    },
+	    SetKeyDefenseSetUp : function( isUse )
+	    {
+	        var _use_KeyDefense = NgbCookie.GetCookie( "isUseMKDPlus" );
+	        if( _use_KeyDefense.length != 7 )
+		        _use_KeyDefense = "0_0_0_0";
+        		
+	        _use_KeyDefense = _use_KeyDefense.substring( 0, 1 ) + ( isUse ? "_1" : "_0" ) + _use_KeyDefense.substring( 3, 7 );
+	        NgbCookie.setCookie_Permanent( "isUseMKDPlus", _use_KeyDefense, NgbAOS.strDomain );
+	    },
+	    SetFireWall : function( isUse )
+	    {
+	        if ( !isUse && NgbAOS.isRunning( NgbAOS.ProductCode.FIREWALL ) )
+	        {
+	            if( NgbAOS.isAutoRunning )
+	            {
+	                alert( '개인방화벽 해제를 지원하지 않습니다.' );
+	                return;
+	            }
+	            else
+	            {
+	                if( !NgbAOS.isUseCloseAOSPopup )
+					{
+						if( NgbAOS.isRunning( NgbAOS.ProductCode.FIREWALL ) == false )
+						{
+							var NxCheckFireWallObjs = document.getElementsByName( 'NxCheckFireWall' );
+							for( var FireWallIndex = 0; FireWallIndex < NxCheckFireWallObjs.length; FireWallIndex++ )
+							{
+								NxCheckFireWallObjs[FireWallIndex].checked = false;
+							}
+						}
+			            alert( '보안설정을 해제하시기 위해서는\r인터넷 창을 모두 닫고 다시 접속해주시기 바랍니다.' );
+					}
+		            else
+		            {
+			            var windowOpen = window.open( NgbAOS.strCloseInfoURL + strWiseLogParam, 'CloseInfo', NgbAOS.strCLoseInfoWindowType );
+			            windowOpen.focus();
+			        }
+			    }
+	        }
+	        
+	        var _use_myfirewall = NgbCookie.GetCookie( "isUseMKDPlus" );
+	        if( _use_myfirewall.length != 7 )
+		        _use_myfirewall = "0_0_0_0";
+        		
+	        _use_myfirewall = _use_myfirewall.substring( 0, 4 ) + ( isUse ? "1_" : "0_" ) + _use_myfirewall.substring( 6, 7 );
+	        NgbCookie.setCookie_Permanent( "isUseMKDPlus", _use_myfirewall, NgbAOS.strDomain );
+	    },
+	    SetFireWallSetUp : function( isUse )
+	    {
+	        var _use_myfirewall = NgbCookie.GetCookie( "isUseMKDPlus" );
+	        if( _use_myfirewall.length != 7 )
+		        _use_myfirewall = "0_0_0_0";
+        		
+	        _use_myfirewall = _use_myfirewall.substring( 0, 5 ) + ( isUse ? "_1" : "_0" );
+	        NgbCookie.setCookie_Permanent( "isUseMKDPlus", _use_myfirewall, NgbAOS.strDomain );
+	    }
+	},
+	// AOS EventHandler에 등록된 함수
+	this.MKD20Event = function( event, param1, param2 )
+	{
+		if( event == "update_complete" )
+	    {
+		    if( NgbAOS.isKeyDefenseUse )
+			    NgbAOS.Util.SetKeyDefenseSetUp( true );
+    		
+		    if( NgbAOS.isFireWallUse )
+			    NgbAOS.Util.SetFireWallSetUp( true );
+			
+			if( NgbAOS.AOSBrowser.firefox() )
+			    NgbAOS.SetCheckBox();
+			
+		    if( NgbAOS.isSetupPage.KeySetupPage() )
+		    {
+		        if( NgbAOS.isKeyDefenseUse )
+		        {
+		            if( typeof( opener ) == 'object' )
+		            {
+			            //opener.location.href = opener.location.href;
+			            NgbAOS.CloseWindow();
+			        }
+			        else
+			            document.location.href = NgbAOS.strSetUpCompleteURL;    
+		        }
+		    }
+		    else if( NgbAOS.isSetupPage.FirewallSetupPage() )
+		    {
+		        if( NgbAOS.isFireWallUse )
+		        {
+		            if( typeof( opener ) == 'object' )
+		            {
+			            //opener.location.href = opener.location.href;
+			            NgbAOS.CloseWindow();
+			        }
+			        else
+			            document.location.href = NgbAOS.strSetUpCompleteURL;    
+		        }
+		    }
+			
+			return;
+	    }
+	},
+	// Windows Vista 에서 UAC 모드가 동작될때 window.close() 함수가 실행되긴하나 타이밍상 놓쳐 팝업을 못닫을경우가 있어 추가
+	this.CloseWindow = function()
+	{
+		window.close();
+		if( !window.closed )
+		{
+			window.setTimeout( NgbAOS.CloseWindow, 500 );
+		}
+	},
+	// CheckBox Checked 설정 --> 자세한 내역은 호출하는 부분의 주석참고
+	this.SetCheckBox = function()
+	{
+	    // 키보안 CheckBox.checked = true;
+        if( NgbAOS.Util.GetKeyDefense() == "1" && typeof( document.forms ) == "object" && ( document.forms.length >= 0 ) )
+		{
+			var NxCheckKeyDefenseObjs = document.getElementsByName( 'NxCheckKeyDefense' );
+			for( var KeyDefensIndex = 0; KeyDefensIndex < NxCheckKeyDefenseObjs.length; KeyDefensIndex++ )
+			{
+				NxCheckKeyDefenseObjs[KeyDefensIndex].checked = true;
+			}
+		}
+    	
+        // 방화벽 CheckBox.checked = true;	
+        if( NgbAOS.Util.GetFireWall() == "1" && typeof( document.forms  ) == "object" && ( document.forms.length >= 0 ) )
+		{
+			var NxCheckFireWallObjs = document.getElementsByName( 'NxCheckFireWall' );
+			for( var FireWallIndex = 0; FireWallIndex < NxCheckFireWallObjs.length; FireWallIndex++ )
+			{
+				NxCheckFireWallObjs[FireWallIndex].checked = true;
+			}
+		}
+	},
+	// Anti-KeyLogger --> 암호화된 문자열을 복호화
+	this.GetText = function( inputObject )
+	{
+		try
+		{
+			if( NgbAOS.isKeyDefenseUse && (typeof( MKD25) == 'object' || typeof(MKD25) == 'function') )
+			{
+				if( inputObject.value.replace(/^\s\s*/, '').replace(/\s\s*$/, '') == "" )
+					return inputObject.value
+				else	
+					return aos_get_text2( inputObject );
+			}
+			else
+				return inputObject.value;
+		}
+		catch( e )
+		{
+			return inputObject.value;
+		}
+	}
+}
+// Singleton object 생성
+var NgbAOS = new __NgbAOS();
+
+}
+/*
+     FILE ARCHIVED ON 21:49:57 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:18 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.649
+  exclusion.robots: 0.033
+  exclusion.robots.policy: 0.019
+  esindex: 0.011
+  cdx.remote: 5.622
+  LoadShardBlock: 34.976 (3)
+  PetaboxLoader3.datanode: 77.072 (5)
+  load_resource: 1282.382 (2)
+  PetaboxLoader3.resolve: 1194.657 (2)
+*/

@@ -1,0 +1,838 @@
+﻿var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+/*
+Name
+	CustomContent Rendering & Processing Module
+ID: customcontents.js
+History
+	2014-06-24 개발 - 김태훈
+	2014-08-06 확장 레이어 수정 - 김태훈
+Description
+	커스텀컨텐츠의 GNB 로케이션 메시지를 위한 모듈
+	
+Dependency
+	gnb.js
+	jquery.js
+	ps.js
+	util.js
+*/
+var domain = {
+	image: "https://web.archive.org/web/20141020100823/http://s.nx.com",
+	css: "https://web.archive.org/web/20141020100823/http://js.nx.com",
+	js: "https://web.archive.org/web/20141020100823/http://js.nx.com"
+};
+var isSSL = document.location.protocol == "https:";
+if (isSSL) {
+	domain.image = "https://web.archive.org/web/20141020100823/https://ssl.nx.com";
+	domain.css = "https://web.archive.org/web/20141020100823/https://ssl.nx.com";
+	domain.js = "https://web.archive.org/web/20141020100823/https://ssl.nx.com";
+}
+user = {
+	isLogin: function () {
+		if ($u.getCookie("IL") == "1") {
+			return true;
+		} else {
+			return false;
+		}
+	},
+	isMembership: function () {
+		if ($u.getCookie("IM") == "1") {
+			return true;
+		} else {
+			return false;
+		}
+	}
+};
+var GNB_Location = 'P_GNB_' + GNB_USERINFO.gamecode;
+var NexonSN = GNB_USERINFO.nexonSN;
+
+var layerTimerID = null;
+var viewPoint = 0;
+var focus_check = false;
+var complete_check = false;
+var fv_callback = false;
+
+init_cc = function () {
+	target_check();
+};
+
+target_check = function () {
+	var serviceUrl = "https://web.archive.org/web/20141020100823/http://lmapi.nexon.com";
+    if (isSSL) serviceUrl = "https://web.archive.org/web/20141020100823/https://lmapi.nexon.com";
+	if ($u.getCookie('CC_KEY_' + NexonSN) == '') {
+		$jq_CC.ajax({
+			dataType: 'jsonp'
+		, type: 'GET'
+		, async: true
+		, url: serviceUrl + '/GetLocationMessage?NexonSN=' + NexonSN + '&LocationCode=' + GNB_Location
+		, ContentType : "application/jsonp; charset=utf-8"
+		, jsonp: 'callback'
+		, success: function (req) {
+			if (req.ReturnValue == 1) {
+				if (req.CCDataList[0] != null) {
+					var data = req.CCDataList[0];
+					// 1. GNB에 썸네일 추가 - 배너/공친 공통 작업
+					rendering_Thumbnail(data);
+
+					setCookie('CC_KEY_' + NexonSN, '[' + data.Key + ']', 10);
+				}
+				else {
+					// 선택된 CC가 없음. 
+					setCookie('CC_KEY_' + NexonSN, '[0]', 10);
+				}
+			}
+		}
+		});
+	}
+	else {
+		// 선택된 CC가 없으면 호출 안함
+		if ($u.getCookie('CC_KEY_' + NexonSN) != '[0]') {
+		$jq_CC.ajax({
+			dataType: 'jsonp'
+		, type: 'GET'
+		, async: true
+		, url: serviceUrl + '/GetCC?keys=' + $u.getCookie('CC_KEY_' + NexonSN)
+		, ContentType: "application/jsonp; charset=utf-8"
+		, jsonp: 'callback'
+		, success: function (req) {
+			if (req.ReturnValue == 1) {
+				if (req.CCDataList[0] != null) {
+					var data = req.CCDataList[0];
+					// 1. GNB에 썸네일 추가 - 배너/공친 공통 작업
+					rendering_Thumbnail(data);
+				}
+			}
+		}
+		});
+	}
+}
+}
+
+// 썸네일 렌더링
+rendering_Thumbnail = function (data) {
+	GNB_Thumbnail = GNB_Thumbnail.replace('#LM_ThumbnailURL', data.Contents.ThumbnailURL).replace('#LM_ImageText', data.Contents.ImageText);
+	if (isSSL) {
+		GNB_Thumbnail = GNB_Thumbnail.replace('https://web.archive.org/web/20141020100823/http://s.nx.com', 'https://web.archive.org/web/20141020100823/https://ssl.nx.com');
+	}
+	else {
+		GNB_Thumbnail = GNB_Thumbnail.replace('https://web.archive.org/web/20141020100823/https://ssl.nx.com', 'https://web.archive.org/web/20141020100823/http://s.nx.com');
+	}
+	$jq_CC('#gnbBannerImg').html(GNB_Thumbnail);		// 섬네일 그리기 완료.
+	
+	if (data.Style == 1) {
+		// 일반 배너형 스타일일 경우 
+		$jq_CC('#gnbBnLink').click(function () {
+			if (!complete_check) {		// 배너 미 완료 시에만 호출
+				// 2. 썸네일 클릭시 동작 - 배너 - Style 참조, 공친 Normal
+				click_Thumnail(data);
+			} else {
+				alert('이미 완료되었습니다.');
+			}
+		});
+	} else {
+		// 확장 배너형 스타일일 경우
+		rendering_FullView(data);
+		if ($u.getCookie('oneday_cc_extend_' + data.Key) != '1') {
+			sendContentLog('NXPEVENT_GNB2', '{"Name":"NXPEvent1","CCKey":"' + data.Key + '"}');
+			$jq_CC('.layerGnbBanner').show();
+			$jq_CC('.layerGnbBannerFrame').show();
+			$jq_CC('.layerGnbBannerSec').show();
+			$jq_CC('#gnbDimmed').show();
+		}
+
+		$jq_CC('#gnbBnLink').click(function () {
+			if (!complete_check) {		// 배너 미 완료 시에만 호출
+				// 2. 썸네일 클릭시 동작 - 배너 - Style 참조, 공친 Normal
+				click_Thumnail(data);
+			} else {
+				alert('이미 완료되었습니다.');
+			}
+		});
+	}
+	sendContentLog('P_GNB', '{"Name":"Gongsik","CCKey":"' + data.Key + '"}');
+}
+
+// 썸네일 클릭 액션
+click_Thumnail = function (data) {
+	if ($jq_CC('#gnbBannerMsgSec').css('display') == '' || $jq_CC('#gnbBannerMsgSec').css('display') == 'block' || $jq_CC('.layerGnbBannerSec').css('display') == '' || $jq_CC('.layerGnbBannerSec').css('display') == 'block') {
+		hideAllLayer();
+		clearLayerTimer();
+	}
+	else {
+		$jq_CC('#gnbBanner').addClass('gnbBanner gnbBannerOn');
+		$jq_CC('.gnbBannerImg').show();
+		if (viewPoint == 0) {
+			sendClickLog('P_GNB', '{"Name":"Gongsik","CCKey":"' + data.Key + '"}');			// 2-1 [A2S]썸네일 클릭 로그
+		}
+
+		if (data.Style == 1) {
+		rendering_Msg(data);
+		} else {
+			sendContentLog('NXPEVENT_GNB2', '{"Name":"NXPEvent1","CCKey":"' + data.Key + '"}');
+			$jq_CC('#gnbDimmed').show();
+			$jq_CC('.layerGnbBanner').show();
+			$jq_CC('.layerGnbBannerFrame').show();
+			$jq_CC('.layerGnbBannerSec').show();
+		}
+	}
+}
+
+rendering_Msg = function (data) {
+	if (viewPoint == 0) {
+		// 2-2 [A2S] GNB 레이어 노출
+		sendContentLog('NXPEVENT_GNB1', '{"Name":"NXPEvent1","CCKey":"' + data.Key + '"}');
+
+		GNB_BannerMSG = GNB_BannerMSG.replace('#LM_BannerURL', data.Contents.BannerURL);
+		GNB_BannerMSG = GNB_BannerMSG.replace('#LM_ImageText', data.Contents.ImageText);
+		GNB_BannerMSG = GNB_BannerMSG.replace('#LM_ActionText', decodeURIComponent(data.ActionText));
+
+		if (isSSL) {
+			GNB_BannerMSG = GNB_BannerMSG.replace('https://web.archive.org/web/20141020100823/http://s.nx.com', 'https://web.archive.org/web/20141020100823/https://ssl.nx.com');
+		}
+		else {
+			GNB_BannerMSG = GNB_BannerMSG.replace('https://web.archive.org/web/20141020100823/https://ssl.nx.com', 'https://web.archive.org/web/20141020100823/http://s.nx.com');
+		}
+
+		// 링크 보정
+		if (data.Link == '' || data.Link == '#') {
+			data.Link = '#'
+		}
+		else if (data.Link.indexOf('http://') < 0 && data.Link.indexOf('https://') < 0) {
+			data.Link = 'http://' + data.Link;
+		}
+
+		if (data.Type == 1) {
+			// 일반 배너일 경우에는 ActionType에 따라 분기 처리
+			if (data.ActionType == 1) {
+				// Link 타입
+				GNB_BannerMSG = GNB_BannerMSG.replace('#LM_ActionLink', data.Link);
+				$jq_CC('#gnbBannerMsgSec').html(GNB_BannerMSG);
+				$jq_CC('#gnbBannerMsgSec').show();
+				$jq_CC('.gnbBannerFrame').show();
+
+				$jq_CC('#GNB_btnAction').click(function () {
+					// 2-3 [A2S] GNB 레이어 액션 버튼 클릭 - 일반배너 링크
+					sendClickLog('NXPEVENT_GNB1', '{"Name":"Add","BannerType":"12","CCKey":"' + data.Key + '"}');
+					hideAllLayer();
+				});
+			} else if (data.ActionType == 2) {
+				// CallBack 타입
+				GNB_BannerMSG = GNB_BannerMSG.replace('#LM_ActionLink', '#');
+				$jq_CC('#gnbBannerMsgSec').html(GNB_BannerMSG);
+				$jq_CC('#gnbBannerMsgSec').show();
+				$jq_CC('.gnbBannerFrame').show();
+				$jq_CC('#GNB_btnAction').click(function () {
+					// 2-3 [A2S] GNB 레이어 액션 버튼 클릭 - 일반배너 콜백
+					sendClickLog('NXPEVENT_GNB1', '{"Name":"Add","BannerType":"11","CCKey":"' + data.Key + '"}');
+					LM_Callback(data);
+					return false;
+				});
+			}
+		}
+		else if ( data.Type == 2 ) {
+			// 공친 배너일 경우에는 Link 타입이 올 수 없으며, 무조건 Callback 타입이고, 
+			// LandingUrl이 있는 경우에는 링크 버튼으로 동작, 그 이외엔 Callback동작
+			GNB_BannerMSG = GNB_BannerMSG.replace('#LM_ActionLink', '#');
+			$jq_CC('#gnbBannerMsgSec').html(GNB_BannerMSG);
+			$jq_CC('#gnbBannerMsgSec').show();
+			$jq_CC('.gnbBannerFrame').show();
+			$jq_CC('#GNB_btnAction').click(function () {
+				if (data.Contents.LandingImgURL != '') {
+					// 2-3 [A2S] GNB 레이어 액션 버튼 클릭 - 공친 링크
+					sendClickLog('NXPEVENT_GNB1', '{"Name":"Add","BannerType":"22","CCKey":"' + data.Key + '","Code":"' + data.Contents.NXPFriendCode + '"}');
+					window.open('https://web.archive.org/web/20141020100823/http://cc.nexon.com/Landing/FriendLanding?key=' + data.Key);
+					return false;
+				} else {
+					// 2-3 [A2S] GNB 레이어 액션 버튼 클릭 - 공친 콜백
+					sendClickLog('NXPEVENT_GNB1', '{"Name":"Add","BannerType":"21","CCKey":"' + data.Key + '","Code":"' + data.Contents.NXPFriendCode + '"}');
+					LM_Callback(data);
+					return false;
+				}
+			});
+		}
+		$jq_CC('.gnbBannerMsg').bind('mousemove', clearLayerTimer);
+		$jq_CC('.gnbBannerMsg').bind('mouseout', setLayerTimer);
+		$jq_CC('#gnbBanner').bind('mousemove', clearLayerTimer);
+
+		$jq_CC('#npinfoBt1').bind('mouseover', function () {
+			$jq_CC('#npinfoTxt1').show();
+		});
+		$jq_CC('#npinfoBt1').bind('mouseout', function () {
+			$jq_CC('#npinfoTxt1').hide();
+		});
+	} else {
+		// 2-4 [A2S] GNB 완료 레이어 노출
+		$jq_CC('#gnbBannerMsgSec').show();
+		$jq_CC('.gnbBannerFrame').show();
+
+		$jq_CC('#npinfoBt2').bind('mouseover', function () {
+			$jq_CC('#npinfoTxt2').show();
+		});
+
+		$jq_CC('#npinfoBt2').bind('mouseout', function () {
+			$jq_CC('#npinfoTxt2').hide();
+		});
+	}
+}
+
+LM_Callback = function (data) {
+
+	var Post_Data = '';
+	// Callback 타입이면서 link 값이 존재할 경우
+	var async_value = true;
+	if (data.Link != '') {
+		async_value = false;
+	} else {
+		async_value = true;
+	}
+
+	Post_Data = '{"NexonSN":' + NexonSN + ',"Key":' + data.Key + ',"CS":"' + encodeURIComponent(data.CS) + '","Type":' + data.Type + ',"Data":';
+	switch (data.Type) {
+		case 1:		// 일반 배너
+			Post_Data = Post_Data + '{}}';
+			break;
+		case 2:		// 공친 배너
+			Post_Data = Post_Data + '{"NXPFriendCode":' + data.Contents.NXPFriendCode + '}}';
+			break;
+		default:
+			// 정의되지 않은 타입이므로 무시... 
+			break;
+	}
+
+	// Callback 타입은 무조건 로그인이 되어 있어야 함. 
+	if (user.isLogin()) {
+		var serviceUrl = "https://web.archive.org/web/20141020100823/http://lmapi.nexon.com";
+		if (isSSL) serviceUrl = "https://web.archive.org/web/20141020100823/https://lmapi.nexon.com";
+		$jq_CC.ajax({
+			dataType: 'jsonp'
+			, type: 'GET'
+			, async: false
+			, url: serviceUrl + '/Complete?JSONData=' + Post_Data
+			, ContentType: "application/jsonp; charset=utf-8"
+			, jsonp: 'callback'
+			, success: function (req) {
+				if (req.ReturnValue == 1) {
+					//if (req.Data.ReturnValue == 1) {
+						if (data.ActionMessage != '') {
+							if (data.Type != 2) {
+								alert(decodeURIComponent(data.ActionMessage));
+							}
+						} else {
+							alert('완료 되었습니다.');
+						}
+						complete_check = true;
+						fv_callback = true;
+						$u.removeCookie('CC_KEY_' + NexonSN);
+						hideAllLayer();
+						// 공친 타입일 경우 SMS 발송 레이어를 띄워준다.
+						if (data.Type == 2) {
+							complete_check = false;
+							GNB_BannerComplete = GNB_BannerComplete.replace('#LM_ActionMessage', decodeURIComponent(data.ActionMessage));
+							$jq_CC('#gnbBannerMsgSec').html(GNB_BannerComplete);
+							$jq_CC('#gnbBanner').addClass('gnbBanner gnbBannerOn');
+							$jq_CC('#gnbBannerMsgSec').show();
+							$jq_CC('.gnbBannerFrame').show();
+
+							$jq_CC('#npinfoBt2').bind('mouseover', function () {
+								$jq_CC('#npinfoTxt2').show();
+							});
+
+							$jq_CC('#npinfoBt2').bind('mouseout', function () {
+								$jq_CC('#npinfoTxt2').hide();
+							});
+
+							clearLayerTimer();
+							$jq_CC('.gnbBannerMsg').bind('mousemove', clearLayerTimer);
+							$jq_CC('.gnbBannerMsg').bind('mouseout', setLayerTimer);
+							$jq_CC('#gnbBanner').bind('mousemove', clearLayerTimer);
+							viewPoint = 1;			// SMS 발송 레이어. 
+
+							$jq_CC('#CC_tbPhone').focus(function () {
+								clearLayerTimer();
+								focus_check = true;
+							});
+
+							$jq_CC('#CC_tbPhone').blur(function () {
+								setLayerTimer();
+								focus_check = false;
+							});
+							$jq_CC('#CC_tbPhone').css({ "ime-mode": "disabled" });
+							$jq_CC('#btnSendSMS').click(function () {
+								sendClickLog('NXPEVENT_GNB1', '{"Name":"Send","CCKey":"' + data.Key + '"}');
+								sendSMS('part');
+							});
+						}
+					//} else {
+					//	// nxp-cc api에서 날라온 returnvalue는 1이나, unit-cc api에서 온 returnValue는 1 이 아님.
+					//	alert(req.Data.ReturnMessage);
+					//}
+				} else {
+					if (data.Type == 1) {
+							alert('다시 시도해 주세요[' + req.ReturnValue + ', '+req.Data.ReturnValue+':'+req.Data.ReturnMessage+']');
+					} else if (data.Type == 2) {
+						if (req.ReturnValue == 100) {
+							complete_check = true;
+							fv_callback = true;
+							alert('이미 추가된 공식친구 입니다.');
+						}
+						else {
+							alert('다시 시도해 주세요[' + req.ReturnValue + ', ' + req.Data.ReturnValue + ':' + req.Data.ReturnMessage + ']');
+						}
+					}
+					hideAllLayer();
+				}
+			}
+		});
+	} else {
+		hideAllLayer();
+		GNB_USERINFO.GNB_MODULE.nxlogin.showLoginLayer();
+	}
+	return false;
+}
+
+rendering_FullView = function (data) {
+		GNB_FullLayer = GNB_FullLayer.replace('#LM_EXTENDIMAGEURL', data.Contents.ExtendImageUrl);
+		if (isSSL) {
+			GNB_FullLayer = GNB_FullLayer.replace('https://web.archive.org/web/20141020100823/http://s.nx.com', 'https://web.archive.org/web/20141020100823/https://ssl.nx.com');
+		}
+		else {
+			GNB_FullLayer = GNB_FullLayer.replace('https://web.archive.org/web/20141020100823/https://ssl.nx.com', 'https://web.archive.org/web/20141020100823/http://s.nx.com');
+		}
+
+	var fullViewSec = document.createElement('div');
+	fullViewSec.className = 'layerGnbBannerSec gnbCurrent';
+
+	var fullViewSecifrm = document.createElement('iframe');
+	fullViewSecifrm.className = 'layerGnbBannerFrame';
+	fullViewSecifrm.src = '';
+	fullViewSecifrm.frameBorder = 0;
+	fullViewSecifrm.scrolling = 'no';
+
+		var fullViewWrapper = document.createElement('div');
+		fullViewWrapper.className = 'layerGnbBanner';
+
+		switch (data.Type) {
+			case 1:				// 일반 배너 타입
+				// data.ActionType 을 보고, 링크 또는 Callback으로 처리
+				if (data.ActionType == 1) {
+					// LINK 타입
+					//#LM_ActionLink
+					GNB_FullLayer = GNB_FullLayer.replace('#LM_ActionLink', data.Link);
+				} else {
+					// 콜백 타입
+					GNB_FullLayer = GNB_FullLayer.replace('#LM_ActionLink', '#');
+				}
+				GNB_FullLayer = GNB_FullLayer.replace('#LM_EXTENDACTIONMESSAGE', decodeURIComponent(data.ActionText));
+				break;
+			case 2:				// 공친 배너 타입
+				// data.ActionType은 무시되고, 무조건 Callback 타입이므로, 무조건 callback 처리
+				GNB_FullLayer = GNB_FullLayer.replace('#LM_ActionLink', '#');
+				GNB_FullLayer = GNB_FullLayer.replace('#LM_EXTENDACTIONMESSAGE', '공식친구 추가');
+				break;
+			default:
+				break;
+		}
+
+		fullViewWrapper.innerHTML = GNB_FullLayer;
+		var body = document.getElementsByTagName("body")[0];
+
+	$jq_CC(fullViewSecifrm).css('display', 'none');
+	$jq_CC(fullViewWrapper).css('display', 'none');
+
+	fullViewSec.appendChild(fullViewSecifrm);
+	fullViewSec.appendChild(fullViewWrapper);
+	
+
+	$jq_CC(fullViewSec).css('display', 'none');
+	body.appendChild(fullViewSec);
+
+		if (!(data.Type == 1 && data.ActionType == 1)) {
+			$jq_CC('#btnFullAction').click(function () {
+				LM_FullViewCallback(data);
+			});
+			$jq_CC('#btnFullSendSMS').click(function () {
+				sendClickLog('NXPEVENT_GNB2', '{"Name":"Send","CCKey":"' + data.Key + '"}');
+				sendSMS('full');
+			});
+			}
+		if (data.Type == 1 && data.ActionType == 1) {
+			$jq_CC('#btnFullAction').click(function () {
+				sendClickLog('NXPEVENT_GNB2', '{"Name":"Add","Type":"12","CCKey":"' + data.Key + '"}');
+			});
+		}
+		$jq_CC('#btnFullClose').click(function () {
+		$u.setCookie('oneday_cc_extend_' + data.Key, '1', 3);
+			hideAllLayer();
+		});
+
+		$jq_CC('.layerGnbBanner').css({ "position": "absolute" });
+		layerPosition();
+}
+
+LM_FullViewCallback = function (data) {
+	if (!complete_check) {
+		var Post_Data = '';
+		// Callback 타입이면서 link 값이 존재할 경우
+		var async_value = true;
+		if (data.Link != '') {
+			async_value = false;
+		} else {
+			async_value = true;
+		}
+
+		Post_Data = '{"NexonSN":' + NexonSN + ',"Key":' + data.Key + ',"CS":"' + encodeURIComponent(data.CS) + '","Type":' + data.Type + ',"Data":';
+		switch (data.Type) {
+			case 1:		// 일반 배너
+				Post_Data = Post_Data + '{}}';
+				break;
+			case 2:		// 공친 배너
+				Post_Data = Post_Data + '{"NXPFriendCode":' + data.Contents.NXPFriendCode + '}}';
+				break;
+			default:
+				// 정의되지 않은 타입이므로 무시... 
+				break;
+		}
+		if (data.Type == 1) {
+			sendClickLog('NXPEVENT_GNB2', '{"Name":"Add","Type":"11","CCKey":"' + data.Key + '"}');
+		} else if (data.Type == 2) {
+			sendClickLog('NXPEVENT_GNB2', '{"Name":"Add","Type":"21","Code":"' + data.Contents.NXPFriendCode + '","CCKey":"' + data.Key + '"}');
+		}
+
+		// Callback 타입은 무조건 로그인이 되어 있어야 함. 
+		if (user.isLogin()) {
+			var serviceUrl = "https://web.archive.org/web/20141020100823/http://lmapi.nexon.com";
+			if (isSSL) serviceUrl = "https://web.archive.org/web/20141020100823/https://lmapi.nexon.com";
+			$jq_CC.ajax({
+				dataType: 'jsonp'
+				, type: 'GET'
+				, async: false
+				, url: serviceUrl+ '/Complete?JSONData=' + Post_Data
+				, ContentType: "application/jsonp; charset=utf-8"
+				, jsonp: 'callback'
+				, success: function (req) {
+					if (req.ReturnValue == 1) {
+						//if (req.Data.ReturnValue == 1) {
+							if (data.ActionMessage != '') {
+								alert(decodeURIComponent(data.ActionMessage));
+							} else {
+								alert('완료 되었습니다.');
+							}
+							complete_check = true;
+							fv_callback = true;
+							if (data.Type != 2) {
+								hideAllLayer();
+							}
+							$u.removeCookie('CC_KEY_' + NexonSN);
+						//} else {
+						//	// cc-open api에서 날라온 returnvalue는 1이나, cc-api에서 온 returnValue는 1 이 아님.
+						//	alert(req.Data.ReturnMessage);
+						//}
+					} else {
+						if (data.Type == 1) {
+							alert('다시 시도해 주세요[' + req.ReturnValue + ', ' + req.Data.ReturnValue + ':' + req.Data.ReturnMessage + ']');
+						} else if (data.Type == 2) {
+							if (req.ReturnValue == 100) {
+								complete_check = true;
+								fv_callback = true;
+								alert('이미 추가된 공식친구 입니다.');
+							}
+							else {
+								alert('다시 시도해 주세요[' + req.ReturnValue + ', ' + req.Data.ReturnValue + ':' + req.Data.ReturnMessage + ']');
+							}
+						}
+						hideAllLayer();
+					}
+				}
+			});
+		} else {
+			hideAllLayer();
+			GNB_USERINFO.GNB_MODULE.nxlogin.showLoginLayer();
+		}
+	} else {
+		alert('이미 완료되었습니다');
+	}
+	return false;
+}
+
+hideAllLayer = function () {
+	$jq_CC('#gnbBannerMsgSec').hide();
+	$jq_CC('#gnbBanner').removeClass('gnbBannerOn');
+	$jq_CC('#gnbDimmed').hide();
+	$jq_CC('.layerGnbBanner').hide();
+	$jq_CC('.gnbBannerFrame').hide();
+	$jq_CC('.layerGnbBannerFrame').hide();
+	$jq_CC('.layerGnbBannerSec').hide();
+}
+
+showBannerLayer = function () {
+	$jq_CC('#gnbBannerMsgSec').show();
+	$jq_CC('.gnbBannerFrame').show();
+}
+
+showSendSMSLayer = function () {
+	$jq_CC('.gnbBannerFrame').show();
+}
+
+clearLayerTimer = function() {
+	if( layerTimerID != null ) {
+		clearTimeout( layerTimerID );
+		layerTimerID = null;
+	}
+}
+
+setLayerTimer = function() {
+	clearLayerTimer();
+	layerTimerID = setTimeout(function () {
+		if (focus_check) {
+			clearLayerTimer();
+		}
+		else {
+			hideAllLayer();
+		}
+	}, 500 );
+}
+
+layerPosition = function () {
+	var windowWidth = $jq_CC(window).width();
+	var windowHeight = $jq_CC(window).height();
+	var leftPosition = windowWidth / 2 - 306;
+	var topPosition = windowHeight / 2 - 362;
+
+	if (topPosition < 80) {
+		topPosition = 80;
+	};
+	if (leftPosition < 0) {
+		leftPosition = 10;
+	};
+	$jq_CC(".layerGnbBanner").css({ "left": leftPosition, "top": topPosition });
+	$jq_CC(".layerGnbBannerFrame").css({ "left": leftPosition, "top": topPosition, "height":724, "position":"absolute", "width":612, "backgroundColor":"#000000", "opacity":0, "filter":"alpha(opacity=0)" });
+	//height: 724px; position: absolute; width: 612px;background-color:#000000;opacity:0.6;filter:alpha(opacity=60);
+};
+$jq_CC(window).resize(function () {
+	layerPosition();
+});
+
+sendSMS = function (type) {
+	if (user.isLogin()) {
+		var CHK1 = false;
+		var CHK2 = false;
+		var phMK = '';
+		var tbPhone = null;
+
+		if (type == 'part') {
+		CHK1 = $jq_CC('input:checkbox[id="chk1"]').is(':checked');
+		CHK2 = $jq_CC('input:checkbox[id="chk2"]').is(':checked');
+			tbPhone = $jq_CC('#CC_tbPhone');
+
+		} else {
+			CHK1 = $jq_CC('input:checkbox[id="f_chk1"]').is(':checked');
+			CHK2 = $jq_CC('input:checkbox[id="f_chk2"]').is(':checked');
+			tbPhone = $jq_CC('#CCF_tbPhone');
+		}
+		if (!CHK1) {
+			alert('개인정보 수집 및 이용 동의에 체크해주세요.');
+			return false;
+		}
+		if (!CHK2) {
+			alert('개인정보 취급 위탁 동의에 체크해주세요.');
+			return false;
+		}
+
+		phMK = $jq_CC(tbPhone).val().substr(0, 3);
+
+		if (CHK1 && CHK2) {
+			var ApplyStr = 'collection:' + CHK1 + '_trust:' + CHK2;
+			if (phMK == '010' || phMK == '011' || phMK == '016' || phMK == '017' || phMK == '018' || phMK == '019') {
+				if ($jq_CC(tbPhone).val().length >= 10 && $jq_CC(tbPhone).val().length <= 11) {
+					$jq_CC.ajax({
+						dataType: 'jsonp'
+					, type: 'GET'
+					, async: false
+					, url: 'https://web.archive.org/web/20141020100823/https://lmapi.nexon.com/sendSMS?phoneNo=' + $jq_CC(tbPhone).val() + '&NexonSN=' + NexonSN + '&Apply=' + ApplyStr
+					, ContentType: "application/jsonp; charset=utf-8"
+					, jsonp: 'callback'
+					, success: function (req) {
+						if (req.ReturnValue == 1) {
+							alert('문자가 성공적으로 전송됐어요!');
+							if (fv_callback) {
+							complete_check = true;
+							hideAllLayer();
+							}
+						} else if (req.ReturnValue == 2) {
+							alert('이미 문자가 발송됐어요.');
+							if (fv_callback) {
+							complete_check = true;
+						}
+						}
+						else if (req.ReturnValue == 3) {
+							if (req.ReturnMessage == "38") {
+								alert('문자 발송을 허용하지 않은 휴대폰 번호에요.');
+							}
+							else {
+								alert('문자 발송에 실패 하였습니다. 잠시 후 다시 시도해주세요.[' + req.ReturnMessage + ']');
+							}
+							if (fv_callback) {
+							complete_check = true;
+							hideAllLayer();
+							}
+						} else {
+							clearLayerTimer();
+							alert('문자 발송에 실패하였습니다. 다시 시도해 주세요.[' + req + ']');
+						}
+					}
+					});
+				}
+				else {
+					clearLayerTimer();
+					alert('휴대폰 번호를 바르게 입력해주세요!');
+				}
+			}
+			else {
+				clearLayerTimer();
+				alert('휴대폰 번호를 바르게 입력해주세요!');
+			}
+		}
+		else {
+			alert('개인정보 수집 및 이용과, 개인정보 취급 위탁에 동의 하셔야 이용이 가능합니다.');
+		}
+	}
+	else {
+		alert('로그인 후 다시 시도해주세요.');
+	}
+}
+
+sendClickLog = function (id, context, callback) {
+	if (typeof ($h) == "object" && typeof ($h.a2s) == "object") {
+		$h.a2s.sendClickLog(id, context, callback);
+	}
+}
+
+sendContentLog = function (id, context) {
+	if (typeof ($h) == "object" && typeof ($h.a2s) == "object") {
+		$h.a2s.sendContentsLog(id, context);
+	}
+}
+
+setCookie = function (name, value, expiremin) {
+	var todayDate = new Date();
+	if (expiremin < 0) {
+		document.cookie = name + "=" + escape(value) + "; path=/; domain=" + document.location.host + ";";
+	} else {
+		todayDate.setMinutes(todayDate.getMinutes() + expiremin);
+		document.cookie = name + "=" + escape(value) + "; path=/; domain=" + document.location.host + "; expires=" + todayDate.toGMTString() + ";";
+	}
+};
+
+popup_privacy = function () {
+	window.open('https://web.archive.org/web/20141020100823/http://cc.nexon.com/common/popup_privacy', 'privacy', 'width=520, height=480');
+}
+
+SMSOnlyNumber = function(obj) {
+	var val = obj.value;
+	var re = /[^0-9]/gi;
+	obj.value = val.replace(re, '');
+}
+
+
+//GNB에 붙는 썸네일 HTML
+var GNB_Thumbnail = "<p class=\"gnbBanner\" id=\"gnbBanner\" class=\"gnbBanner\">";
+GNB_Thumbnail += "<img src=\"#LM_ThumbnailURL\" width=\"116\" height=\"40\" alt=\"#LM_ImageText\" id=\"gnbBannerImg\">";
+GNB_Thumbnail += "<a href=\"#\" onclick=\"return false;\" id=\"gnbBnLink\">";
+GNB_Thumbnail += "<img src=\"" + domain.image + "/S2/p3/main/bg_gnbbn.gif\" width=\"116\" height=\"40\" alt=\"\" class=\"gnbBnBg\">";
+GNB_Thumbnail += "</a></p>";
+
+//조각 레이어 HTML
+var GNB_BannerMSG = "	<div class=\"gnbBannerMsg\" id=\"gnbBannerMsg1\">";
+GNB_BannerMSG += "			<p class=\"stit\"><img src=\"" + domain.image + "/S2/p3/main/stit_gm.gif\" width=\"124\" height=\"16\" alt=\"내 폰 안의 GM 공식친구\"></p>";
+GNB_BannerMSG += "			<div class=\"npinfoSec\">";
+GNB_BannerMSG += "				<div class=\"npinfo\">";
+GNB_BannerMSG += "					<button type=\"button\" id=\"npinfoBt1\"><img src=\"http://s.nx.com/S2/p3/main/ico_q.gif\" width=\"14\" height=\"14\" alt=\"공식친구 안내\"></button>";
+GNB_BannerMSG += "					<div class=\"npinfoTxt\" id=\"npinfoTxt1\"><img src=\"http://s.nx.com/S2/p3/main/img_layer_gamenews.gif\" width=\"201\" height=\"98\" alt=\"내 폰으로 바로 받는 게임소식! 공식친구를 추가하고 넥슨플레이 앱을 설치하면 가장 바른 이벤트 소식을 받을수 있어요\"></div>";
+GNB_BannerMSG += "				</div>";
+GNB_BannerMSG += "			</div>";
+GNB_BannerMSG += "			<p class=\"androidTxt\"><img src=\"http://s.nx.com/S2/p3/main/txt_android2.gif\" width=\"135\" height=\"9\" alt=\"안드로이드 폰 사용자만 참여 가능해요.\"></p>";
+GNB_BannerMSG += "			<p class=\"bnImg\"><img src=\"#LM_BannerURL\" width=\"358\" height=\"105\" alt=\"#LM_ImageText\"></p>";
+GNB_BannerMSG += "			<p class=\"bnBt\"><a href=\"#LM_ActionLink\" id=\"GNB_btnAction\" target=\"_blank\"><b>#LM_ActionText</b></a></p>";
+GNB_BannerMSG += "		</div>";
+
+
+// 완료 레이어 HTML
+var GNB_BannerComplete = "	<div class=\"gnbBannerMsg\" id=\"gnbBannerMsg2\">";
+GNB_BannerComplete += "			<p class=\"stit\"><img src=\"" + domain.image + "/S2/p3/main/stit_gm.gif\" width=\"124\" height=\"16\" alt=\"내 폰 안의 GM 공식친구\"></p>";
+GNB_BannerComplete += "			<div class=\"npinfoSec\">";
+GNB_BannerComplete += "				<div class=\"npinfo\">";
+GNB_BannerComplete += "					<button type=\"button\" id=\"npinfoBt2\"><img src=\"" + domain.image + "/S2/p3/main/ico_q.gif\" width=\"14\" height=\"14\" alt=\"공식친구 안내\"></button>";
+GNB_BannerComplete += "					<div class=\"npinfoTxt\" id=\"npinfoTxt2\"><img src=\"" + domain.image + "/S2/p3/main/img_layer_gamenews.gif\" width=\"201\" height=\"98\" alt=\"내 폰으로 바로 받는 게임소식! 공식친구를 추가하고 넥슨플레이 앱을 설치하면 가장 바른 이벤트 소식을 받을수 있어요\"></div>";
+GNB_BannerComplete += "				</div>";
+GNB_BannerComplete += "			</div>";
+GNB_BannerComplete += "			<p class=\"androidTxt\"><img src=\"" + domain.image + "/S2/p3/main/txt_android2.gif\" width=\"135\" height=\"9\" alt=\"안드로이드 폰 사용자만 참여 가능해요.\"></p>";
+GNB_BannerComplete += "			<p class=\"bnTxt\"><b>#LM_ActionMessage</b></p>";
+GNB_BannerComplete += "			<p class=\"npLink\"><img src=\"" + domain.image + "/S2/p3/main/img_qr.gif\" width=\"87\" height=\"87\" alt=\"QR코드\"></p>";
+GNB_BannerComplete += "			<p class=\"urlTxt\">";
+GNB_BannerComplete += "				<span class=\"urlStit\">넥슨플레이 앱을 설치하셨나요? (설치URL 받기 무료)</span>";
+GNB_BannerComplete += "				<span class=\"agree agree1\"><input type=\"checkbox\" id=\"chk1\" name=\"chk1\"> <label for=\"chk1\">개인정보 수집 및 이용동의</label> ";
+GNB_BannerComplete += "				<button type=\"button\" onclick=\"popup_privacy();\"><img src=\"" + domain.image + "/S2/p3/main/bt_view.png\" width=\"46\" height=\"16\" alt=\"개인정보 수집 및 이용동의 전문보기\"></button></span>";
+GNB_BannerComplete += "				<span class=\"agree agree2\"><input type=\"checkbox\" id=\"chk2\" name=\"chk2\"> <label for=\"chk2\">개인정보 취급 위탁동의</label> ";
+GNB_BannerComplete += "				<button type=\"button\" onclick=\"popup_privacy();\"><img src=\"" + domain.image + "/S2/p3/main/bt_view.png\" width=\"46\" height=\"16\" alt=\"개인정보 취급 위탁동의 전문보기\"></button></span>";
+GNB_BannerComplete += "			</p>";
+GNB_BannerComplete += "			<p class=\"phoneNumber\"><input type=\"text\" maxlength=\"11\" id=\"CC_tbPhone\" onkeypress=\"SMSOnlyNumber(this);\" value=\"휴대폰 번호 ( - 제외 입력)\" onclick=\"if($jq_CC(this).val() == '휴대폰 번호 ( - 제외 입력)'){$jq_CC(this).val('');}\" onblur=\"SMSOnlyNumber(this); if($jq_CC(this).val() == '') { $jq_CC(this).val('휴대폰 번호 ( - 제외 입력)'); }\"></p>";
+GNB_BannerComplete += "			<p class=\"bnBt bnBt2\"><a href=\"#\" id=\"btnSendSMS\" >전송</a></p>";
+GNB_BannerComplete += "		</div>";
+
+
+// 확장 레이어 HTML
+var GNB_FullLayer = "";//"<div class=\"layerGnbBanner\">";
+GNB_FullLayer += "<p class=\"gnbBannerImg\"><img src=\"#LM_EXTENDIMAGEURL\" width=\"550\" height=\"450\" alt=\"\"></p>";
+GNB_FullLayer += "	<p class=\"gnbBannerBt\"><a id=\"btnFullAction\" href=\"#LM_ActionLink\" onclick=\"\" id=\"GNB_EXD_btnAction\"><span style=\"font-size:20px;\">#LM_EXTENDACTIONMESSAGE</span></a></p>";
+GNB_FullLayer += "	<div class=\"phoneInfo\">";
+GNB_FullLayer += "	<p class=\"bnTxt\">공식친구는 넥슨플레이 앱에서 확인할 수 있어요. (안드로이드 폰만 지원)</p>";
+GNB_FullLayer += "	<p class=\"npLink\">";
+GNB_FullLayer += "		<img src=\"" + domain.image + "/S2/p3/main/img_qr.jpg\" width=\"68\" height=\"68\" alt=\"QR코드\">";
+GNB_FullLayer += "		<a href=\"http://i.nx.com/AA\"><img src=\"" + domain.image + "/S2/p3/main/img_googleplay.jpg\" width=\"68\" height=\"68\" alt=\"GOOGLE PLAY\"></a>";
+GNB_FullLayer += "		</p>";
+GNB_FullLayer += "		<p class=\"urlTxt\">넥슨플레이 설치 URL 받기 (무료)";
+GNB_FullLayer += "		<span>";
+GNB_FullLayer += "			<input type=\"checkbox\" id=\"f_chk1\" name=\"chk1\"> <label for=\"f_chk1\" style=\"display:inline\">개인정보 수집 및 이용동의</label>";
+GNB_FullLayer += "			<input type=\"checkbox\" id=\"f_chk2\" name=\"chk2\"> <label for=\"f_chk2\" style=\"display:inline\">개인정보 취급 위탁동의</label>";
+GNB_FullLayer += "			<button type=\"button\" onclick=\"popup_privacy();\"><img src=\"" + domain.image + "/S2/p3/main/bt_view.png\" width=\"46\" height=\"16\" alt=\"전문보기\"></button>";
+GNB_FullLayer += "		</span>";
+GNB_FullLayer += "		</p>";
+GNB_FullLayer += "		<p class=\"phoneNumber\"><input type=\"text\" style=\"background:none;padding:0px;height:auto;\" maxlength=\"11\" id=\"CCF_tbPhone\" value=\"휴대폰 번호 ( - 제외 입력)\" onkeypress=\"SMSOnlyNumber(this);\" onclick=\"if($jq_CC(this).val() == '휴대폰 번호 ( - 제외 입력)'){$jq_CC(this).val('');}\" onblur=\"SMSOnlyNumber(this); if($jq_CC(this).val() == '') { $jq_CC(this).val('휴대폰 번호 ( - 제외 입력)'); }\"></p>";
+GNB_FullLayer += "		<p class=\"bnBt\"><a href=\"#\" id=\"btnFullSendSMS\">전송</a></p>";
+GNB_FullLayer += "	</div>";
+GNB_FullLayer += "	<span class=\"closeBt\"><button type=\"button\" id=\"btnFullClose\"><img src=\"" + domain.image + "/s2/p3/main/bt_closelayer.png\" width=\"22\" height=\"23\" alt=\"레이어 닫기\"></button></span>";
+//GNB_FullLayer += "	</div>";
+
+init_cc();
+
+}
+/*
+     FILE ARCHIVED ON 10:08:23 Oct 20, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:41 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.44
+  exclusion.robots: 0.017
+  exclusion.robots.policy: 0.009
+  esindex: 0.01
+  cdx.remote: 108.168
+  LoadShardBlock: 218.091 (3)
+  PetaboxLoader3.datanode: 5217.486 (5)
+  PetaboxLoader3.resolve: 130.005 (3)
+  load_resource: 5192.351 (2)
+*/

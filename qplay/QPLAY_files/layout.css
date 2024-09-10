@@ -1,0 +1,640 @@
+@charset "euc-kr";
+
+@import "https://web.archive.org/web/20141031214956cs_/http://js.nx.com/S3/common/editor.css";
+
+/* global */
+body,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,fieldset,p {margin:0;padding:0;}
+body,h1,h2,h3,h4,h5,h6,input,textarea,select {color:#333;font:12px Dotum, Gulim, Tahoma, Arial, sans-serif;font-weight:normal;} 
+body	 {background-color:#fff;word-break:break-all;word-wrap:break-word;}
+*:first-child+html body	{word-wrap:normal;}/* ie break-word bug(float box) */
+table {border-collapse:collapse;border-spacing:0;}
+ol,ul {list-style:none; }
+img,fieldset {border:0 none;}
+img,input,select {vertical-align:middle;}
+input,select {color:#333;}
+a:link,a:visited,a:hover,a:active {color:#333;text-decoration:none;} 
+a:hover	 {text-decoration:underline;color:#118ed1;}
+h1 img,h2 img,h3 img,h4 img,h5 img,h6 img,div img,li img,dl img,p img	{vertical-align:top;}
+legend	{position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+caption	{display:none;}
+hr.hr	{position:absolute;top:-9999px;left:-9999px;z-index:-1;}
+input.radio	{margin-top:-4px;}
+input.checkbox	{margin-top:-4px;}
+.hidden	 {display:block;position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+
+/* layout */
+body#sub	{background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_body.gif') no-repeat left top #fff;}
+#wrapper	{width:1000px;}
+#header	{position:relative;width:100%;height:262px;}
+#header	h1	{display:block;position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+#header	#accessibilityMenu	{display:block;position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+#header	#topNav	{position:relative;z-index:5;width:100%;}
+#header	#topNav	h2	{display:block;position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+#header	#topNav	li.logo	{position:absolute;z-index:1;left:62px;top:10px;}
+#header	#topNav	li.menu1	{position:absolute;z-index:1;left:233px;top:23px;}
+#header	#topNav	li.menu2	{position:absolute;z-index:1;left:395px;top:23px;}
+#header	#topNav	li.menu3	{position:absolute;z-index:1;left:482px;top:23px;}
+#header	#topNav	li.menu4	{position:absolute;z-index:1;left:578px;top:23px;}
+#header	#topNav	li.menu5	{position:absolute;z-index:1;left:649px;top:23px;}
+#header	#topNav	li.menu6	{position:absolute;z-index:1;left:731px;top:23px;}
+#header	#topNav	li.menu7	{position:absolute;z-index:1;left:823px;top:23px;}
+#header	#topNav	li.gameStart	{position:absolute;z-index:1;left:90px;top:126px;}
+
+#middle	{margin-bottom:30px;}
+#middle:after	{
+	content:" ";
+	display:block;
+	clear:both;
+	height:0;
+	visibility:hidden;
+}
+#leftArea	{float:left;width:197px;margin-top:-34px;padding:0 0 30px 9px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_leftArea.gif') no-repeat 9px bottom transparent;}
+body#sub	#login	{position:relative;z-index:10;width:182px;height:195px;margin-bottom:15px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_login_120306.gif') no-repeat left top transparent;}
+body#sub	#login	h2	{position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+body#sub	#login	.loginTab	{padding:9px 5px 0 6px;}
+body#sub	#login	.loginTab	ul	{clear:both;overflow:hidden;width:100%;}
+body#sub	#login	.loginTab	ul	li	{float:left;}
+body#sub	#login	.server	p	{height:16px;padding:4px 0 0 10px;}
+body#sub	#login	.server	p	label	{padding:0 5px 0 0;}
+body#sub	#login	.inputInfo	p{clear:both;overflow:hidden;width:100%;}
+body#sub	#login	.inputInfo	p	span.id	{display:block;width:114px;height:22px;padding-left:10px;}
+body#sub	#login	 #loginSt1	.inputInfo	p	input.inputId	{width:103px;height:13px;padding:7px 5px 0;border:1px solid #0089bf;border-right:0;vertical-align:top;color:#4d4d4d;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_id_120306.gif') no-repeat 5px 7px #fff;}
+body#sub	#login	 #loginSt2	.inputInfo	p	input.inputId	{width:103px;height:13px;padding:7px 5px 0;border:1px solid #0089bf;border-right:0;vertical-align:top;color:#4d4d4d;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_email.gif') no-repeat 5px 7px #fff;}
+body#sub	#login	.inputInfo	p	span.pw	{display:block;width:114px;height:21px;padding-left:10px;}
+body#sub	#login	.inputInfo	p	input.inputPW	{width:103px;height:13px;padding:7px 5px 0;border:1px solid #0089bf;border-top:0;border-right:0;vertical-align:top;color:#4d4d4d;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_pw_120306.gif') no-repeat 5px 7px #fff;}
+body#sub	#login	.inputInfo	p	span.submit	{position:absolute;left:117px;top:67px;}
+body#sub	#login	.bt	{height:55px;padding-top:4px;text-align:center;}
+body#sub	#login	.security	p	{text-align:center;}
+body#sub	#login	.changeEmailId	{position:absolute;left:0;top:135px;width:182px;text-align:center;}
+body#sub	#login	.bt	img	{margin:0 -1px;}
+body#sub	#logout	{position:relative;z-index:10;width:182px;height:195px;margin-bottom:15px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_logout_120306.gif') no-repeat left top transparent;text-align:center;color:#fff;}
+body#sub	#logout	h2	{position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+body#sub	#logout	.bt1	{height:29px;padding-top:16px;text-align:center;}
+body#sub	#logout	.greeting	{height:52px;padding:12px 0 0;}
+body#sub	#logout	.greeting	.infor	{color:#0089bf;font-size:11px;letter-spacing:-1px;}
+body#sub	#logout	.bt2	{height:38px;padding-top:13px;text-align:center;}
+body#sub	#logout	.bt3	{padding-top:5px;text-align:center;}
+body#sub	#logout	.characterInfo	{height:32px;padding:17px 0 0 16px;font-size:11px;text-align:left;letter-spacing:-1px;line-height:1.3;}
+body#sub	#logout	#loginCharacterList	{overflow-y:scroll;width:168px;height:103px;margin:0 0 8px 7px;background-color:#fff;text-align:left;}
+body#sub	#logout	#loginCharacterList	ul{margin-top:-1px;}
+body#sub	#logout	#loginCharacterList	ul	li	{border-top:1px dashed #dfdfdf;}
+body#sub	#logout	#loginCharacterList	ul	li	a	{display:block;height:14px;padding:6px 9px 0;color:#004165;font-size:11px;}
+body#sub	#logout	#loginCharacterList	ul	li	a:hover	{text-decoration:none;}
+body#sub	#logout	#loginCharacterList	ul	li	a.on	{background-color:#f0fbff;text-decoration:none;}
+body#sub	#logout	.loginMyCharacter	{padding:19px 0 6px;text-align:left;}
+body#sub	#logout	.loginMyCharacter	.now	{width:147px;height:18px;margin:0 auto;border:1px solid #009ce7;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_arrow_down_blue1.gif') no-repeat 136px 8px #fff;}
+body#sub	#logout	.loginMyCharacter	.now	a	{display:block;height:13px;padding:5px 9px 0;color:#004165;font-size:11px;}
+body#sub	#logout	.loginMyCharacter	.now	a:hover	{text-decoration:none;}
+body#sub	#logout	#loginChangeCharacter	{position:absolute;left:10px;top:38px;overflow-y:scroll;width:147px;height:103px;margin:0 0 8px 7px;background-color:#fff;border:1px solid #009ce7;text-align:left;}
+body#sub	#logout	#loginChangeCharacter	ul{margin-top:-1px;}
+body#sub	#logout	#loginChangeCharacter	ul	li	{border-top:1px dashed #dfdfdf;}
+body#sub	#logout	#loginChangeCharacter	ul	li	a	{display:block;height:14px;padding:6px 9px 0;color:#004165;font-size:11px;}
+body#sub	#logout	#loginChangeCharacter	ul	li	a:hover	{text-decoration:none;}
+body#sub	#logout	#loginChangeCharacter	ul	li	a.on	{background-color:#f0fbff;text-decoration:none;}
+#leftContents	{position:relative;width:180px;padding-top:80px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_leftContents.gif') repeat-y left top transparent;}
+#leftContents	h2.title	{position:absolute;left:0;top:0;}
+#characterInfo	{margin-bottom:10px;}
+#characterInfo	.avatar	{padding-bottom:5px;text-align:center;}
+#characterInfo	.avatarBt	{padding-bottom:5px;text-align:center;}
+#characterInfo	.ability	{width:154px;margin:0 auto 5px;}
+#characterInfo	.ability	table	 {width:100%;table-layout:fixed;border:1px solid #d9d9d9;}
+#characterInfo	.ability	table	th	 {padding:4px 0 1px;color:#4d4d4d;background-color:#f2f2f2;text-align:center;font-weight:normal;border:1px solid #d9d9d9;}
+#characterInfo	.ability	table	td	 {padding:4px 0 1px;color:#01569f;background-color:#fafafa;font-size:11px;text-align:center;border:1px solid #d9d9d9;}
+#characterInfo	.info	{position:relative;width:100%;height:31px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_characterInfo.gif') no-repeat 5px; top transparent;}
+#characterInfo	.info	.level	 {position:absolute;left:17px;top:10px;}
+#characterInfo	.info	.level	 img	{vertical-align:middle;margin:-3px 22px 0 0;}
+#characterInfo	.info	.bt	{position:absolute;left:109px;top:6px;}
+#leftShop	{margin-bottom:10px;}
+#leftShop	p.bt	{margin-bottom:10px;text-align:center;}
+#leftShop	.search	{padding-left:9px;}
+#leftShop	.search	label	{display:block;padding:0 0 3px 4px;}
+#leftShop	.search	input#leftSearchShop	{width:110px;padding:1px 5px;background-color:#f4f9e2;border:1px solid #80a150;}
+#leftShop	.search	*	{vertical-align:middle;}
+#leftMenu	{width:171px;margin:0 0 10px 5px;padding-top:10px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_leftMenu1.gif') no-repeat left top transparent;}
+#leftMenu	ul	{overflow:hidden;width:100%;padding-bottom:10px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_leftMenu2.gif') no-repeat left bottom transparent;}
+#leftMenu	ul	li	{width:130px;margin:-1px 15px 0;padding:5px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_leftMenu3.gif') repeat-x left top transparent;}
+#leftContact	{width:171px;margin:0 0 10px 5px;}
+.leftCustomerLink	{clear:both;overflow:hidden;width:171px;margin-left:5px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_customerLink.gif') no-repeat right top transparent;}
+#leftContents	.leftCustomerLink	h2	{float:left;}
+.leftCustomerLink	ul	{float:left;padding:15px 0 0 10px;}
+.leftCustomerLink	ul	li	{clear:both;padding:2px 0;}
+
+#cntsArea	 {float:left;width:564px;}
+.eventViewPage	#cntsArea,
+.adminViewPage	#cntsArea,
+.quizExpert	#cntsArea	 {float:left;width:778px;}
+#pageInfo	 {margin-bottom:15px;}
+#location	{font-size:11px;text-align:right;color:#808080;}
+#location	span	 {display:block;position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+#location	strong	{}
+#pageInfo	 h1	{padding:5px 0 0;}
+#contents	 {width:100%;min-height:500px;line-height:1.33;}
+
+#rightArea	{float:left;width:200px;padding-left:17px;}
+.eventViewPage	#rightArea,
+.adminViewPage	#rightArea,
+.quizExpert	#rightArea	 {display:none;}
+#rightQuiz	{margin-bottom:10px;}
+#rightQuiz	p.question	{margin:0 auto;padding:30px 25px 35px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/quiz/bg_quiz1.gif') no-repeat left top transparent;color:#fff;}
+#rightQuiz	p.answer	{height:65px;padding-top:7px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/quiz/bg_quiz2.gif') no-repeat left top transparent;text-align:center;}
+#rightQuiz	p.answer	img	{margin:0 3px;cursor:pointer;}
+#rightPromotion	{margin-bottom:10px;}
+#rightNewItem	{position:relative;width:200px;height:125px;margin-bottom:7px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_newItem.jpg') no-repeat left top transparent;}
+#rightNewItem	h2	{padding:13px 0 4px 14px;}
+#rightNewItem	p.more	{position:absolute;left:144px;top:16px;}
+#rightNewItem	dl	{clear:both;overflow:hidden;width:167px;margin-left:14px;padding:5px 0 8px;border-top:1px solid #e5e5e5;}
+#rightNewItem	dl	.thumb	{float:left;display:block;padding:2px;border:1px solid #d9d9d9;}
+#rightNewItem	dl	.thumb	.icon	 {position:absolute;z-index:5;}
+#rightNewItem	dl	.subject	{float:right;width:86px;;padding:4px 0 5px;color:#01569f;}
+#rightNewItem	dl	.subject	a	{color:#01569f;}
+#rightNewItem	dl	dd.price	{float:right;width:86px;color:#5b82ee;}
+#rightNewItem	dl	dd.price	img	{vertical-align:middle;margin-top:-2px;}
+#rightQuizList	{position:relative;width:200px;height:115px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_quiz.jpg') no-repeat left top transparent;}
+#rightQuizList	h2	{padding:15px 0 5px 12px;}
+#rightQuizList	p.more	{position:absolute;left:146px;top:16px;}
+#rightQuizList	ul	{width:178px;height:67px;margin-left:13px;padding:8px 0 0 7px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_quizList.gif') no-repeat left top transparent;}
+#rightQuizList	ul	li	{margin-bottom:3px;padding-top:3px;}
+#rightQuizList	ul	li	img	{vertical-align:middle;margin-top:-3px;}
+
+#footer	 {width:100%;padding:25px 0;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_footer.gif') no-repeat 13px top transparent;}
+#footer	 h2,	#footer	 h3	{position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+#footerInfo	 {clear:both;overflow:hidden;width:100%;}
+#footerInfo	.developer	 {float:left;width:150px;padding:7px 0 0 112px;}
+#footerInfo	ul	{float:right;width:738px;margin-bottom:8px;line-height:1;}
+#footerInfo	ul	li	{float:left;padding:0 8px 0 9px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_footerNav.gif') no-repeat left 3px transparent;}
+#footerInfo	ul	li.first-child	 {padding-left:0;background-image:none;}
+#footer	 .bizInfo	{margin-left:8px;}
+#footerInfo	.nexonInfo	{float:right;width:738px;height:13px;}
+#footerInfo	.address	{float:right;width:738px;height:15px;}
+#footerInfo	.copyright	{float:right;width:738px;font-size:11px;color:#666;}
+
+/* template - global */
+.pageDescription	{position:relative;margin-bottom:15px;}
+.tempH2	{margin-bottom:10px;padding-left:18px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_title1.gif') no-repeat left 45% transparent;color:#2361cd;font-weight:bold;}
+.tab	{clear:both;overflow:hidden;width:100%;margin-bottom:15px;border-bottom:2px solid #b6c0e4;}
+.tab	ul	{float:left;}
+.tab	.tabInfo	{float:right;font-size:11px;padding-top:3px;}
+.tab	.tabInfo	img	{margin-top:-3px;}
+.tab	li	{float:left;}
+.tabDepth2	{clear:both;overflow:hidden;width:100%;}
+.tabDepth2	ul	{float:left;}
+.tabDepth2	li	{float:left;}
+.btnArea	{text-align:center;}
+.btnArea2	{margin-top:15px;text-align:center;}
+.btnArea	img	{cursor:pointer;}
+table.bbsContents	{table-layout:fixed;width:100%;border:1px solid #d9d9d9;}
+table.bbsContents	thead	th	 {padding:6px 0 3px;background-color:#f7f7f7;border:1px solid #d9d9d9;color:#555;text-align:center;}
+table.bbsContents	tbody	td	{padding:6px 0 3px;border:1px solid #d9d9d9;text-align:center;}
+table.bbsContents	tbody	th,
+table.bbsContents	tbody	td.data	{padding:6px 10px 3px;border:1px solid #d9d9d9;text-align:left;font-weight:normal;}
+
+/* template - board list */
+.listInfo	 {padding:5px 0;text-align:right;color:#ff7800;font-size:11px;}
+.listInfo	 img	{margin-top:-3px;vertical-align:middle;}
+.listDivision	{width:100%;margin-bottom:15px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/board/bg_list_thead.gif') no-repeat left top transparent;}
+.listFullDivision	{width:100%;margin-bottom:20px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/board/bg_fullList_thead.gif') no-repeat left top transparent;}
+.listPopDivision	{width:100%;margin-bottom:15px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/board/bg_popList_thead.gif') no-repeat left top transparent;}
+.bbsL	{table-layout:fixed;width:100%;border:0;}
+.bbsL	thead	th	 {height:28px;padding:0;vertical-align:top;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/board/bg_th.gif') no-repeat right 9px transparent;}
+.bbsL	thead	th.last-child	{background-image:none;}
+.bbsL	thead	th	 img	{margin-top:8px;vertical-align:top;}
+.bbsL	tbody	tr.on	 td,
+.bbsL	tbody	tr.notice	 td	{background-color:#ecf8fe;}
+.bbsL	tbody	tr.r	 td	{background-color:#fffae2;}
+.bbsL	tbody	tr.q	 td	{background-color:#e3eafd;}
+.bbsL	tbody	tr.notice	 td	{font-weight:bold;letter-spacing:-1px;}
+.bbsL	tbody	td	 {padding:8px 0 5px;border-bottom:1px solid #e5e5e5;text-align:center;}
+.bbsL	tbody	td.subject	{padding-left:10px;text-align:left;}
+.bbsL	tbody	td.subject	.category	{margin-right:3px;}
+.bbsL	tbody	td.subject	.replyNum	 {color:#808080;font-size:11px;font-family:tahoma;}
+.bbsL	tbody	td.subject	img	{margin-top:-2px;vertical-align:middle;}
+.bbsL	tbody	td.author	{padding-top:9px;padding-left:5px;text-align:left;}
+.bbsL	tbody	td.author	img	{margin-top:-3px;vertical-align:middle;}
+.bbsL	tbody	td.author	a	{color:#01569f;}
+.bbsL	tbody	td.number,
+.bbsL	tbody	td.regDay,
+.bbsL	tbody	td.viewNum,
+.bbsL	tbody	td.term,
+.bbsL	tbody	td.partiNum,
+.bbsL	tbody	td.recommend,
+.bbsL	tbody	td.correctAv	{padding-top:7px;font-size:11px;font-family:tahoma;}
+
+.page	{width:100%;padding-bottom:15px;text-align:center;line-height:1.2;}
+.page	img	{margin-top:1px;}
+.page	.number	{margin:0;vertical-align:middle;font-family:tahoma;font-size:11px;}
+.page	.number	*	{padding:0 8px 0 5px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/board/bg_page.gif') no-repeat right 3px transparent;}
+.page	.number	strong	{color:#f5798a;}
+.page	.number	a:hover	 {color:#f5798a;}
+.page	.bt	{margin-left:-4px;vertical-align:middle;}
+
+.bbsLBt	 {text-align:right;}
+
+.listSearch	 {margin-bottom:5px;text-align:right;}
+.listSearch	 .navi	{margin-bottom:5px;}
+.listSearch	 .word,
+.listSearch	 .count,
+.listSearch	 fieldset,
+.listSearch	 fieldset	p	{display:inline;}
+.listSearch	 .word,
+.listSearch	 .count	{margin-right:10px;}
+.listSearch	 *	{vertical-align:middle;}
+.listSearch	 select	{}
+.listSearch	 .inputSearch	{width:130px;margin-left:2px;padding:1px 5px;border:1px solid #b3b3b3;}
+
+/* template - board view */
+.viewDivision	{width:100%;margin-bottom:10px;}
+.bbsV	{table-layout:fixed;border:0;border-top:2px solid #406dd8;}
+.bbsV	tr.info1	td.subject	 {padding:8px 10px 5px;background-color:#f1f9ff;border-bottom:1px dashed #b2b2b2;text-align:left;color:#2e5fb0;}
+.bbsV	tr.info1	td.subject	img	{vertical-align:middle;margin-top:-3px;}
+.bbsV	tr.info1	td.regDay	{padding:8px 10px 5px;background-color:#f1f9ff;border-bottom:1px dashed #b2b2b2;text-align:right;}
+.bbsV	tr.info2	td.author	{padding:8px 10px 5px;border-bottom:1px solid #d8d8d8;text-align:left;}
+.bbsV	tr.info2	td.author	a	{color:#01569f;}
+.bbsV	tr.info2	td.author	img	{margin-top:-3px;vertical-align:middle;}
+.bbsV	tr.info2	td.ticket	{padding:8px 10px 5px;border-bottom:1px solid #d8d8d8;text-align:left;}
+.bbsV	tr.info2	td.ticket	img	{margin-top:-3px;vertical-align:middle;}
+.bbsV	tr.info2	td.category	 {padding:8px 10px 5px;border-bottom:1px solid #d8d8d8;text-align:left;}
+.bbsV	tr.info2	td.viewNum	 {padding:8px 10px 5px;border-bottom:1px solid #d8d8d8;text-align:right;}
+.bbsV	tr.info2	td.viewNum	img	{margin-top:-3px;vertical-align:middle;}
+
+.bbsV	td.data	{border-bottom:1px solid #d8d8d8;}
+.bbsV	td.data	em	{font-style:italic;}
+.bbsV	td.data	div.data	{clear:both;width:524px;overflow:hidden;margin:0 auto;padding:20px 20px;}
+.bbsV	td.data	div.eventData	{clear:both;width:778px;overflow:hidden;margin:0 auto;padding:20px 0;}
+.bbsV	td.data	div.quizData	{clear:both;width:524px;overflow:hidden;margin:0 auto;padding:20px 20px;}
+.bbsV	td.data	div.quizExpertData	{clear:both;width:738px;overflow:hidden;margin:0 auto;padding:20px 20px;}
+.bbsV	td.data	.authorInfo	{float:right;width:154px;padding:0 0 10px 20px;}
+.bbsV	td.data	.authorInfo	dt	 {padding:5px 0 3px 30px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/quiz/ico_author.gif') no-repeat 10px 6px #f7f7f7;border:1px solid #e5e5e5;font-weight:bold;color:#666;}
+.bbsV	td.data	.authorInfo	.nickname	 {padding:5px;}
+.bbsV	td.data	.authorInfo	.best	 {padding:0 0 0 26px;}
+.bbsV	td.data	.authorInfo	.viewQuiz	 {padding:5px 0 7px 26px;}
+.bbsV	td.data	.authorInfo	img	{margin-top:-3px;vertical-align:middle;}
+.bbsV	td.data	.authorInfo	.nickname	 a	{color:#01569f;}
+.bbsV	td.data	.authorInfo	.info	{padding-top:10px;text-align:center;}
+.bbsV	td.poll	{padding:10px 0;border-bottom:1px solid #d8d8d8;}
+
+/*
+.bbsV	td.data	h1	{font-size:2em;margin:.67em 0}
+.bbsV	td.data	h2	{font-size:1.5em;margin:.83em 0}
+.bbsV	td.data	h3	{font-size:1.17em;margin:1em 0;}
+.bbsV	td.data	h4, .bbsV	td.data	p, .bbsV	td.data	ul, .bbsV	td.data	ol, .bbsV	td.data	dl, .bbsV	td.data	fieldset, .bbsV	td.data	form	{margin:1.33em 0;}
+.bbsV	td.data	h5	{font-size:.83em;line-height:1.17em;margin:1.67em 0;}
+.bbsV	td.data	h6	{font-size:.67em;margin:2.33em 0;}
+.bbsV	td.data	ol, .bbsV	td.data	ul, .bbsV	td.data	dd	{margin-left:40px;}
+.bbsV	td.data	ol	{list-style-type:decimal;}
+.bbsV	td.data	ul	{list-style-type:disc;}
+.bbsV	td.data	ol	ul, .bbsV	td.data	ul	ol, .bbsV	td.data	ul	ol, .bbsV	td.data	ol	ol	{margin-top:0;margin-bottom:0;}
+.bbsV	td.data	h1	img, .bbsV	td.data	h2	img, .bbsV	td.data	h3	img, .bbsV	td.data	h4	img, .bbsV	td.data	h5	img, .bbsV	td.data	h6	img, .bbsV	td.data	li	img, .bbsV	td.data	dl	img, .bbsV	td.data	p	img, .bbsV	td.data	input, .bbsV	td.data	select	{vertical-align:baseline;}
+*/
+
+.bbsV	td.copyURL	{padding:8px 0 5px;border-bottom:1px solid #d8d8d8;}
+.bbsV	td.copyURL	img	{cursor:pointer;margin-top:-3px;vertical-align:middle;}
+
+.bbsVBt	{position:relative;width:100%;padding-top:10px;text-align:right;}
+.bbsVBt	span	 {position:absolute;display:block;left:0;top:10px;text-align:left;}
+
+.bbsReply	{width:542px;margin:10px auto 0;padding:10px;background-color:#f7f7f7;border:1px solid #e5e5e5;}
+.bbsReply	.inputReply	*	{vertical-align:top;}
+.bbsReply	.inputReply	.replyText	{width:478px;padding:1px 5px;border:1px solid #b3b3b3;}
+.bbsReply	.bbsRL	{padding:10px 5px 20px;}
+.bbsReply	.bbsRL	li	{clear:both;overflow:hidden;width:100%;padding:10px 0 0;}
+.bbsReply	.bbsRL	li	dt	{float:left;width:115px;}
+.bbsReply	.bbsRL	li	dt	 img	{position:relative;margin-top:-3px;vertical-align:middle;}
+.bbsReply	.bbsRL	li	dt	 a	{color:#01569f;}
+.bbsReply	.bbsRL	li	dd.data	{float:left;width:417px;}
+.bbsReply	.bbsRL	li	dd.data	 .regDay	{font-size:11px;font-family:tahoma;color:#adadad;}
+.bbsReply	.bbsRL	li	dd.data	 img	{margin-top:-2px;vertical-align:middle;}
+.bbsReply	.bbsRL	li.noReply	{text-align:center;}
+
+.replyPage	{width:100%;padding-bottom:0px;text-align:center;line-height:1.2;}
+.replyPage	img	{margin-top:1px;}
+.replyPage	.number	{margin:0;vertical-align:middle;font-family:tahoma;font-size:11px;}
+.replyPage	.number	*	{padding:0 8px 0 5px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/board/bg_page.gif') no-repeat right 5px transparent;}
+.replyPage	.number	strong	{color:#f5798a;}
+.replyPage	.number	a:hover	 {color:#f5798a;}
+.replyPage	.bt	{margin-left:-4px;vertical-align:middle;}
+
+/* template - board write */
+.writeDivision	{width:100%;margin-bottom:15px;}
+.bbsW	{table-layout:fixed;border:0;border-top:2px solid #406dd8;}
+.bbsW	tr.info1	th	 {padding:8px 0 3px;background-color:#f1f9ff;border-bottom:1px dashed #b2b2b2;text-align:center;color:#2e5fb0;}
+.bbsW	tr.info1	td	 {padding:6px 10px 5px;background-color:#f1f9ff;border-bottom:1px dashed #b2b2b2;text-align:left;}
+.bbsW	tr.info1	td	input	{border:1px solid #b3b3b3;padding:2px 10px 1px;}
+.bbsW	tr.info2	th	{padding:8px 0 3px;border-bottom:1px dashed #b2b2b2;text-align:center;color:#2e5fb0;}
+.bbsW	tr.info2	td	{padding:6px 10px 5px;border-bottom:1px dashed #b2b2b2;text-align:left;}
+.bbsW	tr.info2	td.file	{font-size:11px;}
+.bbsW	tr.info2	td	input	{border:1px solid #b3b3b3;padding:2px 10px 1px;background-color:#fff;}
+.bbsW	tr.preview	td.preview	{padding:20px 0;border-bottom:1px solid #b2b2b2;text-align:center;}
+
+.bbsWBt	{text-align:center;}
+
+/* editor */
+.edSec	{width:562px;border-top:none;}
+.editWindow	 {width:542px;}
+
+/* popup */
+#popCommon	{width:300px;}
+#popCommon	p.txt	{margin:10px;padding:30px;background-color:#f3f3f3;text-align:center;color:#555;}
+
+#popLogin	{width:335px;height:220px;border:1px solid #5465a6;background-color:#fff;}
+#popLogin	h1	 {margin-bottom:55px;}
+#popLogin	.contents	{width:315px;height:95px;margin:0 auto;}
+#popLogin	.contents	.info	{text-align:center;}
+#popLogin	.bt	{text-align:center;}
+#popLogin	.bt	img	{cursor:pointer;}
+
+#popCombine	{width:335px;height:220px;border:1px solid #5465a6;background-color:#fff;}
+#popCombine	h1	 {margin-bottom:40px;}
+#popCombine	.contents	{width:315px;height:80px;margin:0 auto;}
+#popCombine	.contents	.info	{text-align:center;}
+#popCombine	.bt	{height:40px;text-align:center;}
+#popCombine	.bt	img	{cursor:pointer;}
+#popCombine	.today	 {height:21px;padding:9px 10px 0;background-color:#f0fbff;text-align:right;color:#406dd8;font-size:11px;}
+
+#popCancelDeleteCharacter	{width:335px;height:220px;}
+#popCancelDeleteCharacter	h1	 {margin-bottom:20px;}
+#popCancelDeleteCharacter	.contents	{width:292px;margin:0 auto;}
+#popCancelDeleteCharacter	.contents	h2	{margin-bottom:5px;font-weight:bold;font-size:11px;}
+#popCancelDeleteCharacter	.contents	#gameCharacterList	{overflow-y:scroll;width:290px;height:103px;border:1px solid #406dd8;}
+#popCancelDeleteCharacter	.contents	#gameCharacterList	 ul{margin-top:-1px;}
+#popCancelDeleteCharacter	.contents	#gameCharacterList	 ul	li	{border-top:1px dashed #dfdfdf;}
+#popCancelDeleteCharacter	.contents	#gameCharacterList	 ul	li	a	{display:block;height:14px;padding:6px 7px 0;color:#004165;font-size:11px;}
+#popCancelDeleteCharacter	.contents	#gameCharacterList	 ul	li	a:hover	{text-decoration:none;}
+#popCancelDeleteCharacter	.contents	#gameCharacterList	 ul	li	a.on	{background-color:#f0fbff;text-decoration:none;}
+#popCancelDeleteCharacter	.bt	{padding-top:10px;text-align:center;}
+#popCancelDeleteCharacter	.bt	img	{cursor:pointer;}
+
+#popFindId	{width:335px;height:300px;}
+#popFindId	h1	 {margin-bottom:25px;}
+#popFindId	.contents	{width:315px;margin:0 auto 15px;}
+#popFindId	.contents	.info	{padding:10px 0 5px 0;border-top:3px solid #b6c0e4;}
+#popFindId	.contents	.info	li	{padding:0 0 10px 15px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_title1.gif') no-repeat left 1px transparent;}
+#popFindId	.contents	table	 {width:100%;table-layout:fixed;border-top:2px solid #406dd8;border-bottom:1px solid #406dd8;}
+#popFindId	.contents	table	 tbody	th	 {padding:3px 0 3px;background-color:#f3f3f3;border-top:1px solid #d8d8d8;vertical-align:middle;text-align:center;}
+#popFindId	.contents	table	 tbody	td	 {padding:6px 10px 4px;border-top:1px solid #d8d8d8;vertical-align:top;}
+#popFindId	.contents	table	 tbody	td	 input.text	 {width:70px;padding:2px 5px 0;border:1px solid #b3b3b3;}
+#popFindId	.contents	table	 tbody	td	 *	{vertical-align:middle;}
+#popFindId	.bt	{text-align:center;}
+#popFindId	.bt	img	{cursor:pointer;}
+
+#popFindPw	{width:335px;height:300px;}
+#popFindPw	h1	 {margin-bottom:25px;}
+#popFindPw	.contents	{width:315px;margin:0 auto 15px;}
+#popFindPw	.contents	.info	{padding:10px 0 15px 15px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_title1.gif') no-repeat left 11px transparent;border-top:3px solid #b6c0e4;}
+#popFindPw	.contents	table	 {width:100%;table-layout:fixed;border-top:2px solid #406dd8;border-bottom:1px solid #406dd8;}
+#popFindPw	.contents	table	 tbody	th	 {padding:3px 0 3px;background-color:#f3f3f3;border-top:1px solid #d8d8d8;vertical-align:middle;text-align:center;}
+#popFindPw	.contents	table	 tbody	td	 {padding:6px 10px 4px;border-top:1px solid #d8d8d8;vertical-align:top;}
+#popFindPw	.contents	table	 tbody	td	 input.text	 {width:120px;padding:2px 5px 0;border:1px solid #b3b3b3;}
+#popFindPw	.contents	table	 tbody	td	 *	{vertical-align:middle;}
+#popFindPw	.result	{padding:40px 0;text-align:center;}
+#popFindPw	.bt	{text-align:center;}
+#popFindPw	.bt	img	{cursor:pointer;}
+
+#popupGameUser	 {width:500px;height:440px;}
+#popupGameUser	 p.close	 {position:absolute;left:442px;top:420px;}
+#popupGameUser	 p.close	 img	{cursor:pointer;}
+
+#popMemberInfo	{position:relative;width:400px;height:550px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/popup/meminfo/bg_body.gif') no-repeat left top transparent;}
+#popMemberInfo	.popMemberInfoTab	 {margin-bottom:25px;padding:23px 0 0 12px;}
+#popMemberInfo	.popMemberInfoTab	 ul	 {clear:both;overflow:hidden;width:100%;}
+#popMemberInfo	.popMemberInfoTab	 ul	 li	{float:left;}
+#popMemberInfo	h1	{margin:0 0 5px 20px;color:#2e73c5;font-weight:bold;}
+#popMemberInfo	h1	img	{vertical-align:middle;margin-top:-3px;}
+#popMemberInfo	.memberInfo	 {position:relative;clear:both;overflow:hidden;width:360px;height:230px;margin:0 0 0 20px;}
+#popMemberInfo	.memberInfo	 .avatar	 {position:absolute;left:0px;top:0px;width:154px;}
+#popMemberInfo	.memberInfo	 .info	{position:relative;float:right;width:198px;}
+#popMemberInfo	.memberInfo	 .info	dl	{clear:both;overflow:hidden;height:120px;}
+#popMemberInfo	.memberInfo	 .info	dl	dt	 {width:196px;height:16px;padding-top:4px;border:1px solid #d9d9d9;text-align:center;}
+#popMemberInfo	.memberInfo	 .info	dl	dd	{padding:5px 0 3px 14px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_gray1.gif') no-repeat 5px 10px transparent;border-bottom:1px solid #d9d9d9;}
+#popMemberInfo	.memberInfo	 .info	p.introduce	{width:182px;height:70px;padding:10px 8px 0;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/popup/meminfo/bg_introduce.gif') no-repeat left top transparent;line-height:1.35;color:#5b8ee2;}
+#popMemberInfo	.memberInfo	 .info	p.introduce	textarea	{width:182px;height:65px;padding:0;border:none;overflow:hidden;background-color:transparent;line-height:1.35;color:#5b8ee2;}
+#popMemberInfo	.memberInfo	 .info	p.introduce	span	 {display:block;padding-top:10px;text-align:right;}
+#popMemberInfo	.memberInfo	 .info	p.modifyMyPW	 {position:absolute;left:138px;top:26px;}
+#popMemberInfo	.memberLevel	{position:relative;clear:both;overflow:hidden;width:360px;height:130px;margin:0 0 0 20px;border-bottom:1px solid #e5e5e5;}
+#popMemberInfo	.memberLevel	p.stage	 {position:absolute;left:0;top:0;}
+#popMemberInfo	.memberLevel	p.level	{position:absolute;left:0;top:40px;width:50px;height:37px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/popup/meminfo/box_level.gif') no-repeat left top transparent;text-align:center;color:#ff8518;font-family:;font-size:15px;font-weight:bold;}
+#popMemberInfo	.memberLevel	p.level	img	{display:block;margin:6px 0 5px 12px;}
+#popMemberInfo	.memberLevel	.jewelry	 {width:246px;height:70px;padding:5px 0 5px 114px;}
+#popMemberInfo	.memberLevel	.jewelry	 table	{table-layout:fixed;border:0;width:246px;}
+#popMemberInfo	.memberLevel	.jewelry	 table	td	 {padding:0;text-align:center;vertical-align:middle;line-height:1;}
+#popMemberInfo	.memberLevel	.jewelry	 table	.jewelry1	{background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/popup/meminfo/box_gem11.gif') no-repeat left top transparent;}
+#popMemberInfo	.memberLevel	.jewelry	 table	.jewelry2	{background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/popup/meminfo/box_gem21.gif') no-repeat left top transparent;}
+#popMemberInfo	.memberLevel	.jewelry	 table	.jewelry3	{background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/popup/meminfo/box_gem31.gif') no-repeat left top transparent;}
+#popMemberInfo	.memberLevel	.jewelry	 table	.jewelry4	{background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/popup/meminfo/box_gem41.gif') no-repeat left top transparent;}
+#popMemberInfo	.memberLevel	.info	 {width:330px;height:21px;padding:16px 0 0 30px;color:#4d4d4d;}
+#popMemberInfo	.memberLevel	.flag	 {position:relative;width:252px;height:114px;margin:0 0 0 108px;}
+#popMemberInfo	.record	{width:360px;margin:7px 0 0 20px;}
+#popMemberInfo	.record	table	 {table-layout:fixed;border:0;width:360px;}
+#popMemberInfo	.record	table	 th	{height:25px;padding:0;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_gray1.gif') no-repeat 10px 9px transparent;text-align:center;vertical-align:middle;font-weight:bold;color:#4d4d4d;}
+#popMemberInfo	.record	table	 td	{height:25px;padding:0;text-align:left;vertical-align:middle;color:#4d4d4d;}
+#popMemberInfo	.record	table	 td	span	 {font-size:11px;color:#091391;}
+#popMemberInfo	.record	table	 td	img	{margin-bottom:2px;border:1px solid #6d7eee;}
+#popMemberInfo	.wishList	{width:360px;margin:0 0 0 20px;}
+#popMemberInfo	.wishList	p.info	{padding-left:16px;text-indent:-16px;padding-bottom:5px;border-bottom:2px solid #d8d8d8;color:#5b8ee2;}
+#popMemberInfo	.wishList	ul	{clear:both;overflow:hidden;width:100%;}
+#popMemberInfo	.wishList	ul	li	{float:left;width:180px;height:84px;}
+#popMemberInfo	.wishList	ul	li.noData	{clear:both;float:none;width:100%;padding-top:40px;text-align:center;}
+#popMemberInfo	.wishList	ul	li	dl	{clear:both;overflow:hidden;width:180px;padding:8px 0 0;}
+#popMemberInfo	.wishList	ul	li	dl	.thumb	{float:left;display:block;padding:2px;border:1px solid #d9d9d9;}
+#popMemberInfo	.wishList	ul	li	dl	.thumb	.icon	 {position:absolute;z-index:5;}
+#popMemberInfo	.wishList	ul	li	dl	.subject	{float:right;width:104px;padding:5px 0 5px;color:#01569f;}
+#popMemberInfo	.wishList	ul	li	dl	.subject	a	{color:#01569f;}
+#popMemberInfo	.wishList	ul	li	dl	dd.price	{float:right;width:104px;padding-bottom:3px;color:#5b82ee;}
+#popMemberInfo	.wishList	ul	li	dl	dd.price	img	{vertical-align:middle;margin-top:-3px;}
+#popMemberInfo	.wishList	ul	li	dl	dd.lv	{float:right;width:104px;color:#5b82ee;}
+#popMemberInfo	.wishList	ul	li	dl	dd.lv	img	{vertical-align:middle;margin-top:-3px;}
+#popMemberInfo	p.close	{position:absolute;left:337px;top:525px;}
+#popMemberInfo	p.close	img	{cursor:pointer;}
+
+#popModifyPW	{width:308px;height:168px;border:1px solid #808080;}
+#popModifyPW	h1	 {height:17px;padding:6px 0 0 10px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/popup/bg_modifyPW.gif') repeat-x left top transparent;color:#fff;font-weight:bold;}
+#popModifyPW	.contents	{height:107px;border-bottom:1px solid #cdcdcd;}
+#popModifyPW	.contents	table	 {table-layout:fixed;width:290px;margin:0 auto;border:0;}
+#popModifyPW	.contents	table	 th	{padding:9px 5px 7px 0;border-top:1px solid #d8d8d8;text-align:right;color:#4d4d4d;font-weight:bold;}
+#popModifyPW	.contents	table	 td	{padding:8px 0 8px 5px;border-top:1px solid #d8d8d8;text-align:left;}
+#popModifyPW	.contents	table	 td	input.text	{width:90%px;padding:2px 5px 0;border:1px solid #b3b3b3;}
+#popModifyPW	.bt	{height:29px;padding-top:8px;background-color:#f2f2f2;text-align:center;}
+#popModifyPW	.bt	img	{cursor:pointer;}
+#popModifyPW	.close	{position:absolute;left:289px;top:4px;}
+#popModifyPW	.close	img	{cursor:pointer;}
+
+#popNXIDReg	{width:308px;height:168px;border:1px solid #808080;}
+#popNXIDReg	h1	 {height:17px;padding:6px 0 0 10px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/popup/bg_modifyPW.gif') repeat-x left top transparent;color:#fff;font-weight:bold;}
+#popNXIDReg	.contents	{height:107px;border-bottom:1px solid #cdcdcd;}
+#popNXIDReg	.contents	table	 {table-layout:fixed;width:290px;margin:0 auto;border:0;}
+#popNXIDReg	.contents	table	 th	{padding:9px 5px 7px 0;border-top:1px solid #d8d8d8;text-align:right;color:#4d4d4d;font-weight:bold;}
+#popNXIDReg	.contents	table	 td	{padding:8px 0 8px 5px;border-top:1px solid #d8d8d8;text-align:left;}
+#popNXIDReg	.contents	table	 td	input.text	{width:90%px;padding:2px 5px 0;border:1px solid #b3b3b3;}
+#popNXIDReg	.bt	{height:29px;padding-top:8px;background-color:#f2f2f2;text-align:center;}
+#popNXIDReg	.bt	img	{cursor:pointer;}
+#popNXIDReg	.close	{position:absolute;left:289px;top:4px;}
+#popNXIDReg	.close	img	{cursor:pointer;}
+
+#popDeleteId	{width:335px;height:320px;}
+#popDeleteId	h1	 {margin-bottom:40px;}
+#popDeleteId	.contents	{width:315px;margin:0 auto 10px;}
+#popDeleteId	.contents	.info	{padding:0 0 10px 15px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_title1.gif') no-repeat left top transparent;color:#2361cd;}
+#popDeleteId	.contents	table	 {width:100%;table-layout:fixed;border-top:2px solid #406dd8;border-bottom:1px solid #406dd8;}
+#popDeleteId	.contents	table	 table	{border:none;}
+#popDeleteId	.contents	table	 tbody	th	 {padding:3px 0 3px;background-color:#f3f3f3;border-top:1px solid #d8d8d8;vertical-align:middle;text-align:center;}
+#popDeleteId	.contents	table	 tbody	td	 {padding:5px 10px 4px;border-top:1px solid #d8d8d8;vertical-align:top;}
+#popDeleteId	.contents	table	 tbody	td	 td	{padding:0;border:none;vertical-align:middle;}
+#popDeleteId	.contents	table	 tbody	td	 input.text	 {width:150px;padding:2px 5px 0;border:1px solid #b3b3b3;}
+#popDeleteId	.contents	table	 tbody	td	 *	{vertical-align:middle;}
+#popDeleteId	.contents	.attention	{padding:15px 0 0 7px;color:#ff0000;font-weight:bold;}
+#popDeleteId	.result	{width:315px;margin:0 auto 20px;}
+#popDeleteId	.result	.info	{margin-bottom:25px;color:#4d4d4d;text-align:center;font-weight:bold;}
+#popDeleteId	.result	.img	{text-align:center;}
+#popDeleteId	.result	.txt	{padding:20px 0 0 10px;padding-left:10px;}
+#popDeleteId	.result	.txt	strong	{color:#ff0000;}
+#popDeleteId	.bt	{text-align:center;}
+#popDeleteId	.bt	img	{cursor:pointer;}
+
+#popGuildInfo	{width:300px;height:305px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/popup/bg_guildInfo.gif') no-repeat left top transparent;}
+#popGuildInfo	h1	 {padding:10px 0 0 10px;}
+#popGuildInfo	.contents	{width:260px;height:230px;padding:15px 20px 0;}
+#popGuildInfo	.contents	table	 {table-layout:fixed;width:260px;margin:0 auto;border:0;}
+#popGuildInfo	.contents	table	 th	{height:30px;padding:0;background-color:#f7f7f7;border:1px solid #d9d9d9;}
+#popGuildInfo	.contents	table	 td	{height:30px;padding:0;border:1px solid #d9d9d9;text-align:center;}
+#popGuildInfo	.close	{padding-right:10px;text-align:right;}
+#popGuildInfo	.close	img	{cursor:pointer;}
+
+#popReport	{width:335px;height:300px;}
+#popReport	h1	 {margin-bottom:20px;}
+#popReport	.contents	{width:315px;margin:0 auto 10px;}
+#popReport	p.info	 {margin-bottom:10px;text-align:center;}
+#popReport	.contents	textarea	{width:293px;height:138px;padding:10px;border:1px solid #b3b3b3;}
+#popReport	.bt	{text-align:center;}
+#popReport	.bt	img	{cursor:pointer;}
+
+#popReport2	{width:378px;height:450px;}
+#popReport2	h1	 {margin-bottom:7px;}
+#popReport2	.contents	{width:360px;margin:0 auto 10px;}
+#popReport2	p.info	 {margin-bottom:8px;text-align:center;}
+#popReport2	.contents	table	 {width:100%;table-layout:fixed;border-top:2px solid #406dd8;border-bottom:1px solid #406dd8;}
+#popReport2	.contents	table	 tbody	th	 {padding:3px 0 3px;background-color:#f3f3f3;border-top:1px solid #d8d8d8;vertical-align:middle;text-align:center;}
+#popReport2	.contents	table	 tbody	td	 {padding:5px 10px 4px;border-top:1px solid #d8d8d8;vertical-align:top;}
+#popReport2	.contents	table	 tbody	td	 input.text	 {width:90%;padding:2px 10px 0;border:1px solid #b3b3b3;}
+#popReport2	.contents	table	 tbody	td	 *	{vertical-align:middle;}
+#popReport2	.contents	textarea	{width:90%;height:138px;padding:10px;border:1px solid #b3b3b3;}
+#popReport2	.bt	{text-align:center;}
+#popReport2	.bt	img	{cursor:pointer;}
+
+#popDesigner	{width:300px;height:400px;}
+#popDesigner	h1	 {margin-bottom:15px;}
+#popDesigner	.contents	{margin-bottom:10px;}
+#popDesigner	h2	{margin:0 0 10px 10px;padding-left:18px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_title1.gif') no-repeat left top transparent;color:#2361cd;font-weight:bold;}
+#popDesigner	ul	{overflow:scroll;overflow-x:hidden;width:268px;height:265px;margin-left:15px;padding:5px 0;border:1px solid #ebebeb;}
+#popDesigner	ul	li	{width:220px;padding:5px 10px;}
+#popDesigner	ul	li	dl	{clear:both;overflow:hidden;width:100%;}
+#popDesigner	ul	li	dl	.thumb	 {float:left;}
+#popDesigner	ul	li	dl	.subject	{float:right;width:150px;padding:3px 0;}
+#popDesigner	ul	li	dl	.subject	a	{color:#01569f;}
+#popDesigner	ul	li	dl	.price	{float:right;width:150px;padding:3px 0;color:#5b82ee;}
+#popDesigner	ul	li	dl	.price	img	{vertical-align:middle;margin-top:-3px;}
+#popDesigner	.close	{text-align:center;}
+#popDesigner	.close	img	{cursor:pointer;}
+
+#popViewMovie	{width:680px;height:620px;}
+#popViewMovie	h1	 {margin-bottom:20px;}
+#popViewMovie	.contents	{height:505px;text-align:center;}
+#popViewMovie	.bt	{position:relative;height:31px;padding-top:8px;background-color:#f2f2f2;text-align:center;border-top:1px solid #cdcdcd;}
+#popViewMovie	.close	{position:absolute;left:615px;top:8px;cursor:pointer;}
+
+#popViewCartoon	{width:560px;}
+#popViewCartoon	h1	 {margin-bottom:20px;}
+#popViewCartoon	.contents	{margin-bottom:20px;}
+#popViewCartoon	.bt	{position:relative;height:31px;padding-top:8px;background-color:#f2f2f2;text-align:center;border-top:1px solid #cdcdcd;}
+#popViewCartoon	.close	{position:absolute;left:495px;top:8px;cursor:pointer;}
+
+#popViewCupimon	{width:500px;height:420px;color:#4d4d4d;}
+#popViewCupimon	h1	 {margin-bottom:15px;}
+#popViewCupimon	.contents	{clear:both;overflow:hidden;width:480px;height:315px;padding:0 10px;}
+#popViewCupimon	h2	{margin-bottom:10px;padding-left:18px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_title1.gif') no-repeat left top transparent;color:#2361cd;font-weight:bold;}
+#popViewCupimon	.img	{float:left;}
+#popViewCupimon	.info	{float:right;width:236px;height:268px;border:1px solid #d9d9d9;overflow-y:auto;}
+#popViewCupimon	.info	dl	{padding:10px;}
+#popViewCupimon	.info	dt	 {font-weight:bold;padding:0 0 5px 10px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_gray5.gif') no-repeat 2px 5px transparent;}
+#popViewCupimon	.info	dd	{padding:0 0 5px 10px;}
+#popViewCupimon	.bt	{position:relative;height:31px;padding-top:8px;background-color:#f2f2f2;text-align:center;border-top:1px solid #cdcdcd;}
+#popViewCupimon	.close	{margin-left:410px;cursor:pointer;}
+
+#popQuizExpertInfo	{width:470px;height:470px;}
+#popQuizExpertInfo	h1	 {padding:15px 0 10px;text-align:center;}
+#popQuizExpertInfo	h1	 img	{margin-top:-3px;vertical-align:middle;}
+
+#popBestdresserDetail	{width:500px;height:350px;}
+#popBestdresserDetail	h1	 {margin-bottom:17px;}
+#popBestdresserDetail	.popContents	{clear:both;overflow:hidden;width:460px;margin:0 auto 15px;}
+#popBestdresserDetail	.info	{float:left;width:154px;text-align:center;}
+#popBestdresserDetail	.img	{margin-top:-3px;vertical-align:middle;}
+#popBestdresserDetail	.a	{color:#313031;}
+#popBestdresserDetail	.avatar	{width:154px;margin-bottom:6px;}
+#popBestdresserDetail	.avatar	img	{margin:0;vertical-align:top;}
+#popBestdresserDetail	.text	{float:right;overflow-x:hidden;overflow-y:scroll;width:273px;height:178px;padding:10px;border:1px solid #e4e4e4;}
+#popBestdresserDetail	.close	{text-align:center;}
+#popBestdresserDetail	.close	img	{cursor:pointer;}
+
+#popBestdresserSea	{width:662px;height:600px;}
+#popBestdresserSea	h1	 {margin-bottom:15px;}
+#popBestdresserSea	.popContents	{position:relative;width:600px;height:432px;margin:0 auto 30px;padding:10px;overflow-x:hidden;overflow-y:scroll;border:1px solid #e4e4e4;}
+#popBestdresserSea	.bestDresserNewCon	{width:564px;margin:0 auto;}
+#popBestdresserSea	.bestDresserCon	{width:564px;margin:0 auto;}
+#popBestdresserSea	.close	{text-align:center;}
+
+/* etc */
+.myCharacter	{position:relative;width:100%;height:295px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/etc/img_myCharacter.jpg') no-repeat left top transparent;margin-bottom:5px;}
+.myCharacter	p.server	{position:absolute;left:138px;top:98px;}
+.myCharacter	p.name	{position:absolute;left:138px;top:127px;}
+.myCharacter	p.class	{position:absolute;left:138px;top:150px;}
+.myCharacter	p.level	{position:absolute;left:138px;top:172px;}
+.myCharacter	p.guild	{position:absolute;left:138px;top:201px;}
+.myCharacter	p.visual	{position:absolute;left:334px;top:23px;width:326px;text-align:right;}
+.modifyCharacter	{background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/etc/bg_modifyCharacter1.jpg') repeat-y left top transparent;}
+.modifyCharacter	.selectServer	{width:610px;margin:0 auto 25px;padding:6px 10px 5px;background-color:#566447;border-top:1px solid #1f2f0f;border-bottom:1px solid #4a593b;}
+.modifyCharacter	.selectServer	*	{vertical-align:middle;}
+.modifyCharacter	.selectServer	select	{color:#627053;font-size:11px;}
+.modifyCharacter	.selectServer	img	{margin-left:10px;}
+.modifyCharacter	.characterList	{clear:both;overflow:hidden;width:560px;margin:0 auto 30px;}
+.modifyCharacter	.characterList	li	{float:left;width:100px;padding:0 20px;text-align:center;}
+.modifyCharacter	.characterList	li	span.img	{display:block;width:100px;height:110px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/etc/bg_modifyCharacter_thumb.jpg') no-repeat left top transparent;}
+.modifyCharacter	.characterList	li	span.img	img	{margin-top:9px;border:1px solid #28321d;}
+.modifyCharacter	.characterList	li	span.txt	{display:block;}
+.modifyCharacter	.choiceCharacter	{height:43px;padding:11px 0 0;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/etc/bg_modifyCharacter2.jpg') no-repeat left top transparent;text-align:center;}
+#viewItem	 {position:absolute;width:298px;height:298px;border:1px solid #808080;background-color:#fff;color:#4d4d4d;}
+#viewItem	 h2	{height:17px;margin-bottom:15px;padding:5px 0 0 10px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/shop/bg_viewItem.gif') repeat-x left top transparent;border-bottom:1px solid #cdcdcd;font-weight:bold;color:#fff;}
+#viewItem	 p.close	 {position:absolute;left:278px;top:4px;}
+#viewItem	 p.close	 img	{cursor:pointer;}
+#viewItem	 dl.item	 {clear:both;overflow:hidden;width:268px;margin:0 auto 10px;}
+#viewItem	 dl.item	 dt	{float:right;width:156px;padding:5px 0 3px;background-color:#fafafa;border:1px solid #d9d9d9;color:#01569f;font-weight:bold;text-align:center;}
+#viewItem	 dl.item	 .itemThumb	{float:left;width:98px;height:123px;border:1px solid #d9d9d9;text-align:center;}
+#viewItem	 dl.item	 .itemThumb	img	{margin-top:26px;}
+#viewItem	 dl.item	 .itemCategory	 {float:right;width:144px;padding:5px 0 3px 14px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_gray1.gif') no-repeat 5px 10px transparent;border-bottom:1px solid #d9d9d9;}
+#viewItem	 dl.item	 .itemCash	 {float:right;width:144px;padding:5px 0 3px 14px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_gray1.gif') no-repeat 5px 10px transparent;border-bottom:1px solid #d9d9d9;}
+#viewItem	 dl.item	 .itemLevel	 {float:right;width:144px;padding:5px 0 3px 14px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_gray1.gif') no-repeat 5px 10px transparent;border-bottom:1px solid #d9d9d9;}
+#viewItem	 dl.description	 {clear:both;overflow:hidden;width:268px;margin:0 auto;}
+#viewItem	 dl.description	 dt	{margin-bottom:3px;padding:5px 0 3px 10px;background-color:#fafafa;border:1px solid #d9d9d9;border-top-width:3px;font-weight:bold;}
+#viewItem	 dl.description	 dd	{height:50px;padding:10px;border:1px solid #d9d9d9;color:#5b8ee2;}
+.error	{height:240px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/etc/bg_error.gif') no-repeat 22px top transparent;}
+.error	.txt	{padding:32px 0 20px 192px;}
+.error	.bt	{padding:0 0 0 296px;}
+.error	.bt	img	{cursor:pointer;}
+/*
+     FILE ARCHIVED ON 21:49:56 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:17 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.679
+  exclusion.robots: 0.03
+  exclusion.robots.policy: 0.013
+  esindex: 0.014
+  cdx.remote: 29.738
+  LoadShardBlock: 84.546 (3)
+  PetaboxLoader3.datanode: 126.977 (5)
+  load_resource: 215.476 (2)
+  PetaboxLoader3.resolve: 135.127 (2)
+*/

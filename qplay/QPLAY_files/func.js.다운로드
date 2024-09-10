@@ -1,0 +1,290 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+
+// 쿠키 읽기
+function getCookies(nameVal) {
+    if (nameVal.length > 4) {
+        if (nameVal.substring(0, 4) == "NXCH") {
+            return getCookies2(nameVal);
+        }
+    }
+
+    var numCookie = document.cookie.length;
+    var oven = document.cookie.split("; ");
+
+    for (var i = 0; i < oven.length; i++) {
+        if (oven[i].indexOf("=") != -1) {
+            cookieName = oven[i].substring(0, oven[i].indexOf("="));
+        } else {
+            cookieName = oven[i];
+        }
+
+        if (cookieName == nameVal) {
+            if (oven[i].indexOf("=") != -1) {
+                cookieVal = oven[i].substr(oven[i].indexOf("=") + 1);
+            } else {
+                cookieVal = "";
+            }
+            return cookieVal;
+        }
+    }
+    return "";
+} 
+function LaunchQplay ( gamecode, launchtype, version, argument )
+{
+	var strCookie = getCookies( 'QPENC' );
+	
+	if ( launchtype == 0 && ( getCookies( "QIL" ) != "1" || strCookie == "" ) )
+	{
+		alert('로그인 후 사용하세요.');
+	}
+	else
+	{
+		if( g_IsRun )
+		{
+			alert( "큐플레이를 실행하는 중입니다. 잠시만 기다려주세요." );
+		}
+		else
+		{
+			g_IsRun = true;
+			try
+			{
+				var isLoad = parent.frmBottom.document.all.QxConn.CheckInit();
+				if( isLoad == "999" )
+				{
+					if( parent.frmBottom.QxConn.SetCookie( strCookie ) )
+					{
+						parent.frmBottom.QxConn.GameLaunch( gamecode, launchtype, version, argument );
+					}
+					else
+					{
+						alert('ActiveX 에 쿠키 세팅 실패');
+					}
+				}
+				else
+				{
+					alert("엑티브엑스를 설치하는 중입니다. 잠시후 이용해 주세요.");
+				}
+
+			}
+			catch( e )
+			{
+				if( confirm( "게임을 실행하려면 로그아웃 후 엑티브엑스를 설치 해야 합니다. 설치 하시겠습니까?" ) )
+				{
+					top.location.href = "https://web.archive.org/web/20141031214957/http://qplay.nexon.com";
+				}
+			}
+			finally
+			{
+				g_IsRun= false;
+			}
+		}
+	}
+}
+
+function viewUserInfo( codeQplayServer, strQplayID )
+{
+    if ( codeQplayServer == 'Sea' || codeQplayServer == 2 )
+	{
+	    alert( '바다 서버 회원 정보는 제공하지 않습니다.' );
+	    return;
+	}
+	
+	if( getCookies( "QIL" ) == "1"  )
+	{
+		if( codeQplayServer == 0 )
+			viewMyUserInfo();
+		else
+		{
+			if ( codeQplayServer == 'Sea' )
+			    codeQplayServer = 2;
+			else if ( codeQplayServer == 'Sky' )
+			    codeQplayServer = 1;    			    
+			
+			openWin( '/myinfo/info.aspx?codeQplayServer=' + codeQplayServer + '&strQplayID=' + strQplayID, 550, 400, 0, 0, "UserInfo" );
+		}
+	}
+	else
+	{
+		alert("로그인 후 이용할 수 있습니다.");
+	}
+}
+
+function viewMyUserInfo()
+{
+	if( getCookies( "QIL" ) == "1"  )
+	{
+	    openWin("/myinfo/info.aspx?", 550, 400, 0, 0, "UserInfo");
+	}
+	else
+	{
+		alert("로그인 후 이용할 수 있습니다.");
+	}
+}
+
+function viewMySomangBox()
+{
+	if( getCookies( "QIL" ) == "1"  )
+	{
+	    openWin("/myinfo/wishbox.aspx", 550, 400, 0, 0, "UserInfo");
+	}
+	else
+	{
+		alert("로그인 후 이용할 수 있습니다.");
+	}
+}
+
+function GetBitMask( nNumber, nStart, nEnd )
+{
+	var n4RetVal = nNumber;
+
+	// bit shift
+	n4RetVal = n4RetVal >> nStart;
+	
+	// make masking
+	var n4Mask = 0;
+	for ( var idx=0; idx < ( nEnd - nStart + 1 ); idx++ )
+	{
+		n4Mask = n4Mask*2+1;
+	}
+
+	// masking
+	n4RetVal = n4RetVal & n4Mask;
+
+	return n4RetVal;
+}
+
+/*********************************************************************
+*	1) TERRA(2003/??/??) : 팝업창을 띄운다..
+*	args : URL, height, width, isResizable, isScrollbars, isNewWin , isAlertMessage
+*********************************************************************/
+function openWin(strUrl) {
+    var args = openWin.arguments;
+    var sHeight = window.screen.height;
+    var sWidth = window.screen.width;
+    var iHeight, iWidth, isResizable, isScrollbars, isNewWin, isAlertMessage;
+    var iLeft, iTop;
+    if (args.length >= 2)
+        iHeight = args[1];
+    else
+        iHeight = 500;
+
+    if (args.length >= 3)
+        iWidth = args[2];
+    else
+        iWidth = 300;
+
+    if (args.length >= 4)
+        isResizable = args[3];
+    else
+        isResizable = 1;
+
+    if (args.length >= 5)
+        isScrollbars = args[4];
+    else
+        isScrollbars = 0;
+
+    if (args.length >= 6)
+        isNewWin = args[5];
+    else
+        isNewWin = null;
+
+    if (args.length >= 7)
+        isAlertMessage = args[6];
+    else
+        isAlertMessage = "";
+
+    iTop = (sHeight - iHeight) / 2;
+    iLeft = (sWidth - iWidth) / 2;
+
+    //alert( iHeight + "-" + iWidth );
+    if (isAlertMessage != "")
+        openWindow_cookie(strUrl, isNewWin, "height=" + iHeight + ", width=" + iWidth + ", top=" + iTop + ", left=" + iLeft + ", resizable=" + isResizable + " ,scrollbars=" + isScrollbars, true, isAlertMessage);
+    else
+        openWindow(strUrl, isNewWin, "height=" + iHeight + ", width=" + iWidth + ", top=" + iTop + ", left=" + iLeft + ", resizable=" + isResizable + " ,scrollbars=" + isScrollbars);
+}
+
+/*********************************************************************
+*	1) TERRA(2004/09/03) : 팝업창을 띄운다..
+*	args : strURL, strName, strFeatures, isReplace , alertMessage
+*********************************************************************/
+function openWindow() {
+    var args = openWindow.arguments;
+    var objNewWindow;
+    switch (args.length) {
+        case 1:
+            objNewWindow = window.open(args[0]);
+            break;
+        case 2:
+            objNewWindow = window.open(args[0], args[1]);
+            break;
+        case 3:
+            objNewWindow = window.open(args[0], args[1], args[2]);
+            break;
+        case 4:
+            objNewWindow = window.open(args[0], args[1], args[2], args[3]);
+            break;
+        case 5:
+            objNewWindow = window.open(args[0], args[1], args[2], args[3]);
+            break;
+    }
+}
+
+function Linkcopy(strlink) {
+    window.clipboardData.setData('Text', strlink);
+    alert('링크 주소가 복사 되었습니다.');
+} 
+/*
+function QxLaunchGame()
+{
+	var game = "786433";  			
+	var arg = "0";    
+		     
+	NGM.QxLaunchGame( game, arg );	
+	document.getElementById( "ifrWiselog" ).src = "/wiselog/gamestart.aspx";	
+}
+*/
+ 
+function QxForceInstall()
+{
+	PS.game.startGame({
+	    gameCode: "786433",
+	    param: "0",
+	    forceInstall: true
+	});
+
+}
+
+
+
+}
+/*
+     FILE ARCHIVED ON 21:49:57 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:18 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.451
+  exclusion.robots: 0.018
+  exclusion.robots.policy: 0.009
+  esindex: 0.01
+  cdx.remote: 30.131
+  LoadShardBlock: 116.778 (3)
+  PetaboxLoader3.datanode: 151.666 (5)
+  PetaboxLoader3.resolve: 122.537 (3)
+  load_resource: 209.536 (2)
+*/

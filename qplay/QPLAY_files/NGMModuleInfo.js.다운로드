@@ -1,0 +1,36 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+var NGMModuleInfo = '<?xml version="1.0"?><NGMModule><NGMDll host="platform.nexon.com/NGM/Bin/NGMDll.dll" crc="3642860426" /><GameData><qplay gamecode="786433" crc="0" /></GameData></NGMModule>';
+
+
+}
+/*
+     FILE ARCHIVED ON 21:52:34 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:20 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.556
+  exclusion.robots: 0.019
+  exclusion.robots.policy: 0.008
+  esindex: 0.009
+  cdx.remote: 10.012
+  LoadShardBlock: 178.51 (6)
+  PetaboxLoader3.datanode: 233.297 (8)
+  load_resource: 138.328 (2)
+  PetaboxLoader3.resolve: 60.1 (2)
+*/

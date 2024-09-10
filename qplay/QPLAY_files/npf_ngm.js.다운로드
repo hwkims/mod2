@@ -1,0 +1,583 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+function _NGM()
+{
+	this.strGameAXName		= "NXCOM.NxGameControl.2";
+	this.strGameFPName		= "application/x-npnxgame";
+	this.objNxGame			= null;
+	this.versionNxGame		= 0;
+
+	this.strNxMInfoAXName	= "NXCOM.NxMachineControl.2";
+	this.strNxMInfoFPName	= "application/x-npnxminfo";
+	this.objNxMInfo			= null;
+	this.versionNxMInfo		= 0;
+
+	if ( window.navigator.userAgent.indexOf("x64") > -1 )
+	{
+		this.strGameAXName		= "NXCOM.NxGameControl.2.x64";
+		this.strNxMInfoAXName	= "NXCOM.NxMachineControl.2.x64";
+	}
+
+	this.strServerHost		= "platform.nexon.com/NGM/Bin/NGMDll.dll";
+	this.strNGMDllCRC		= "";
+	this.strGameDatas		= "";
+
+	this.strInstallPage = "https://web.archive.org/web/20141031215234/http://platform.nexon.com/ngm/html/pop_ngm_guide.html";
+
+	// Browser Info Setting
+	if ( (window.navigator.appName == "Microsoft Internet Explorer") || ( window.navigator.userAgent.toLowerCase().indexOf('trident') > -1 ) )
+	{
+		this.BrowserInfo= "IE";
+	}
+	else if (window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
+	{
+		this.BrowserInfo= "FF";
+	}
+	else if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1)
+	{
+		this.BrowserInfo= "Chrome";
+	}
+	else if (window.navigator.userAgent.toLowerCase().indexOf('opera') > -1)
+	{
+		this.BrowserInfo= "Opera";
+	}
+	else if (window.navigator.userAgent.toLowerCase().indexOf('safari') > -1)
+	{
+		this.BrowserInfo= "Safari";
+	}
+	else if (window.navigator.userAgent.toLowerCase().indexOf('netscape') > -1)
+	{
+		this.BrowserInfo= "Netscape";
+	}
+	else
+	{
+		this.BrowserInfo= "Unknown";
+	}
+	
+	if ( this.BrowserInfo == "IE" )
+	{
+		this.ModuleFormat= "AX";
+	}
+	else if (  this.BrowserInfo == "Unknown")
+	{
+		this.ModuleFormat= "err";
+	}
+	else
+	{
+		this.ModuleFormat= "NP";
+	}
+
+	this.ErrorHandler = function NGM_ErrorHandler()
+	{
+		if (window.navigator.userAgent.match(/iPhone|iPod|iPad|Android/) != null)
+		{
+			alert("모바일 환경에서는 PC 게임 실행을 지원하지 않습니다.");
+		}
+		else
+		{
+			window.open( this.strInstallPage, null, "height=500,width=450,status=yes,toolbar=no,menubar=no,location=no");
+			if ( typeof( nxPlayLoger ) == "function" ) nxPlayLoger( "NGMError" );
+		}
+	};
+
+	this.LoadModuleInfo = function NGM_LoadModuleInfo()
+	{
+		if (this.ModuleFormat == "AX")
+		{
+			var xmlDoc	= null;
+			var xmlObj	= null;
+
+			try
+			{
+				xmlDoc	= new ActiveXObject( "Microsoft.XMLDOM" );
+			}
+			catch( ex )
+			{
+			}
+
+			if ( xmlDoc != null )
+			{
+				xmlDoc.async="false";
+
+				if ( xmlDoc.loadXML( NGMModuleInfo ) )
+				{
+					xmlObj	= xmlDoc.documentElement;
+
+					var nodeNGMDll		= xmlObj.getElementsByTagName( "NGMDll" )[0];
+
+					this.strServerHost	= nodeNGMDll.getAttribute( "host" );
+					this.strNGMDllCRC	= nodeNGMDll.getAttribute( "crc" );
+					this.strGameDatas	= "";
+				}
+			}
+		}
+		else if (this.ModuleFormat == "NP")
+		{
+			var parser=new DOMParser();
+			var doc = parser.parseFromString(NGMModuleInfo,"text/xml");
+			var xmlObj=doc.documentElement;
+
+			var nodeNGMDll		= xmlObj.getElementsByTagName( "NGMDll" )[0];
+			this.strServerHost	= nodeNGMDll.getAttribute( "host" );
+			this.strNGMDllCRC	= nodeNGMDll.getAttribute( "crc" );
+
+			this.strGameDatas	= "";
+		}
+	};
+
+	this.CreateNpObject = function NGM_CreateNpObject( strPluginId, strPluginName )
+	{
+		navigator.plugins.refresh(false);
+
+		var mimetype = navigator.mimeTypes[ strPluginName ];
+
+		if (mimetype && mimetype.enabledPlugin)
+		{
+			var embed		= document.createElement( 'embed' );
+
+			embed.id		= strPluginId;
+			embed.type		= strPluginName;
+			embed.pluginspage	= this.strInstallPage;
+			embed.style.visiblity	= "hidden";
+			embed.style.height		= "0px";
+			embed.style.width		= "0px";
+
+			var body = document.getElementsByTagName( 'body' );
+
+			if ( body != null && body != "undefined" )
+				body[0].appendChild( embed );
+		}
+
+		return document.getElementById( strPluginId );
+	};
+
+	this.InitGameControl = function NGM_InitGameControl()
+	{
+		if( this.objNxGame == null )
+		{
+			try
+			{
+				if (this.ModuleFormat == "AX")
+				{
+					this.objNxGame = new ActiveXObject( this.strGameAXName );
+				}
+				else if (this.ModuleFormat == "NP")
+				{
+					this.objNxGame = this.CreateNpObject( 'npnxgame', this.strGameFPName );
+				}
+			}
+			catch( ex )
+			{
+			}
+
+			if ( this.objNxGame != null )
+			{
+				this.LoadModuleInfo();
+
+				this.objNxGame.ServerHost	= this.strServerHost;
+				this.objNxGame.NGMDllCRC	= this.strNGMDllCRC;
+				this.objNxGame.GameDatas	= this.strGameDatas;
+
+				try
+				{
+					this.versionNxGame = this.objNxGame.GetVersion();
+				}
+				catch ( ex )
+				{
+					this.versionNxGame = 1.0;
+				}
+			}
+		}
+	};
+
+	this.InitMachineControl = function NGM_InitMachineControl()
+	{
+		if( this.objNxMInfo == null )
+		{
+			try
+			{
+				if (this.ModuleFormat== "AX")
+				{
+					this.objNxMInfo = new ActiveXObject( this.strNxMInfoAXName );
+				}
+				else if (this.ModuleFormat == "NP")
+				{
+					this.objNxMInfo = this.CreateNpObject( 'npnxminfo', this.strNxMInfoFPName );
+				}
+			}
+			catch( ex )
+			{
+			}
+
+			if ( this.objNxMInfo != null )
+			{
+				try
+				{
+					this.versionNxMInfo = this.objNxMInfo.GetVersion();
+				}
+				catch ( ex )
+				{
+				}
+			}
+		}
+	};
+
+	this.GenerateMID = function NGM_GenerateMID()
+	{
+		this.InitMachineControl();
+
+		try
+		{
+			var mid = this.objNxMInfo.GenerateMID();
+
+			if ( mid == '')
+			{
+				if ( this.versionNxMInfo >= 1.1 )
+				{
+					alert( "고객님의 PC 환경에서는 지정PC 이용이 불가능합니다." );
+				}
+				else
+				{
+					this.ErrorHandler();
+				}
+			}
+			
+			return mid;
+		}
+		catch( ex )
+		{
+			if ( this.IsChrome() && this.IsInstalledMachinePlugin() )
+				alert( "현재 사용 중인 크롬 브라우저에서는\nNGM 플러그인에 대한 실행 허용 처리가 필요합니다.\r\n브라우저 상단의 노란색 안내창에서\n[ 이 사이트에서 항상 실행 ] 혹은\n[ Always run on this site ] 버튼을 누른 후\n다음 작업을 다시 해주세요.\r\n노란색 안내창이 나타나지 않을 경우\n새로고침(F5) 후에 다시 시도해 주세요" );
+			else
+				this.ErrorHandler();
+		}
+		return '';
+	};
+
+	this.GetComputerName = function GetComputerName()
+	{
+		this.InitMachineControl();
+		
+		try
+		{
+			var name = this.objNxMInfo.GetPCName();
+
+			return name;
+		}
+		catch( ex )
+		{
+			if ( this.IsChrome() && this.IsInstalledMachinePlugin() )
+			{
+			}
+			else
+				this.ErrorHandler();
+		}
+		return '';
+	};
+
+	this.IsNGMInstalled = function NGM_IsNGMInstalled()
+	{
+		this.InitGameControl();
+
+		if( this.objNxGame == null )
+		{
+			return 0;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+
+	this.IsInstalledGamePlugin = function NGM_IsInstalledGamePlugin()
+	{
+		var mimetype = navigator.mimeTypes[ this.strGameFPName ];
+
+		if ( mimetype == undefined )
+			return false;
+		else
+			return true;
+	}
+
+	this.IsInstalledMachinePlugin = function NGM_IsInstalledMachinePlugin()
+	{
+		var mimetype = navigator.mimeTypes[ this.strNxMInfoFPName ];
+
+		if ( mimetype == undefined )
+			return false;
+		else
+			return true;
+	}
+
+	this.IsChrome = function NGM_IsChrome()
+	{
+		return this.BrowserInfo == "Chrome" ? true : false;
+	}
+
+	this.GenerateArgument = function NGM_GenerateArgument( mode, game, passport, arg, age, a2sk, position ) 
+	{
+		var argument = argument = "-dll:" + this.strServerHost + ":" + this.strNGMDllCRC + " -locale:KR -mode:" + mode + " -game:" + game + ":0 -token:'" + passport + "' -passarg:'" + arg + "'";
+
+		if ( age != null && age != "" && age != "undefined" ) 
+		{
+			argument += " -age:" + age;
+		}
+
+		if ( a2sk != null && a2sk != "" && a2sk != "undefined") 
+		{
+			argument += " -a2sk:'" + a2sk + "'";
+		}
+
+		if ( position == null || position == "" || position == "undefined")
+		{
+			position = "GameWeb|" + location.href;
+		}
+
+		if ( position.length > 100 )
+		{
+			position = position.substr(0,100);
+		}
+
+		argument += " -position:'" + position + "'";
+
+		return argument;
+	};
+
+	this.ExecuteNGM = function NGM_ExecuteNGM( argument )
+	{
+		try 
+		{
+			var ret = this.objNxGame.ExecuteNGM( String( argument ) );
+
+			if ( 2 == ret ) 
+			{
+				this.ErrorHandler();
+			}
+			else if ( 0 != ret )
+			{
+				alert( "Cannot Launch NGM! error code=" + ret );
+			}
+		}
+		catch ( ex ) 
+		{
+			if ( this.IsChrome() && this.IsInstalledGamePlugin() )
+				alert( "현재 사용 중인 크롬 브라우저에서는\nNGM 플러그인에 대한 실행 허용 처리가 필요합니다.\r\n브라우저 상단의 노란색 안내창에서\n[ 이 사이트에서 항상 실행 ] 혹은\n[ Always run on this site ] 버튼을 누른 후\n홈페이지의 게임시작 버튼을 다시 눌러주세요.\r\n노란색 안내창이 나타나지 않을 경우\n새로고침(F5) 후에 다시 시도해 주세요" );
+			else
+				this.ErrorHandler();
+		}
+	}
+
+	this.GxForceInstall = function NGM_GxForceInstall( game, arg, passport, age, position )
+	{
+		this.InitGameControl();
+
+		var a2sk	= this.GetCookie( "A2SK" );
+		var argument = this.GenerateArgument( "install", game, passport, arg, age, a2sk, position );
+
+		this.ExecuteNGM( argument );
+		if ( typeof( nxPlayLoger ) == "function" ) nxPlayLoger( "install", game );
+	};
+	
+	this.GxLaunchGame = function NGM_GxLaunchGame( game, arg, passport, age, position )
+	{
+		this.InitGameControl();
+
+		var a2sk	= this.GetCookie( "A2SK" );
+		var argument = this.GenerateArgument( "launch", game, passport, arg, age, a2sk, position );
+
+		this.ExecuteNGM( argument );
+		if ( typeof( nxPlayLoger ) == "function" ) nxPlayLoger( "launch", game );
+	};
+
+	this.WriteLogHandler = function NGM_WriteLogHandler( resultObject, responseXML )
+	{
+	};
+
+	this.LaunchGameForGuestUser = function NGM_LaunchGameForGuestUser( game, arg, position )
+	{
+		var ngp	= this.GetCookie( "NGP" );
+		this.GxLaunchGame( game, arg, ngp, null, position );
+	};
+
+	this.LaunchGame = function NGM_LaunchGame( game, arg, position )
+	{
+		var npp		= this.GetCookie( "NPP" );
+		this.GxLaunchGame( game, arg, npp, null, position );
+	};
+
+	this.ForceInstall = function NGM_ForceInstall( game, arg, position )
+	{
+		var npp		= this.GetCookie( "NPP" );
+		this.GxForceInstall( game, arg, npp, null, position );
+	};
+
+	this.QxForceInstall = function NGM_QxForceInstall( game, arg, position )
+	{
+		var qpenc	= this.GetCookie( "QPENC" );
+		this.GxForceInstall( game, arg, qpenc, null, position );
+	};
+
+	this.QxLaunchGame = function NGM_QxLaunchGame( game, arg, position )
+	{
+		var qpenc	= this.GetCookie( "QPENC" );
+		this.GxLaunchGame( game, arg, qpenc, null, position );
+	};
+
+
+	this.MxForceInstall = function NGM_MxForceInstall( game, arg, position )
+	{
+		var msenc	= this.GetCookie( "MSGENC" );
+		this.GxForceInstall( game, arg, msenc, null, position );
+	};
+
+	this.MxLaunchGame = function NGM_MxLaunchGame( game, arg1, arg2, position )
+	{
+		var msenc		= this.GetCookie( "MSGENC" );
+		var launchtype	= String( arg1 ).toLowerCase();
+		var lastworld	= String( arg2 ).toLowerCase();
+
+		if ( lastworld != null && lastworld != "" && lastworld != "undefined" )
+		{
+			msenc	= msenc + ":" + arg2;
+		}
+		if ( launchtype == "gameluanching" )
+		{
+			msenc	= "";
+		}
+
+		this.GxLaunchGame( game, arg1, msenc, null, position );
+	};
+
+
+	this.ChannelForceInstall = function NGM_ChannelForceInstall( game, arg, chenc, service, position )
+	{
+		var prefix;
+		var chpp;
+
+		prefix = "CHPP:01:" + service + ":";
+		chpp = prefix + chenc;
+
+		this.GxForceInstall( game, arg, chpp, null, position );
+	};
+
+	this.ChannelLaunchGame = function NGM_ChannelLaunchGame( game, arg, chenc, service, position )
+	{
+		var prefix;
+		var chpp;
+
+		prefix = "CHPP:01:" + service + ":";
+		chpp = prefix + chenc;
+
+		this.GxLaunchGame( game, arg, chpp, null, position );
+	};
+
+
+	this.MxChannelForceInstall = function NGM_MxChannelForceInstall( game, arg, service, position )
+	{
+		var prefix;
+		var chpp;
+		var msenc	= this.GetCookie( "MSGENC" );
+
+		prefix = "CHPP:01:" + service + ":";
+		chpp = prefix + msenc;
+
+		this.GxForceInstall( game, arg, chpp, null, position );
+	};
+
+	this.MxChannelLaunchGame = function NGM_MxChannelLaunchGame( game, arg1, arg2, service, position )
+	{
+		var prefix;
+		var chpp;
+		var msenc		= this.GetCookie( "MSGENC" );
+		var launchtype	= String( arg1 ).toLowerCase();
+		var lastworld	= String( arg2 ).toLowerCase();
+
+		if ( lastworld != null && lastworld != "" && lastworld != "undefined" )
+		{
+			msenc	= msenc + ":" + arg2;
+		}
+		if ( launchtype == "gameluanching" )
+		{
+			msenc	= "";
+		}
+
+		prefix = "CHPP:01:" + service + ":";
+		chpp = prefix + msenc;
+
+		this.GxLaunchGame( game, arg1, chpp, null, position );
+	};
+
+
+	this.DownloadNGM = function NGM_DownloadNGM()
+	{
+		var DownloadURL = "https://web.archive.org/web/20141031215234/http://platform.nexon.com/NGM/Bin/Setup.exe";
+		if( Platform.IsTestPlatform() )
+			DownloadURL = "https://web.archive.org/web/20141031215234/http://platform.nexon.com/NGM/Bin/SetupT.exe";
+
+		location.href = DownloadURL;
+	};
+
+	this.GetCookie = function NGM_GetCookie( nameVal )
+	{
+		var numCookie = document.cookie.length;
+		var oven = document.cookie.split( '; ' );
+
+		for ( var i = 0; i < oven.length; i++ )
+		{
+			if ( oven[i].indexOf( '=' ) != -1 )
+			{
+				cookieName = oven[i].substring( 0, oven[i].indexOf( '=' ) );
+			}
+			else
+			{
+				cookieName = oven[i];
+			}
+
+			if ( cookieName == nameVal )
+			{
+				if ( oven[i].indexOf( '=' ) != -1 )
+				{
+					cookieVal = oven[i].substr( oven[i].indexOf( '=' ) + 1 );
+				} else {
+					cookieVal = '';
+				}
+				return cookieVal;
+			}
+		}
+		return '';
+	};
+}
+
+var NGM = new _NGM();
+
+}
+/*
+     FILE ARCHIVED ON 21:52:34 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:19 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 5.682
+  exclusion.robots: 0.022
+  exclusion.robots.policy: 0.01
+  esindex: 0.012
+  cdx.remote: 20.896
+  LoadShardBlock: 28.869 (3)
+  PetaboxLoader3.datanode: 55.123 (5)
+  load_resource: 111.091 (2)
+  PetaboxLoader3.resolve: 63.277 (2)
+*/

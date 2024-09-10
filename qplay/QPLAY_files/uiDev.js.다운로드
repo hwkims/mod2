@@ -1,0 +1,205 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+/*--------------------------------------------------------------------------*/
+/*  $id Selector
+/*--------------------------------------------------------------------------*/
+/* getElementById : $id("id") */
+function $id()	{
+	var elements = new Array();
+
+	for (var i = 0; i < arguments.length; i++) {
+		var element = arguments[i];
+		if (typeof element == 'string')
+		element = document.getElementById(element);
+
+		if (arguments.length == 1)
+		return element;
+
+		elements.push(element);
+	}
+
+	return elements;
+}
+
+/*--------------------------------------------------------------------------*/
+/*  getElementsByClassName Selector
+/*--------------------------------------------------------------------------*/
+/* getElementsByClassName : getElementsByClassName("className","parentId","elementName")*/
+document.getElementsByClassName = function(_class, el_id, elTag) {
+	if (elTag == false || elTag == null) {
+		elTag = '*';
+	}
+	var parent, els, returnArr = new Array(), i = 0;
+	parent = (el_id) ? document.getElementById(el_id) : document;
+	els = parent.getElementsByTagName(elTag) || parent.all;
+	for (i; i < els.length; i++)
+		if (els[i].className == _class) 
+			returnArr[returnArr.length] = els[i];
+	return returnArr;
+}
+
+/*--------------------------------------------------------------------------*/
+/*  add event
+/*--------------------------------------------------------------------------*/
+function addEvent( obj, type, fn )
+{
+	if (obj.addEventListener)	/* Dom Standard */
+		obj.addEventListener( type, fn, false );
+	else if (obj.attachEvent)	/* MS Script */
+	{
+		obj["e"+type+fn] = fn;
+		obj[type+fn] = function() { obj["e"+type+fn]( window.event ); }
+		obj.attachEvent( "on"+type, obj[type+fn] );
+	}
+}
+/*
+addEvent	(window, "load", function()	{
+					
+			}
+);
+*/
+
+/*--------------------------------------------------------------------------*/
+/*  popup
+/*--------------------------------------------------------------------------*/
+function windowPopup(url, w, h, s, name){
+	if (w==null) w = '100%';
+	if (h==null) h = '100%';
+	var l,t = '0';
+	if (screen.width && screen.height)	{
+		l = (screen.width-w)/2;
+		t = (screen.height-h)/2;
+	}
+	if (s==null) s = '0';
+	if (name==null) name = '';
+	window.open(url, name, 'width='+w+',height='+h+',left='+l+',top='+t+',resizable=0,menubar=0,toolbar=0,scrollbars='+s+',status=0');
+}
+
+/*--------------------------------------------------------------------------*/
+/*  copy URL
+/*--------------------------------------------------------------------------*/
+function copyURL(text) {
+	if (window.clipboardData) {
+		window.clipboardData.setData("Text",text);
+		alert('주소가 복사되었습니다.');
+	}
+	else {
+		alert('클립보드를 지원하지 않습니다. 다음 소스를 직접 입력하세요\n' + text);
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+/*  tabContents
+/*--------------------------------------------------------------------------*/
+function	tabContents(tabId,tabMenuId)
+{
+	var moreBtn = document.getElementsByClassName("more",tabMenuId);
+	var tabDivId = document.getElementById(tabId);
+	var tabMenuId = document.getElementById(tabMenuId);
+	var tabMenuAnchor = tabMenuId.getElementsByTagName("ul")[0].getElementsByTagName("a");
+	var first=0;
+	var temp = tabMenuAnchor[0].href.split("#")[1];
+	for (i=0; i<tabMenuAnchor.length; i++)
+	{
+		var divName	= tabMenuAnchor[i].href.split("#")[1];
+		document.getElementById(divName).style.display = "none";
+		if ((moreBtn.length > 0) && (moreBtn[i] != null)) moreBtn[i].style.display = "none";
+		if (first==0)
+		{	
+			document.getElementById(tabMenuAnchor[0].href.split("#")[1]).style.display = "block";
+			if (moreBtn.length > 0) moreBtn[0].style.display = "block";
+			if	(tabMenuId.getElementsByTagName("img")[0] !=null) {
+				tabMenuId.getElementsByTagName("img")[0].src=
+				tabMenuId.getElementsByTagName("img")[0].src.replace("_off","_on");
+			}
+			else	{
+				tabMenuId.getElementsByTagName("li")[0].className="onTab";
+			}
+			first=1;
+		}
+		tabMenuAnchor[i].onclick = function()	{
+			for	(j=0; j<tabMenuAnchor.length; j++)
+			{
+				if (tabMenuAnchor[j].getElementsByTagName("img")[0] != null)	{
+					tabMenuAnchor[j].getElementsByTagName("img")[0].src = tabMenuAnchor[j].getElementsByTagName("img")[0].src.replace("_on","_off");
+					this.getElementsByTagName("img")[0].src = this.getElementsByTagName("img")[0].src.replace("_off","_on");
+				}
+				else	{
+					tabMenuAnchor[j].parentNode.className="";
+					this.parentNode.className="onTab";
+				}
+			}
+			document.getElementById(temp).style.display = "none";
+			divName	= this.href.split("#")[1];
+			temp=divName;
+			document.getElementById(divName).style.display = "block";
+			if (moreBtn.length > 0)	{
+				for	(k=0;k<tabMenuAnchor.length;k++)	{
+					if (moreBtn[k] != null)	moreBtn[k].style.display = "none";
+				}
+				for	(l=0;l<tabMenuAnchor.length;l++)	{
+					if (tabMenuAnchor.length == moreBtn.length && this==tabMenuAnchor[l])	moreBtn[l].style.display = "block";
+					if (tabMenuAnchor.length != moreBtn.length) moreBtn[0].style.display = "block";
+				}
+			}
+			return false;
+		}
+	}
+}
+
+/*--------------------------------------------------------------------------*/
+/*  image on off
+/*--------------------------------------------------------------------------*/
+function imgOn(el)	{
+	el.src = el.src.replace("_off.", "_on.");
+}
+
+function imgOff(el)	{
+	el.src = el.src.replace("_on.", "_off.");
+}
+
+/*--------------------------------------------------------------------------*/
+/*  table row on off
+/*--------------------------------------------------------------------------*/
+function trOn(el)	{
+	el.className = "on";
+}
+
+function trOff(el)	{
+	el.className = "";
+}
+
+
+
+
+}
+/*
+     FILE ARCHIVED ON 21:52:27 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:18 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.492
+  exclusion.robots: 0.02
+  exclusion.robots.policy: 0.01
+  esindex: 0.01
+  cdx.remote: 5.998
+  LoadShardBlock: 90.384 (3)
+  PetaboxLoader3.datanode: 135.83 (5)
+  load_resource: 185.432 (2)
+  PetaboxLoader3.resolve: 106.52 (2)
+*/

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .slider-container {
+            width: 1920px; /* Set the width to 1920 pixels */
+            height: 1080px; /* Fix the height at 1080 pixels */
+            background-image: url('bg.png');
+            background-repeat: no-repeat; /* Prevent the image from repeating */
+            animation: slide 10s infinite ;
+        }
+        
+        @keyframes slide {
+            0% {
+                background-position: 0% 0%;
+            }
+            50% {
+                background-position: 0% 70%;
+            }
+        }
+        
+        .logo {
+            position: absolute; /* Position the logo absolutely */
+            left: 450px; /* Move the logo 50% to the left */
+ 
+            top: 1px; /* Move the logo 50% down */
+ 
+        }
+  
+    </style>
+</head>
+<body>
+    <div class="slider-container">
+        <div class="logo"><img src="logo.png" alt="logo"></div>
+    </div>
+ 
+</body>
+</html>

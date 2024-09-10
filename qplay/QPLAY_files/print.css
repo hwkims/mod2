@@ -1,0 +1,28 @@
+@charset "euc-kr";
+
+body#sub	 {background-image:none;}
+#topGnb,	body#sub	#header,	#leftArea,	#rightArea,	body#sub	#footer	 {display:none;}
+
+#cntsArea	 {clear:both;float:none;width:706px;background-image:none;}
+#pageInfo	 {margin:0 auto 20px;padding:0 0 13px;}
+#contents	 {padding:0 0 40px 0;background-image:none;}
+/*
+     FILE ARCHIVED ON 21:49:56 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:31 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.429
+  exclusion.robots: 0.016
+  exclusion.robots.policy: 0.008
+  esindex: 0.007
+  cdx.remote: 1261.564
+  LoadShardBlock: 201.369 (3)
+  PetaboxLoader3.datanode: 170.912 (5)
+  PetaboxLoader3.resolve: 170.846 (3)
+  load_resource: 145.982 (2)
+*/

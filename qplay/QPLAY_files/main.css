@@ -1,0 +1,167 @@
+@charset "euc-kr";
+
+/* layout */
+body#main	{background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_body.gif') no-repeat left 40px #fff;}
+#mainWrapper	{width:1000px;}
+#mainHeader	{position:relative;width:100%;height:315px;}
+#mainHeader	h1	{display:block;position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+#mainHeader	#accessibilityMenu	{display:block;position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+#mainHeader	#topNav	{position:relative;z-index:5;width:100%;}
+#mainHeader	#topNav	h2	{display:block;position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+#mainHeader	#topNav	li.logo	{position:absolute;z-index:1;left:62px;top:10px;}
+#mainHeader	#topNav	li.menu1	{position:absolute;z-index:1;left:233px;top:23px;}
+#mainHeader	#topNav	li.menu2	{position:absolute;z-index:1;left:395px;top:23px;}
+#mainHeader	#topNav	li.menu3	{position:absolute;z-index:1;left:482px;top:23px;}
+#mainHeader	#topNav	li.menu4	{position:absolute;z-index:1;left:578px;top:23px;}
+#mainHeader	#topNav	li.menu5	{position:absolute;z-index:1;left:649px;top:23px;}
+#mainHeader	#topNav	li.menu6	{position:absolute;z-index:1;left:731px;top:23px;}
+#mainHeader	#topNav	li.menu7	{position:absolute;z-index:1;left:823px;top:23px;}
+#mainHeader	#topNav	li.gameStart	{position:absolute;z-index:1;left:90px;top:146px;}
+
+#mainMiddle	{margin-bottom:30px;}
+#mainMiddle:after	{
+	content:" ";
+	display:block;
+	clear:both;
+	height:0;
+	visibility:hidden;
+}
+#mainLeftArea	{float:left;width:209px;margin-top:-53px;padding:0 20px 0 33px;}
+body#main	#login	{position:relative;z-index:10;width:209px;height:195px;margin-bottom:15px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_login_120306.gif') no-repeat left top transparent;}
+body#main	#login	h2	{position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+body#main	#login	.loginTab	{padding:9px 10px 0 9px;}
+body#main	#login	.loginTab	ul	{clear:both;overflow:hidden;width:100%;}
+body#main	#login	.loginTab	ul	li	{float:left;}
+body#main	#login	.server	p	{height:16px;padding:4px 0 0 20px;}
+body#main	#login	.server	p	label	{padding:0 5px 0 0;}
+body#main	#login	.inputInfo	p{clear:both;overflow:hidden;width:100%;}
+body#main	#login	.inputInfo	p	span.id	{display:block;width:114px;height:22px;padding-left:21px;}
+body#main	#login	#loginSt1	 .inputInfo	p	input.inputId	{width:103px;height:13px;padding:7px 5px 0;border:1px solid #0089bf;border-right:0;vertical-align:top;color:#4d4d4d;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_id_120306.gif') no-repeat 5px 7px #fff;}
+body#main	#login	#loginSt2	 .inputInfo	p	input.inputId	{width:103px;height:13px;padding:7px 5px 0;border:1px solid #0089bf;border-right:0;vertical-align:top;color:#4d4d4d;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_email.gif') no-repeat 5px 7px #fff;}
+body#main	#login	.inputInfo	p	span.pw	{display:block;width:114px;height:21px;padding-left:21px;}
+body#main	#login	.inputInfo	p	input.inputPW	{width:103px;height:13px;padding:7px 5px 0;border:1px solid #0089bf;border-top:0;border-right:0;vertical-align:top;color:#4d4d4d;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/layout/bg_pw_120306.gif') no-repeat 5px 7px #fff;}
+body#main	#login	.inputInfo	p	span.submit	{position:absolute;left:134px;top:67px;}
+body#main	#login	.bt	{height:55px;padding-top:4px;text-align:center;}
+body#main	#login	.security	p	{text-align:center;}
+body#main	#login	.changeEmailId	{position:absolute;left:0;top:135px;width:209px;text-align:center;}
+body#main	#logout	{position:relative;z-index:10;width:209px;height:195px;margin-bottom:15px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_logout_120306.gif') no-repeat left top transparent;text-align:center;color:#fff;}
+body#main	#logout	h2	{position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+body#main	#logout	.bt1	{height:29px;padding-top:16px;text-align:center;}
+body#main	#logout	.greeting	{height:52px;padding:12px 0 0;}
+body#sub	#logout	.greeting	.infor	{color:#0089bf;font-size:11px;letter-spacing:-1px;}
+body#main	#logout	.bt2	{height:38px;padding-top:13px;text-align:center;}
+body#main	#logout	.bt3	{padding-top:5px;text-align:center;}
+
+body#main	#logout	.characterInfo	{height:32px;padding:17px 0 0 16px;font-size:11px;text-align:left;letter-spacing:-1px;line-height:1.3;}
+body#main	#logout	#loginCharacterList	{overflow-y:scroll;width:188px;height:103px;margin:0 0 8px 10px;background-color:#fff;text-align:left;}
+body#main	#logout	#loginCharacterList	ul{margin-top:-1px;}
+body#main	#logout	#loginCharacterList	ul	li	{border-top:1px dashed #dfdfdf;}
+body#main	#logout	#loginCharacterList	ul	li	a	{display:block;height:14px;padding:6px 9px 0;color:#004165;font-size:11px;}
+body#main	#logout	#loginCharacterList	ul	li	a:hover	{text-decoration:none;}
+body#main	#logout	#loginCharacterList	ul	li	a.on	{background-color:#f0fbff;text-decoration:none;}
+body#main	#logout	.loginMyCharacter	{padding:19px 0 6px;text-align:left;}
+body#main	#logout	.loginMyCharacter	.now	{width:147px;height:18px;margin:0 auto;border:1px solid #009ce7;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/bullet/bul_arrow_down_blue1.gif') no-repeat 136px 8px #fff;}
+body#main	#logout	.loginMyCharacter	.now	a	{display:block;height:13px;padding:5px 9px 0;color:#004165;font-size:11px;}
+body#main	#logout	.loginMyCharacter	.now	a:hover	{text-decoration:none;}
+body#main	#logout	#loginChangeCharacter	{position:absolute;left:23px;top:38px;overflow-y:scroll;width:147px;height:103px;margin:0 0 8px 7px;background-color:#fff;border:1px solid #009ce7;text-align:left;}
+body#main	#logout	#loginChangeCharacter	ul{margin-top:-1px;}
+body#main	#logout	#loginChangeCharacter	ul	li	{border-top:1px dashed #dfdfdf;}
+body#main	#logout	#loginChangeCharacter	ul	li	a	{display:block;height:14px;padding:6px 9px 0;color:#004165;font-size:11px;}
+body#main	#logout	#loginChangeCharacter	ul	li	a:hover	{text-decoration:none;}
+body#main	#logout	#loginChangeCharacter	ul	li	a.on	{background-color:#f0fbff;text-decoration:none;}
+
+#mainLeftArea	.link	{clear:both;overflow:hidden;width:100%;margin-bottom:5px;}
+#mainLeftArea	.link	li	{float:left;}
+#mainLeftArea	.guide	{clear:both;overflow:hidden;width:100%;}
+#mainLeftArea	.guide	li	{float:left;}
+.mainQuickLink	{margin-bottom:15px;}
+.mainCustomerLink	{width:100%;height:195px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_customerLink.jpg') no-repeat left top transparent;}
+.mainCustomerLink	h2	{padding-left:18px;height:27px;}
+.mainCustomerLink	li	{height:24px;padding:8px 0 0 20px;}
+
+#mainCenterArea	{float:left;width:473px;margin-right:19px;padding-left:26px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_mainCenter.jpg') no-repeat left top transparent;}
+#mainNotice	{position:relative;width:446px;height:125px;}
+#mainNotice	h2	{background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_mainTitle.gif') repeat-x -1px 7px transparent;}
+#mainNotice	p.more	{position:absolute;left:383px;top:4px;}
+.mainNoticeCon	{width:100%;}
+.mainNoticeCon	ul	{padding-top:5px;}
+.mainNoticeCon	li	{clear:both;overflow:hidden;width:100%;height:20px;border-bottom:2px dashed #e8e8e8;}
+.mainNoticeCon	.noData	{padding-top:35px;text-align:center;border-bottom:0;}
+.mainNoticeCon	li	.subject	{overflow:hidden;float:left;width:350px;padding:4px 0 0;white-space:nowrap;}
+.mainNoticeCon	li	.subject	img	{vertical-align:middle;margin-top:-2px;}
+.mainNoticeCon	li	.date	 {float:right;color:#808080;padding-top:5px;}
+#mainBanner {position:relative;width:446px;height:170px;margin-bottom:15px;overflow:hidden;font-size:0;line-height:0;}
+#bannerList {width:446px;height:680px;position:relative;z-index:2;}
+#bannerList a {display:block;width:446px;height:170px;}
+.paging {position:absolute;right:12px;bottom:14px;z-index:3;}
+.paging a {display:inline-block;padding:0 2px;}
+.border_t {position:absolute;left:0;top:0;z-index:3;}
+.border_b {position:absolute;left:0;bottom:0;z-index:3;}
+.border_l {position:absolute;left:0;top:10px;z-index:3;}
+.border_r {position:absolute;right:0;top:10px;z-index:3;}
+#mainShop	{position:relative;clear:both;overflow:hidden;width:446px;height:165px;}
+#mainShop	h2	{margin-bottom:7px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_mainTitle.gif') repeat-x -3px 7px transparent;}
+#mainShop	p.more	{position:absolute;left:383px;top:4px;}
+#mainShop	.newItem	{float:left;width:223px;height:120px;margin-right:3px;border-right:1px solid #e0e0e0;}
+#mainShop	.newItem	li	{float:left;margin-right:4px;text-align:center;}
+#mainShop	.newItem	li.noData	{clear:both;float:none;margin-right:0;padding-top:40px;color:#01569f;}
+#mainShop	.hotItem	{float:left;width:219px;height:120px;}
+#mainShop	.hotItem	li	{float:left;padding-left:4px;text-align:center;}
+#mainShop	.hotItem	li.noData	{clear:both;float:none;padding-left:0;padding-top:40px;color:#01569f;}
+#mainShop	li	dl	{clear:both;width:69px;}
+#mainShop	li	dl	dt	 {color:#01569f;letter-spacing:-1px;}
+#mainShop	li	dl	dt	 a	{color:#01569f;}
+#mainShop	li	dl	.thumb	{display:block;padding:2px;border:1px solid #d9d9d9;}
+#mainShop	li	dl	.thumb	.icon	 {position:absolute;z-index:5;}
+#mainShop	li	dl	.subject	{display:block;padding:7px 0 5px;}
+#mainShop	li	dl	dd.price	{color:#5b82ee;}
+#mainShop	li	dl	dd.price	img	{vertical-align:middle;margin-top:-3px;}
+#mainImageBoard	 {}
+#mainImageBoard	{position:relative;clear:both;overflow:hidden;width:446px;height:145px;}
+#mainImageBoard	h2	{margin-bottom:7px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_mainTitle.gif') repeat-x left 7px transparent;}
+#mainImageBoard	p.more	{position:absolute;left:383px;top:4px;}
+.mainImageBoardCon	{clear:both;overflow:hidden;width:100%;}
+.mainImageBoardCon	ul	{width:465px;margin-left:-19px;}
+.mainImageBoardCon	ul	li	{float:left;width:136px;padding-left:19px;}
+.mainImageBoardCon	ul	li	.thumb	 {display:block;padding:3px;border:1px solid #d9d9d9;}
+.mainImageBoardCon	ul	li	.subject	{display:block;padding-top:5px;text-align:center;}
+.mainImageBoardCon	ul	li.noData	{clear:both;float:none;width:100%;padding-top:50px;text-align:center;}
+
+#mainRightArea	{float:left;width:200px;margin-top:-78px;}
+#mainQuiz	{position:relative;z-index:10;margin-bottom:10px;}
+#mainQuiz	p.question	{margin:0 auto;padding:30px 25px 35px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_quiz1.gif') no-repeat left top transparent;color:#fff;}
+#mainQuiz	p.answer	{height:65px;padding-top:7px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_quiz2.gif') no-repeat left top transparent;text-align:center;}
+#mainQuiz	p.answer	img	{margin:0 3px;cursor:pointer;}
+#mainPromotion	{margin-bottom:10px;}
+#mainRanking	{position:relative;width:200px;height:136px;background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_ranking.jpg') no-repeat left top transparent;}
+#mainRanking	h2	{height:20px;padding:12px 0 0 12px;}
+#mainRankingMenu	{position:absolute;left:101px;top:11px;width:88px;}
+#mainRankingMenu	ul	{clear:both;overflow:hidden;width:100%;}
+#mainRankingMenu	ul	li	{float:left;}
+#mainRanking1	 {background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_rankingList1.jpg') no-repeat left top transparent;}
+#mainRanking2	 {background:url('https://web.archive.org/web/20141031214956im_/http://s.nx.com/S2/Game/Qplay/2010/main/bg_rankingList2.jpg') no-repeat left top transparent;}
+.mainRankingCon	{width:178px;height:95px;margin-left:11px;color:#4d4d4d;}
+.mainRankingCon	h3	{position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;font-size:0;line-height:0;}
+.mainRankingCon	ol	{padding:5px 0 0 5px;}
+.mainRankingCon	ol	li	{padding-top:3px;line-height:1;}
+.mainRankingCon	ol	li	img	{margin-top:-3px;padding-left:5px;vertical-align:middle;}
+/*
+     FILE ARCHIVED ON 21:49:56 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:17 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 1.372
+  exclusion.robots: 0.021
+  exclusion.robots.policy: 0.011
+  esindex: 0.014
+  cdx.remote: 52.092
+  LoadShardBlock: 159.387 (3)
+  PetaboxLoader3.datanode: 106.62 (5)
+  PetaboxLoader3.resolve: 165.15 (3)
+  load_resource: 143.028 (2)
+*/

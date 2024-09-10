@@ -1,0 +1,132 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+function PCIDfn_getCookieVal(offset)
+{
+	var endstr = document.cookie.indexOf (";", offset);
+	
+	if (endstr == -1)
+		endstr = document.cookie.length;
+		
+	return unescape(document.cookie.substring(offset, endstr));
+}
+
+function PCIDfn_SetCookie(name, value)
+{
+	var argv = PCIDfn_SetCookie.arguments;
+	var argc = PCIDfn_SetCookie.arguments.length;
+	var expires = (2 < argc) ? argv[2] : null;
+	var path = (3 < argc) ? argv[3] : null;
+	var domain = (4 < argc) ? argv[4] : null;
+	var secure = (5 < argc) ? argv[5] : false;
+
+	// alert("DOMAIN = " + domain);
+	document.cookie = name + "=" + escape (value) +
+		((expires == null) ? "" : ("; expires="+expires.toGMTString())) +
+		((path == null) ? "" : ("; path=" + path)) +
+		((domain == null) ? "" : ("; domain=" + domain)) +
+		((secure == true) ? "; secure" : "");
+
+//	alert(document.cookie);
+}
+
+function PCIDfn_GetCookie(name)
+{
+	var arg = name + "=";
+	var alen = arg.length;
+	var clen = document.cookie.length;
+	var i = 0;
+
+	while (i < clen)
+	{
+		var j = i + alen;
+		
+		if (document.cookie.substring(i, j) == arg)
+			return PCIDfn_getCookieVal (j);
+			
+		i = document.cookie.indexOf(" ", i) + 1;
+		
+		if (i == 0)
+			break;
+	}
+
+	return null;
+}
+
+function PCIDfn_makePersistentCookie(name,length,path,domain)
+{
+    var today = new Date();
+    var expiredDate = new Date(2110,1,1);
+    var cookie;
+	var value;
+
+    cookie = PCIDfn_GetCookie(name);
+    
+    if ( cookie ) 
+    {
+//		alert(cookie);
+        return 1;
+	}
+
+	var values = new Array();
+	
+	for ( i=0; i < length ; i++ ) 
+	{
+		values[i] = "" + Math.random();
+	}
+
+	value = today.getTime();
+
+	// use first decimal
+	for ( i=0; i < length ; i++ ) 
+	{
+		value += values[i].charAt(2);
+	}
+
+    PCIDfn_SetCookie(name,value,expiredDate,path,domain);
+}
+
+function PCIDfn_getDomain() 
+{
+	var _host   = document.domain;
+	var so      = _host.split('.');
+	var dm		= so[so.length-2] + '.' + so[so.length-1];
+	
+	return (so[so.length-1].length == 2) ? so[so.length-3] + '.' + dm : dm;
+}
+
+var PCIDfn_domain  = PCIDfn_getDomain();
+
+PCIDfn_makePersistentCookie("PCID",10,"/",PCIDfn_domain);
+
+
+}
+/*
+     FILE ARCHIVED ON 21:52:31 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:29 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.753
+  exclusion.robots: 0.022
+  exclusion.robots.policy: 0.01
+  esindex: 0.013
+  cdx.remote: 7.037
+  LoadShardBlock: 80.677 (6)
+  PetaboxLoader3.datanode: 91.845 (8)
+  load_resource: 126.399 (2)
+  PetaboxLoader3.resolve: 109.233 (2)
+*/

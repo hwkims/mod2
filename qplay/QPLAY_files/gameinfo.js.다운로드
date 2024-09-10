@@ -1,0 +1,118 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+( function( win, doc ) {
+	var tgs = doc.getElementsByTagName( "script" ),
+	gnbid = "",
+	gameInfo = {};
+	
+	for( var i = 0, l = tgs.length; i < l; i++ ) {
+		var s = tgs[ i ].getAttribute( "src" );
+		if( ( s != null && s.indexOf( "js.nx.com/s1/p2/gameinfo.js" ) > -1 ) || s != null && s.indexOf( "ssl.nx.com/s1/p2/gameinfo.js" ) > -1 ) {
+			var n = tgs[ i ].getAttribute( "data-gnbid" );
+			if( n && n != "" ) {
+				gnbid = n;
+			}
+			break;
+		}
+	}
+	
+	// 수정시 이곳만 건들어주세요!!!!!!!!!
+	gameInfo = {
+		online: {
+			rpg: [
+				{ name: "메이플스토리", url: "https://web.archive.org/web/20141031215236/http://maplestory.nexon.com/", appsn: 589824 },
+				{ name: "마비노기", url: "https://web.archive.org/web/20141031215236/http://www.mabinogi.com/", appsn: 74245 },
+				{ name: "바람의나라", url: "https://web.archive.org/web/20141031215236/http://baram.nexon.com/", appsn: 131072 },
+				{ name: "삼국지를 품다", url: "https://web.archive.org/web/20141031215236/http://3p.nexon.com/", appsn: 94236 },
+				{ name: "테일즈위버", url: "https://web.archive.org/web/20141031215236/http://tales.nexon.com/", appsn: 74248 },
+				{ name: "에버플래닛", url: "https://web.archive.org/web/20141031215236/http://everplanet.nexon.com/", appsn: 94220 },
+				{ name: "어둠의전설", url: "https://web.archive.org/web/20141031215236/http://lod.nexon.com/", appsn: 74275 },
+				{ name: "아스가르드", url: "https://web.archive.org/web/20141031215236/http://asgard.nexon.com/", appsn: 74274 },
+				{ name: "일랜시아", url: "https://web.archive.org/web/20141031215236/http://elancia.nexon.com/", appsn: 74276 },
+				{ name: "샤이야", url: "https://web.archive.org/web/20141031215236/http://shaiya.nexon.com/", appsn: 74277 },
+				{ name: "아틀란티카", url: "https://web.archive.org/web/20141031215236/http://at.nexon.com/", appsn: 98818 },
+				{ name: "메이플스토리2", url: "https://web.archive.org/web/20141031215236/http://maplestory2.nexon.com/", appsn: 106498 }
+			],
+			arpg: [
+				{ name: "던전앤파이터", url: "https://web.archive.org/web/20141031215236/http://df.nexon.com/", appsn: 74257 },
+				{ name: "엘소드", url: "https://web.archive.org/web/20141031215236/http://elsword.nexon.com/", appsn: 94224 },
+				{ name: "마비노기영웅전", url: "https://web.archive.org/web/20141031215236/http://heroes.nexon.com/", appsn: 73739 },
+				{ name: "히어로", url: "https://web.archive.org/web/20141031215236/http://fc.nexon.com/", appsn: 94243 },
+				{ name: "로스트사가", url: "https://web.archive.org/web/20141031215236/http://lostsaga.nexon.com/", appsn: 94247 },
+				{ name: "크리티카", url: "https://web.archive.org/web/20141031215236/http://kt.hangame.nexon.com/", appsn: 94249 },
+				{ name: "클로저스", url: "https://web.archive.org/web/20141031215236/http://closers.nexon.com/", appsn: 94249 }
+			],
+			casual: [
+				{ name: "크레이지아케이드", url: "https://web.archive.org/web/20141031215236/http://ca.nexon.com/", appsn: 720896 },
+				{ name: "카트라이더", url: "https://web.archive.org/web/20141031215236/http://kart.nexon.com/", appsn: 73985 },
+				{ name: "버블파이터", url: "https://web.archive.org/web/20141031215236/http://bf.nexon.com/", appsn: 74255 },
+				{ name: "큐플레이", url: "https://web.archive.org/web/20141031215236/http://qplay.nexon.com/", appsn: 786432 },
+				{ name: "테일즈런너", url: "https://web.archive.org/web/20141031215236/http://tr.afreecatv.nexon.com/", appsn: 94248 },
+				{ name: "클럽오디션", url: "https://web.archive.org/web/20141031215236/http://audition.nexon.com/", appsn: 94248 }
+			],
+			fps: [
+				{ name: "서든어택", url: "https://web.archive.org/web/20141031215236/http://sa.nexon.com/", appsn: 94227 },
+				{ name: "카운터스트라이크온라인", url: "https://web.archive.org/web/20141031215236/http://csonline.nexon.com/", appsn: 73737 },
+				{ name: "카운터스트라이크온라인2", url: "https://web.archive.org/web/20141031215236/http://csonline2.nexon.com/", appsn: 74268 },
+				{ name: "워페이스", url: "https://web.archive.org/web/20141031215236/http://wf.nexon.com/", appsn: 94223 },
+				{ name: "컴뱃암즈", url: "https://web.archive.org/web/20141031215236/http://combatarms.nexon.com/", appsn: 74247 },
+				{ name: "서든어택2", url: "https://web.archive.org/web/20141031215236/http://sa2.nexon.com/", appsn: 74278 }
+			],
+			aos: [
+				{ name: "사이퍼즈", url: "https://web.archive.org/web/20141031215236/http://cyphers.nexon.com/", appsn: 74264 },
+				{ name: "카오스온라인", url: "https://web.archive.org/web/20141031215236/http://co.nexon.com/", appsn: 94239 },
+				{ name: "도타2", url: "https://web.archive.org/web/20141031215236/http://dota2.nexon.com/", appsn: 94246 }
+			],
+			sports: [
+				{ name: "EA SPORTS™ FIFA ONLINE3", url: "https://web.archive.org/web/20141031215236/http://fifaonline3.nexon.com/", appsn: 94242 },
+				{ name: "프로야구2K14", url: "https://web.archive.org/web/20141031215236/http://2k.nexon.com/", appsn: 74266 },
+				{ name: "프리스타일2", url: "https://web.archive.org/web/20141031215236/http://fs2.nexon.com/", appsn: 94244 }
+			]
+		},
+		mobile: [
+			{ name: "빨간마후라", url: "https://web.archive.org/web/20141031215236/http://game.nexon.com/home/game.aspx?appsn=1000071", appsn: 1000071 },
+			{ name: "넥슨프로야구마스터2014", url: "https://web.archive.org/web/20141031215236/http://game.nexon.com/home/game.aspx?appsn=1000075", appsn: 1000075 },
+			{ name: "링토스 세계여행", url: "https://web.archive.org/web/20141031215236/http://devcat.nexon.com/ringtoss", appsn: 1000070 },
+			{ name: "캔디코스터", url: "https://web.archive.org/web/20141031215236/http://game.nexon.com/home/game.aspx?appsn=1000068", appsn: 1000068 },
+			{ name: "몬몬몬", url: "https://web.archive.org/web/20141031215236/http://game.nexon.com/home/game.aspx?appsn=1000066", appsn: 1000066 },
+			{ name: "러시앤캐슬", url: "https://web.archive.org/web/20141031215236/http://game.nexon.com/home/game.aspx?appsn=1000061", appsn: 1000061 }, 
+			{ name: "퍼즐삼국", url: "https://web.archive.org/web/20141031215236/http://game.nexon.com/home/game.aspx?appsn=1000063", appsn: 1000063 }, 
+			{ name: "판타지러너즈", url: "https://web.archive.org/web/20141031215236/http://game.nexon.com/home/game.aspx?appsn=1000060", appsn: 1000060 },
+			{ name: "리듬엔조이", url: "https://web.archive.org/web/20141031215236/http://game.nexon.com/home/game.aspx?appsn=1000055", appsn: 1000055 }
+		]
+	}
+	
+	win[ gnbid ].callback.getGameInfo( gameInfo );
+} )( this, document );
+
+}
+/*
+     FILE ARCHIVED ON 21:52:36 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:22 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.64
+  exclusion.robots: 0.021
+  exclusion.robots.policy: 0.01
+  esindex: 0.012
+  cdx.remote: 6.262
+  LoadShardBlock: 578.854 (3)
+  PetaboxLoader3.datanode: 85.617 (5)
+  PetaboxLoader3.resolve: 1003.459 (3)
+  load_resource: 592.974 (2)
+*/

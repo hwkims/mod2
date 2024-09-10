@@ -1,0 +1,185 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+(function($) {
+
+	$.jBanner = {
+
+		// Defaults
+		defaults: {
+			bannerList : '#bannerList',
+			bannerSize : 170,
+			pagingBtns : '#mainBanner .paging a',
+			slideSpeed : 1000,
+			slideTimer : null,
+			currentPos : 0,
+			currentIdx : 0
+		},
+
+		// Rotation + Timing Event
+		autoSlide : function(config) {
+			var btnsLength = $(config.pagingBtns).length;
+			config.currentPos = parseInt($(config.bannerList).css('margin-top'));
+			config.currentIdx = (-config.currentPos) / config.bannerSize + 1;
+
+			if (config.currentIdx >= btnsLength) {
+				config.currentIdx = 0;
+			}
+
+			$.jBanner.setAnimate(config, config.bannerSize * (-config.currentIdx));
+
+			config.slideTimer = setTimeout(function() { $.jBanner.autoSlide(config); }, config.slideSpeed);
+		},
+
+		// Stop the rotation
+		setHover : function(bannerArea, config) {
+			bannerArea.hover(function() {
+			    clearTimeout(config.slideTimer);
+			},
+			function() {
+				config.slideTimer = setTimeout(function() { $.jBanner.autoSlide(config); }, config.slideSpeed);
+			});
+		},
+
+		// Button On/Off
+		setBtnHover : function(config) {
+			var btnImgs = $(config.pagingBtns).find('img');
+			btnImgs.hover(function(ev) {
+				var img = $(ev.currentTarget);
+				img.attr('src', function() { return img.attr('src').replace('_off', '_on'); });
+			},
+			function(ev) {
+				var img = $(ev.currentTarget);
+				imgIdx = btnImgs.index(img);
+				if (config.currentIdx != imgIdx) {
+					img.attr('src', function() { return img.attr('src').replace('_on', '_off'); });
+				}
+			});
+		},
+
+		// Activate the clicked paging
+		setBtns : function(config) {
+			$(config.pagingBtns).each(function(idx) {
+				$(this).bind('click', function() {
+					config.currentIdx = idx;
+					$.jBanner.setAnimate(config, config.bannerSize * (-idx));
+					return false;
+				});
+			});
+		},
+
+		// Animation + Button On/Off
+		setAnimate : function(config, val) {
+			$(config.bannerList).animate({
+				'margin-top' : val
+			}, 'fast');
+			
+			$(config.pagingBtns).each(function(i) {
+				var img = $(this).find('img');
+				if (i == config.currentIdx) {
+					img.attr('src', function() { return img.attr('src').replace('_off', '_on'); });
+				} else {
+					img.attr('src', function() { return img.attr('src').replace('_on', '_off'); });
+				}
+			});
+		}
+	};
+
+$.fn.extend({
+	jBanner : function(options) {
+		var config = $.extend({}, $.jBanner.defaults, options);
+
+		config.slideTimer = setTimeout(function() { $.jBanner.autoSlide(config); }, config.slideSpeed);
+		var img = $(config.pagingBtns).find('img').eq(0);
+		img.attr('src', function() { return img.attr('src').replace('off', 'on'); });
+
+		$.jBanner.setHover(this, config);
+		$.jBanner.setBtns(config);
+		$.jBanner.setBtnHover(config);
+	}
+});
+
+})(jQuery);
+
+/*--------------------------------------------------------------------------*/
+/*  ie6 png fixed
+/*--------------------------------------------------------------------------*/
+var clearImg="https://web.archive.org/web/20141031215227/http://s.nx.com/S2/Game/dn/OBT/etc/clear.gif"; //path to clear.gif
+
+pngfix = function (els) {
+	var els = els.getElementsByTagName('img'),
+		ip = /\.png/i,
+		al = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='",
+		i = els.length,
+		uels = new Array(),
+		c = 0;
+		while (i --> 0) {
+		if (els[i].className.match(/unitPng/)) {
+			uels[c] = els[i];
+			c++;
+		}
+	}
+	if (uels.length == 0) pfx(els);
+	else pfx(uels);
+
+	function pfx(els) {
+		i = els.length;
+		while (i --> 0) {
+			var el = els[i],
+				es = el.style,
+				elc = el.currentStyle,
+				elb = elc.backgroundImage;
+			if (el.src && el.src.match(ip) && !es.filter) {
+				es.height = el.height;
+				es.width = el.width;
+				es.filter = al + el.src + "',sizingMethod='crop')";
+				el.src = clearImg;
+			} else {
+				if (elb.match(ip)) {
+					var path = elb.split('"'),
+						rep = (elc.backgroundRepeat == 'no-repeat') ? 'crop' : 'scale',
+					elkids = el.getElementsByTagName('*'),
+					j = elkids.length;
+					es.filter = al + path[1] + "',sizingMethod='" + rep + "')";
+					es.height = el.clientHeight + 'px';
+					es.backgroundImage = 'none';
+					if (j != 0) {
+						if (elc.position != "absolute") es.position = 'static';
+						while (j --> 0) if (!elkids[j].style.position) elkids[j].style.position = "relative";
+					}
+				}
+			}
+		}
+	};
+};
+
+}
+/*
+     FILE ARCHIVED ON 21:52:27 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:21 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.501
+  exclusion.robots: 0.018
+  exclusion.robots.policy: 0.008
+  esindex: 0.009
+  cdx.remote: 7.404
+  LoadShardBlock: 31.256 (3)
+  PetaboxLoader3.datanode: 59.677 (5)
+  load_resource: 138.493 (2)
+  PetaboxLoader3.resolve: 84.247 (2)
+*/

@@ -1,0 +1,1811 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+function ConvertToNumber( array )
+{
+	var result = new Array();
+	
+	for ( var i=0 ; i < array.length ; ++i )
+		result[ i ] = Number( array [ i ] );
+		
+	return result;
+}
+
+// AvatarCore Clsss
+
+/*_Property = 
+{
+	strQAView : [ "Sex", "Type", "Jeni", "Level" ],
+	strQSView : [ "Sex", "Fullset" ]
+}*/
+_Property = new Array();
+_Property[ "strQAView" ] = [ "Sex", "Type", "Jeni", "Level" ];
+_Property[ "strQSView" ] = [ "Sex", "Fullset" ];
+
+function AvatarCore( strQAView )
+{
+	this.Slot = null;
+
+	this.setStrQAView = function ( strQAView )
+	{
+		if ( strQAView == null || strQAView == "" ) return false;
+
+		var body = strQAView.split( "|" );
+		if ( body.length != 2 ) return false;
+		
+		var header = body[ 0 ].split( ":" );
+		if ( header.length != 2 ) return false;
+		
+		this._headerStr = header[ 0 ];
+		this._propertys = _Property[ this._headerStr ];
+
+		header = header[ 1 ].split( "," );
+		if ( header.length < this._propertys.length ) return false;
+		
+		for ( var i in header )
+			this[ this._propertys[ i ] ] = header[ i ];
+		
+		this.Slot = ConvertToNumber( body[ 1 ].split( ";" ) );
+
+		return true;
+	}
+
+	this.getStrQAView = function ()
+	{
+		var arh = new Array();
+		for ( var i=0; i<this._propertys.length; ++i )
+			arh[ i ] = this[ this._propertys[ i ] ];
+
+		return this._headerStr + ":" + arh.join( "," ) + "|" + this.Slot.join( ";" );
+	}
+	
+	this.getIList = function ()
+	{
+		var items = "";
+		var count = 0;
+		
+		for ( var i in this.Slot )
+			if ( this.Slot[ i ] != 0 )
+			{
+				++count;
+				items += this.Slot[ i ] + ",1|";
+			}
+		return "IList:" + count +  "|" + items;
+	}
+	
+	this.diffItem = function ( strAView_origin )
+	{
+		var ac = new AvatarCore( strAView_origin );
+		for ( var i in this.Slot )
+		{
+			if ( ac.Slot[ i ] != this.Slot[ i ] && this.Slot[ i ] != 0 )
+				ac.Slot[ i ] = this.Slot[ i ];
+			else
+				ac.Slot[ i ] = 0;
+		}
+
+		return ac.getIList();
+	}
+	
+	this.hasItem = function( itemno )
+	{
+		for ( var i = 0 ; i < this.Slot.length ; ++i )
+		{
+			if ( this.Slot[ i ] == itemno )
+				return true;
+		}
+		return false;
+	}
+	
+	this._headerStr = "";
+	this._propertys = null;
+
+	this.OK = this.setStrQAView( strQAView );
+}
+
+
+// Avatar Common
+//var _SexCode2Char = { 1:"M", 2:"F" };
+var _SexCode2Char = new Array();
+_SexCode2Char[ 1 ] = "M";
+_SexCode2Char[ 2 ] = "F";
+
+AVATAR_WIDTH = 154;
+AVATAR_HEIGHT = 200;
+QS_WIDTH = 71;
+QS_HEIGHT = 90;
+QM_WIDTH = 100;
+QM_HEIGHT = 99;
+//if ( typeof( g_ImgPath ) == "undefined" ) g_ImgPath = "../avatar";
+if ( typeof( g_ImgPath ) == "undefined" ) g_ImgPath = "https://web.archive.org/web/20141031215227/http://nxweb.nefficient.co.kr/nxweb/qplay/pack/objgif";
+//if ( typeof( g_ImgPath ) == "undefined" ) g_ImgPath = "https://web.archive.org/web/20141031215227/http://qplayavatar.nx.com/avatar";
+
+function _ConvertCmodelForSpecialType( sex, type )
+{
+	new_Type = type;
+
+	if (type == '19')
+	{
+		if (sex == 1)
+			new_Type = '07';
+		else
+			new_Type = '15';
+	}
+	else if (type == '20')
+	{
+		if (sex == 1)
+			new_Type = '15';
+		else
+			new_Type = '08';
+	}
+	else if (type == '21')
+	{
+		if (sex == 1)
+			new_Type = '16';
+		else
+			new_Type = '18';
+	}
+	else if (type == '22')
+	{
+		if (sex == 1)
+			new_Type = '15';
+		else
+			new_Type = '18';
+	}
+	else if (type == '23')
+	{
+		if (sex == 1)
+			new_Type = '16';
+		else
+			new_Type = '18';
+	}
+	else if (type == '24')
+	{
+		if (sex == 1)
+			new_Type = '18';
+		else
+			new_Type = '09';
+	}
+	else if (type == '25')
+	{
+		if (sex == 1)
+			new_Type = '16';
+		else
+			new_Type = '18';
+	}
+	else
+	{
+		new_Type = type;
+	}
+
+	return new_Type;
+}
+
+function _GetImgTag_Body( itemno, sex, type )
+{
+	type = _ConvertCmodelForSpecialType( sex,type ); // Convert cmodel type for special case
+	return '<IMG src="' + g_ImgPath + '/Char' + _SexCode2Char[ sex ] + '/' + type + '/CITEM' + _SexCode2Char[ sex ] + itemno.substr( 1,6 ) + '.gif">';
+}
+
+function _GetImgTag_Backgorund( itemno, sex, type, index )
+{
+	type = _ConvertCmodelForSpecialType( sex, type ); // Convert cmodel type for special case
+	return '<IMG src="' + g_ImgPath + '/Char' + _SexCode2Char[ sex ] + '/CITEM' + _SexCode2Char[ sex ] + itemno.substr( 1,6 ) + '_' + index + '.gif">';
+}
+
+function _GetImgTag_Base( sex, type )
+{
+	return '<IMG src="' + g_ImgPath + '/Char' + _SexCode2Char[ sex ] + '/' + type + '/Cmodel' + _SexCode2Char[ sex ] + '.gif">';
+}
+
+function _GetImgTag_Base_Head( sex, type )
+{
+	return '<IMG src="' + g_ImgPath + '/Char' + _SexCode2Char[ sex ] + '/' + type + '/Cmodel' + _SexCode2Char[ sex ] + '_Head.gif">';
+}
+
+function _GetImgTag_Back( level )
+{
+	if ( level > 4 )
+	{
+		return '<IMG src="https://web.archive.org/web/20141031215227/http://qplay.nx.com/image/popup/meminfo/characterback_101.gif">';	
+	}
+	else
+	{
+		return '<IMG src="https://web.archive.org/web/20141031215227/http://qplay.nx.com/image/shop/avatar_back_default_'+( level+1 )+'.gif">';	
+	}
+	
+}
+
+function _GenLayerStr( id, layer, imgtag, style )
+{
+	return "<div id="+id+" style='position:absolute; z-index:"+layer+"; "+style+"'>" + imgtag.toLowerCase() + "</div>";
+}
+
+function _WriteLayer_Body( hdr, itemno, sex, type, style )
+{
+	var lorder = itemno.substr( 1,1 )+"00";
+	if ( lorder == "400" ) lorder = "150";
+	
+	document.writeln( _GenLayerStr( hdr+itemno.substr( 1,1 ), lorder, _GetImgTag_Body( itemno, sex, type ), style ) );
+}
+
+function _WriteLayer_Backgorund( hdr, itemno, sex, type, style )
+{
+	document.writeln( _GenLayerStr( hdr+itemno.substr( 1,2 )+"_00", 10, _GetImgTag_Backgorund( itemno,sex,type,"00" ), style ) );
+	document.writeln( _GenLayerStr( hdr+itemno.substr( 1,2 )+"_01", 20, _GetImgTag_Backgorund( itemno,sex,type,"01" ), style ) );
+	document.writeln( _GenLayerStr( hdr+itemno.substr( 1,2 )+"_02", 600, _GetImgTag_Backgorund( itemno,sex,type,"02" ), style ) );
+}
+
+function _WriteLayer_Cospre( hdr, itemno, sex, type, style )
+{
+	document.writeln( _GenLayerStr( hdr+itemno.substr( 1,2 ), 150, _GetImgTag_Body( itemno, sex, type ), style ) );
+}
+
+function _WriteLayer_Fullset( hdr, itemno, sex, type, style )
+{
+	document.writeln( _GenLayerStr( hdr+itemno.substr( 1,1 ), 150, _GetImgTag_Body( itemno, sex, type ), style ) );
+}
+
+//_WriteLayer = { 
+//	1  : _WriteLayer_Body, 
+//	2  : _WriteLayer_Body,
+//	3  : _WriteLayer_Body,
+//	4  : _WriteLayer_Body,
+//	41 : _WriteLayer_Cospre,
+//	5  : _WriteLayer_Body,
+//	66 : _WriteLayer_Backgorund,
+//	7  : _WriteLayer_Fullset
+//};
+
+var _WriteLayer = new Array()
+_WriteLayer[ 1 ] = _WriteLayer_Body;
+_WriteLayer[ 2 ] = _WriteLayer_Body;
+_WriteLayer[ 3 ] = _WriteLayer_Body;
+_WriteLayer[ 4 ] = _WriteLayer_Body;
+_WriteLayer[ 41 ] = _WriteLayer_Cospre;
+_WriteLayer[ 5 ] = _WriteLayer_Body;
+_WriteLayer[ 66 ] = _WriteLayer_Backgorund;
+_WriteLayer[ 7 ] = _WriteLayer_Fullset;
+
+function _clipStr( clip_y1, clip_x2, clip_y2, clip_x1 )
+{
+	if( clip_y1 == null || clip_x2 == null || clip_y2 == null || clip_x1 == null )
+		return "inherit";
+	else
+		return "clip:rect( "+ clip_y1.toString() +", "+ clip_x2.toString() +", "+ clip_y2.toString() +", "+ clip_x1.toString() +" );"
+}
+
+function _WriteAvatar( ac, objID, clip_x1, clip_y1, clip_x2, clip_y2 )
+{
+	var oid_hdr = "", tid="";
+	if ( objID != null )
+	{
+		tid = " id=" + objID;
+		oid_hdr = objID + "_";
+	}
+	
+	var a_width = AVATAR_WIDTH;
+	if ( clip_x1!=null && clip_x2!=null ) a_width = clip_x2 - clip_x1;
+	
+	var a_height = AVATAR_HEIGHT;
+	if ( clip_y1!=null && clip_y2!=null ) a_height = clip_y2 - clip_y1;
+	
+	var a_top = ( clip_y1 == null ) ? "" : "top:"+( clip_y1*-1 )+" ; ";
+	var a_left = ( clip_x1 == null ) ? "" : "left:"+( clip_x1*-1 )+" ; ";
+
+	var a_style = _clipStr( clip_y1, clip_x2, clip_y2, clip_x1 ) + a_top + a_left;
+	
+	document.writeln( "<div"+tid+" style='position:relative; width:"+a_width+"px; height:"+a_height+"px;margin:0 auto;text-align:left;'>" );
+
+	//땜빵
+	if ( ac.Jeni == "0" )
+		document.writeln( _GenLayerStr( oid_hdr+"0", 50, _GetImgTag_Base( ac.Sex, ac.Type ), a_style ) );
+	if ( ac.Slot[ 0 ] == 0 && ac.Slot[ 3 ].toString().substr( 1,1 ) != "7" && ac.Slot[ 3 ].toString().substr( 1,2 ) != "41" )
+		document.writeln( _GenLayerStr( oid_hdr+"0h", 100, _GetImgTag_Base_Head( ac.Sex, ac.Type ), a_style ) );
+			
+	document.writeln( _GenLayerStr( objID+"_back", 0, _GetImgTag_Back( Number( ac.Level ) ), a_style ) );
+
+	for ( var i in ac.Slot )
+		if ( ac.Slot[ i ] != 0 )
+		{
+			var stritemno = ac.Slot[ i ].toString();
+			var itype = stritemno.substr( 1,2 );
+			if ( typeof( _WriteLayer[ itype ] ) == "undefined" )
+				itype = itype.substr( 0,1 );
+				
+			_WriteLayer[ itype ]( oid_hdr, stritemno, ac.Sex, ac.Type, a_style ); 
+		}
+
+	document.writeln( "</div>" );
+}
+
+function _WriteAvatarWithoutItem( ac, objID, clip_x1, clip_y1, clip_x2, clip_y2 )
+{
+	var oid_hdr = "", tid="";
+	if ( objID != null )
+	{
+		tid = " id=" + objID;
+		oid_hdr = objID + "_";
+	}
+	
+	var a_width = AVATAR_WIDTH;
+	if ( clip_x1!=null && clip_x2!=null ) a_width = clip_x2 - clip_x1;
+	
+	var a_height = AVATAR_HEIGHT;
+	if ( clip_y1!=null && clip_y2!=null ) a_height = clip_y2 - clip_y1;
+	
+	document.writeln( "<div"+tid+" style='position:relative; width:"+a_width+"px; height:"+a_height+"px;'>" );
+	document.writeln( "</div>" );
+}
+
+
+// Slime
+
+_QS_DrawOrder = [ 1, 0, 2 ];
+
+function _GetImgTag_QSBase( sex )
+{
+	return '<IMG src="' + g_ImgPath + '/SlimeItem/BUBBLE' + _SexCode2Char[ sex ] + '00.gif">';
+}
+
+function _GetImgTag_QS( itemno, sex )
+{
+	return '<IMG src="' + g_ImgPath + '/SlimeItem/I' + itemno + '-00.gif">';
+}
+
+function _WriteQSAvatar( ac, objID, clip_x1, clip_y1, clip_x2, clip_y2 )
+{
+	var oid_hdr = "", tid="";
+	if ( objID != null )
+	{
+		tid = " id=" + objID;
+		oid_hdr = objID + "_";
+	}
+	
+	var a_width = QS_WIDTH;
+	if ( clip_x1!=null && clip_x2!=null ) a_width = clip_x2 - clip_x1;
+	
+	var a_height = QS_HEIGHT;
+	if ( clip_y1!=null && clip_y2!=null ) a_height = clip_y2 - clip_y1;
+	
+	var a_top = ( clip_y1 == null ) ? "" : "top:"+( clip_y1*-1 )+" ; ";
+	var a_left = ( clip_x1 == null ) ? "" : "left:"+( clip_x1*-1 )+" ; ";
+
+	var a_style = _clipStr( clip_y1, clip_x2, clip_y2, clip_x1 ) + a_top + a_left;
+	
+	document.writeln( "<div"+tid+" style='position:relative; width:"+a_width+"px; height:"+a_height+"px;'>" );
+
+	//땜빵
+	if ( ac.Fullset == "0" )
+	{
+		if ( ac.Slot[ 4 ] == 0 )
+			document.writeln( _GenLayerStr( oid_hdr+"0", 0, _GetImgTag_QSBase( ac.Sex ), a_style ) );
+		else
+			document.writeln( _GenLayerStr( oid_hdr+"0", 0, _GetImgTag_QS( ac.Slot[ 4 ], ac.Sex ), a_style ) );
+	}
+
+	for ( var i in _QS_DrawOrder )
+		if ( ac.Slot[ _QS_DrawOrder[ i ] ] != 0 )
+			 document.writeln( _GenLayerStr( oid_hdr+( Number( i )+1 ), ( Number( i )+1 )*100, _GetImgTag_QS( ac.Slot[ _QS_DrawOrder[ i ] ].toString(), ac.Sex ), a_style ) );
+			 
+	document.writeln( "</div>" );
+}
+
+function _WriteQSAvatarWithoutItem( ac, objID, clip_x1, clip_y1, clip_x2, clip_y2 )
+{
+	var oid_hdr = "", tid="";
+	if ( objID != null )
+	{
+		tid = " id=" + objID;
+		oid_hdr = objID + "_";
+	}
+	
+	var a_width = QS_WIDTH;
+	if ( clip_x1!=null && clip_x2!=null ) a_width = clip_x2 - clip_x1;
+	
+	var a_height = QS_HEIGHT;
+	if ( clip_y1!=null && clip_y2!=null ) a_height = clip_y2 - clip_y1;
+	
+	document.writeln( "<div"+tid+" style='position:relative; width:"+a_width+"px; height:"+a_height+"px;'>" );
+	document.writeln( "</div>" );
+}
+
+// QPMon
+function _GetImgTag_QM( itemno, straction )
+{
+	return '<IMG src="' + g_ImgPath + '/QMon/' + ( itemno%1000000 ) + '_' + straction + '.gif">';
+}
+function _WriteQMAvatar( itemno, straction, objID, clip_x1, clip_y1, clip_x2, clip_y2 )
+{
+	var oid_hdr = "", tid="";
+	if ( objID != null )
+	{
+		tid = " id=" + objID;
+		oid_hdr = objID + "_";
+	}
+	
+	var action = ( straction == null ) ? "044" : straction;
+	
+	var a_width = QM_WIDTH;
+	if ( clip_x1!=null && clip_x2!=null ) a_width = clip_x2 - clip_x1;
+	
+	var a_height = QM_HEIGHT;
+	if ( clip_y1!=null && clip_y2!=null ) a_height = clip_y2 - clip_y1;
+	
+	var a_top = ( clip_y1 == null ) ? "" : "top:"+( clip_y1*-1 )+" ; ";
+	var a_left = ( clip_x1 == null ) ? "" : "left:"+( clip_x1*-1 )+" ; ";
+
+	var a_style = _clipStr( clip_y1, clip_x2, clip_y2, clip_x1 ) + a_top + a_left;
+
+	document.writeln( "<div"+tid+" style='position:relative; width:"+a_width+"px; height:"+a_height+"px;'>" );
+	
+	document.writeln( _GenLayerStr( oid_hdr+"0", 0, ( itemno != 0 ) ? _GetImgTag_QM( itemno, action ) : "", a_style ) );
+		
+	document.writeln( "</div>" );
+}
+
+function _WriteQMAvatarWithoutItem( itemno, straction, objID, clip_x1, clip_y1, clip_x2, clip_y2 )
+{
+	var oid_hdr = "", tid="";
+	if ( objID != null )
+	{
+		tid = " id=" + objID;
+		oid_hdr = objID + "_";
+	}
+	
+	var action = ( straction == null ) ? "044" : straction;
+	
+	var a_width = QM_WIDTH;
+	if ( clip_x1!=null && clip_x2!=null ) a_width = clip_x2 - clip_x1;
+	
+	var a_height = QM_HEIGHT;
+	if ( clip_y1!=null && clip_y2!=null ) a_height = clip_y2 - clip_y1;
+	
+	var a_top = ( clip_y1 == null ) ? "" : "top:"+( clip_y1*-1 )+" ; ";
+	var a_left = ( clip_x1 == null ) ? "" : "left:"+( clip_x1*-1 )+" ; ";
+
+	var a_style = _clipStr( clip_y1, clip_x2, clip_y2, clip_x1 ) + a_top + a_left;
+
+	document.writeln( "<div"+tid+" style='position:relative; width:"+a_width+"px; height:"+a_height+"px;'>" );
+	
+	document.writeln( _GenLayerStr( oid_hdr+"0", 0, "", a_style ) );
+		
+	document.writeln( "</div>" );
+}
+
+//Interface
+function WriteQPAvatar( strQAView, clip_x1, clip_y1, clip_x2, clip_y2 )
+{
+	_WriteAvatar( new AvatarCore( strQAView ), null, clip_x1, clip_y1, clip_x2, clip_y2 );
+}
+
+function WriteQSAvatar( strQSView, clip_x1, clip_y1, clip_x2, clip_y2 )
+{
+	_WriteQSAvatar( new AvatarCore( strQSView ), null, clip_x1, clip_y1, clip_x2, clip_y2 );
+}
+
+function WriteQMAvatar( itemno, straction /* "000"~"019" */, clip_x1, clip_y1, clip_x2, clip_y2 )
+{
+	_WriteQMAvatar( itemno, straction, null, clip_x1, clip_y1, clip_x2, clip_y2 );
+}
+
+function QAItem2Slot( itemno )
+{
+	return _GetAvatarSlot( itemno );
+}
+
+function QSItem2Slot( itemno, attr )
+{
+	return _GetQSSlot( itemno, attr );
+}
+
+function QAIsCheckFullset( itemno, attr )
+{
+	var itype = _GetCategory( itemno.toString() );
+	return ( itype == "41" || itype == "7" || ( itype == "4" && ( attr&0x1000000 )!=0 ) );
+}
+
+function QACanWear( itemno )
+{
+	return ( _GetCategory( itemno.toString() ) != "" );
+}
+
+function QSIsCheckFullset( attr )
+{
+	return ( ( attr&0x800000 ) != 0 );
+}
+
+function QSCanWear( itemno, attr )
+{
+	return ( _GetQSSlot( itemno, attr ) != -1 );
+}
+
+
+
+// Refresh Category
+
+function _CreateLayer( parent, id, zIndex, clip, top, left )
+{
+	var obj = document.createElement( "DIV" );
+	obj.id = id;
+	obj.style.position ="absolute";
+	obj.style.zIndex = zIndex;
+	//obj.style.clip = clip;
+	obj.style.top = top;
+	obj.style.left = left;	
+
+	parent.appendChild( obj );
+	
+	return obj;
+}
+
+function _CommonRefreshCategory( rl, oid, itemno, sex, type, layer_index )
+{
+	var category = _GetCategory( itemno );
+	rl[ oid+"_"+category ] = [ layer_index, _GetImgTag_Body( itemno, sex, type ) ];
+}
+
+
+function _RefreshCategory_Body( rl, oid, itemno, sex, type )
+{
+	var lorder = itemno.substr( 1,1 )+"00";
+	if ( lorder == "400" ) lorder = "150";
+	_CommonRefreshCategory( rl, oid, itemno, sex, type, lorder );
+}
+
+function _RefreshCategory_Backgorund( rl, oid, itemno, sex, type )
+{
+	rl[ oid+"_66_00" ] = [ 10 , _GetImgTag_Backgorund( itemno, sex, type, "00" ) ];
+	rl[ oid+"_66_01" ] = [ 20 , _GetImgTag_Backgorund( itemno, sex, type, "01" ) ];
+	rl[ oid+"_66_02" ] = [ 600, _GetImgTag_Backgorund( itemno, sex, type, "02" ) ];
+}
+
+function _RefreshCategory_Cospre( rl, oid, itemno, sex, type )
+{
+	_CommonRefreshCategory( rl, oid, itemno, sex, type, 150 );
+}
+
+function _RefreshCategory_Fullset( rl, oid, itemno, sex, type )
+{
+	_CommonRefreshCategory( rl, oid, itemno, sex, type, 150 );
+}
+
+function _GetCategory( itemno )
+{
+	var itype = itemno.substr( 1,2 );
+	if ( typeof( _RefreshCategory[ itype ] ) == "undefined" )
+		itype = itype.substr( 0,1 );
+		
+	if ( typeof( _RefreshCategory[ itype ] ) == "undefined" )
+		return "";
+		
+	return itype;
+}
+
+//_RefreshCategory =
+//{
+//	1  : _RefreshCategory_Body, 
+//	2  : _RefreshCategory_Body,
+//	3  : _RefreshCategory_Body,
+//	4  : _RefreshCategory_Body,
+//	41 : _RefreshCategory_Cospre,
+//	5  : _RefreshCategory_Body,
+//	66 : _RefreshCategory_Backgorund,
+//	7  : _RefreshCategory_Fullset
+//}
+var _RefreshCategory = new Array();
+_RefreshCategory[ 1 ] = _RefreshCategory_Body;
+_RefreshCategory[ 2 ] = _RefreshCategory_Body;
+_RefreshCategory[ 3 ] = _RefreshCategory_Body;
+_RefreshCategory[ 4 ] = _RefreshCategory_Body;
+_RefreshCategory[ 41 ] = _RefreshCategory_Cospre;
+_RefreshCategory[ 5 ] = _RefreshCategory_Body;
+_RefreshCategory[ 66 ] = _RefreshCategory_Backgorund;
+_RefreshCategory[ 7 ] = _RefreshCategory_Fullset;
+
+
+
+// Category2Slot
+
+//_Category2Slot =
+//{
+//	1: 0,
+//	2: 2,
+//	3: 1,
+//	4: 3,
+//	5: 4,
+//	66: 5,
+//	7: 3,
+//	41: 3
+//};
+var _Category2Slot = new Array();
+_Category2Slot[ 1 ] = 0;
+_Category2Slot[ 2 ] = 2;
+_Category2Slot[ 3 ] = 1;
+_Category2Slot[ 4 ] = 3;
+_Category2Slot[ 5 ] = 4;
+_Category2Slot[ 66 ] = 5;
+_Category2Slot[ 7 ] = 3;
+_Category2Slot[ 41 ] = 3;
+
+
+function _GetAvatarSlot( itemno )
+{
+	var itype = _GetCategory( itemno.toString() );
+	if ( itype == "" ) return -1;
+	
+	return _Category2Slot[ itype ];
+}
+
+
+// AavatarViewer class
+function QPAvatarViewer( strQAView, objID, clip_x1, clip_y1, clip_x2, clip_y2 )
+{
+	this._Core = new AvatarCore( strQAView );
+	this._ID = objID;
+	this._clip_x1 = clip_x1;
+	this._clip_y1 = clip_y1;
+	this._clip_x2 = clip_x2;
+	this._clip_y2 = clip_y2;
+	this._effect = 0;
+	this._effectattr = 0;
+
+	this._sclip = _clipStr( clip_y1, clip_x2, clip_y2, clip_x1 );
+	this._stop = ( clip_y1 == null ) ? "0" : ( clip_y1*-1 ).toString();
+	this._sleft = ( clip_x1 == null ) ? "0" : ( clip_x1*-1 ).toString();
+	
+	this.write = function ()
+	{
+		_WriteAvatar( this._Core, this._ID, this._clip_x1, this._clip_y1, this._clip_x2, this._clip_y2 );
+	};
+	this.writeNR= function ()
+	{
+		_WriteAvatarWithoutItem( this._Core, this._ID, this._clip_x1, this._clip_y1, this._clip_x2, this._clip_y2 );
+	};
+	this.getStrQAView = function ()
+	{
+		return this._Core.getStrQAView();
+	};
+	this.setStrQAView = function ( strQAView )
+	{
+		this._Core.setStrQAView( strQAView );
+		this._refresh();
+	};
+	this.setStrQAViewWithEffect = function ( strQAView, effectstr )
+	{
+		effectstr = trim( "" + effectstr );
+		if ( effectstr == "0" || effectstr == "" )
+			effectstr = "0:0";
+
+		this._Core.setStrQAView( strQAView );
+		var ar = effectstr.split( ":" );
+		this._effect = parseInt( ar[ 0 ] );
+		this._effectattr = parseInt( ar[ 1 ] );
+		this._refresh();
+	};
+	this.getSex = function ()
+	{
+		return this._Core.Sex;
+	};
+	this.setSex = function ( sex /* "1":male "2":female */ )
+	{
+		this._Core.Sex = sex;
+		this.unsetAll();
+	};
+	this.getType = function ()
+	{
+		return this._Core.Type;
+	};
+	this.setType = function ( type  /* "01" ~ "18" */ )
+	{
+		this._Core.Type = type;
+		this._refresh();
+	};
+	this.setSlot = function ( slot, itemno, jeni, attr )
+	{
+		if ( itemno == 0 )
+		{
+			if ( slot == 3 ) this._Core.Jeni = "0";
+			this._Core.Slot[ slot ] = 0;
+		}
+		else if ( this._Core.Slot[ slot ] == itemno ) 
+		{
+			if ( jeni ) this._Core.Jeni = "0";
+			this._Core.Slot[ slot ] = 0;
+		}
+		else
+		{
+			this._Core.Slot[ slot ] = itemno;
+			var slot3type = _GetCategory( this._Core.Slot[ 3 ].toString() );
+
+			if ( slot3type == "41" || slot3type == "7" || ( slot3type == "4" && ( attr&0x1000000 )!=0 ) )
+			{
+				if ( slot ==  3 )
+				{
+					this._Core.Slot[ 0 ] = this._Core.Slot[ 1 ] = this._Core.Slot[ 2 ] = this._Core.Slot[ 4 ] = 0;
+					this._Core.Jeni = ( jeni ) ? "1" : "0";
+				}
+				else if ( slot != 5 )
+				{
+					this._Core.Slot[ 3 ] = 0;
+					this._Core.Jeni = "0";
+				}
+			}
+			else if ( slot ==  3 )	this._Core.Jeni = "0";
+
+			if ( slot3type == "4" && ( attr & 0x1000000 ) != 0 )
+			{
+				if ( slot ==  3 )
+				{
+					this._Core.Slot[ 0 ]= 0;
+				}
+				else if ( slot == 0 )
+				{
+					this._Core.Slot[ 3 ] = 0;
+					this._Core.Jeni = "0";
+				}
+			}
+		}
+			
+		this._refresh();
+	};
+	this.addItemNo = function ( itemno, attr, effectattr )
+	{
+		var slot = _GetAvatarSlot( itemno );
+
+		if ( Math.floor( itemno%1000000/10000 ) == 61 && ( ( attr&31 ) == 4 || ( attr&31 ) == 13 ) )
+		{
+			if ( this._effect == itemno )
+			{
+				this._effect = 0;
+				this._effectattr = 0;
+			}
+			else
+			{
+				this._effect = itemno;
+				this._effectattr = ( effectattr==null ) ? 0 : effectattr;
+			}
+				
+			this._refresh();
+			return true;
+		}
+		else if ( slot != -1 ) 
+		{
+			this.setSlot( slot, itemno, ( attr&0x100000 )!=0, attr );
+			return true;
+		}
+		
+		return false;
+	};
+	this.unsetAll = function ()
+	{
+		for ( var i in this._Core.Slot )
+			this._Core.Slot[ i ] = 0;
+		this._Core.Jeni = "0";
+		this._effect = 0;
+
+		this._refresh();
+	};
+	this.getSlot = function ()
+	{
+		return this._Core.Slot;
+	};
+	this.moveToSlot = function  ( itemno, attr )
+	{
+		var itype = _GetCategory( itemno.toString() );
+		
+		if ( itype == "" ) 
+		{
+			//alert( "캐릭터가 입을 수 있는 아이템이 아닙니다." );
+			return -1;
+		}
+		
+		var slot = _Category2Slot[ itype ];
+		
+		if ( slot == 3 )
+		{
+			if ( ( itype == "41" || itype == "7" ) && this._Core.Slot[ 0 ]+this._Core.Slot[ 1 ]+this._Core.Slot[ 2 ]+this._Core.Slot[ 4 ] != 0 )
+			{
+				//alert( "이 아이템을 착용하시려면\n입고 있는 아이템을 모두 벗으셔야 합니다." );
+				return -2;
+			}
+		}
+		else if ( slot != 5 )
+		{
+			var slot3type = _GetCategory( this._Core.Slot[ 3 ].toString() );
+			
+			if ( slot3type == "41" || slot3type == "7" )
+			{
+				//alert( "세트 아이템을 먼저 벗으세요." );
+				return -3;
+			}
+		}
+		
+		var result = this._Core.Slot[ slot ];
+
+		if ( ( attr&0x100000 )!=0 ) this._Core.Jeni = "1";
+		this._Core.Slot[ slot ] = itemno;
+
+		this._refresh();
+		
+		return result;
+	};
+	this.removeFromSlot = function  ( slot )
+	{
+		var result = this._Core.Slot[ slot ];
+
+		if ( slot == 3 ) this._Core.Jeni = "0";
+		this._Core.Slot[ slot ] = 0;
+		
+		this._refresh();
+		
+		return result;
+	};
+	this.getIList = function ()
+	{
+		var ac = new AvatarCore( this.getStrQAView() );
+		ac.Slot[ 6 ] = this._effect;
+		
+		return ac.getIList();
+	};
+	this.diffItem = function ( strQAView_origin )
+	{
+		var ac = new AvatarCore( this.getStrQAView() );
+		ac.Slot[ 6 ] = this._effect;
+		var ac_origin = new AvatarCore( strQAView_origin );
+		ac_origin.Slot[ 6 ] = 0;
+
+		return ac.diffItem( ac_origin.getStrQAView() );
+	};
+	this.getEffect = function ()
+	{
+		return this._effect+":"+this._effectattr;
+	};
+	this.setEffect = function ( effectstr )
+	{
+		effectstr = $.trim( "" + effectstr );
+		if ( effectstr == "0" || effectstr == "" )
+			effectstr = "0:0";
+
+		var ar = effectstr.split( ":" );
+		this._effect = parseInt( ar[ 0 ] );
+		this._effectattr = parseInt( ar[ 1 ] );
+		this._refresh();
+	};
+	this.changeSex = function ()
+	{
+		this.setSex( ( this._Core.Sex == "1" ) ? "2" : "1" );
+	};
+	this.getLevel = function ()
+	{
+		return this._Core.Level;
+	};
+	this.setLevel = function ( level )
+	{
+		this._Core.Level = level.toString();
+		this._refresh();
+	};
+	this.setEventHandler = function ( strevent, func )
+	{
+		var parent = document.getElementById( this._ID );
+		if ( parent == null ) return false;
+
+		parent[ strevent ] = func;
+		return true;
+	};
+	this.setStyle = function ( strstyle, value )
+	{
+		var parent = document.getElementById( this._ID );
+		if ( parent == null ) return false;
+
+		parent.style[ strstyle ] = value;
+		return true;
+	};
+	this.hasItem = function( itemno ) { return this._Core.hasItem( itemno ); }
+	
+	this._refresh = function ()
+	{
+		var parent = document.getElementById( this._ID );
+		if ( parent == null ) return;
+			
+		var renderlist = new Array();
+		
+		//땜빵
+		if ( this._Core.Jeni == "0" ) 
+			renderlist[ this._ID+"_0" ] = [ 50, _GetImgTag_Base( this._Core.Sex, this._Core.Type ) ];
+		if ( this._Core.Slot[ 0 ] == 0 && this._Core.Slot[ 3 ].toString().substr( 1,1 ) != "7" && this._Core.Slot[ 3 ].toString().substr( 1,2 ) != "41" ) 
+			renderlist[ this._ID+"_0h" ] = [ 100, _GetImgTag_Base_Head( this._Core.Sex, this._Core.Type ) ];
+		
+		//effect 
+		if ( this._effect !=0 )
+		{	
+			//성별구분 매직아이템 때문에 구분
+			if( ( this._effect%1000000 ) == "616502" ){
+			renderlist[ this._ID+"_effect" ] = [ ( ( this._effectattr&0x40 )==0 ) ? 1000:30,  '<IMG src="' + g_ImgPath + '/effect/Q' + this._Core.Sex + ( this._effect%1000000 ) + '.gif">' ];
+			}
+			else
+			{ 
+			renderlist[ this._ID+"_effect" ] = [ ( ( this._effectattr&0x40 )==0 ) ? 1000:30,  '<IMG src="' + g_ImgPath + '/effect/Q9' + ( this._effect%1000000 ) + '.gif">' ];
+			}
+		}
+		//level
+		renderlist[ this._ID+"_back" ] = [ 0, _GetImgTag_Back( Number( this._Core.Level ) ) ];
+
+		
+		for ( var i in this._Core.Slot )
+			if ( this._Core.Slot[ i ] != 0 ) 
+			{
+				var itype = _GetCategory( this._Core.Slot[ i ].toString() );
+				_RefreshCategory[ itype ]( renderlist, this._ID, this._Core.Slot[ i ].toString(), this._Core.Sex, this._Core.Type ); 
+			}
+			
+
+		var obj = null;
+		for ( var key in renderlist )
+		{
+			obj = document.getElementById( key );
+			if ( obj == null )
+				obj = _CreateLayer( parent, key, renderlist[ key ][ 0 ], this._sclip, this._stop, this._sleft );
+			else
+				obj.style.zIndex = renderlist[ key ][ 0 ];
+		}
+		
+		var id = "";
+		for ( var i=0; i<parent.childNodes.length; ++i )
+		{
+			id = parent.childNodes[ i ].id;
+			
+			if ( typeof( renderlist[ id ] ) == "undefined" )
+				parent.childNodes[ i ].innerHTML = "";
+			else if ( parent.childNodes[ i ].innerHTML.toLowerCase() != renderlist[ id ][ 1 ].toLowerCase() )
+				parent.childNodes[ i ].innerHTML = renderlist[ id ][ 1 ].toLowerCase();
+		}
+	};
+}
+
+// QSAavatarViewer class Util
+function _GetQSSlot( itemno, attr )
+{
+	if ( itemno == 0 ) return -1;
+	
+	switch ( Math.floor( ( itemno%1000000 )/100000 ) )
+	{
+	case 8: return 0;
+	case 9: return 1;
+	case 0: return 2;
+	}
+	
+	if ( Math.floor( ( itemno%1000000 )/10000 )  == 60 )
+	{
+		if ( ( attr&0x800 ) != 0 )
+			return 3;
+		else if ( ( attr&0x1000 ) != 0 )
+			return 4;
+		else
+			return -1;
+	}
+	else 
+		return -1;
+}
+
+function _RefreshQS( pid, oid, itemno, sex, layer_index, clip, top, left )
+{
+	var parent =  document.getElementById( pid );
+	if ( parent == null ) return;
+
+	var obj = document.getElementById( oid );
+	
+	if ( obj == null )
+		obj = _CreateLayer( parent, oid, layer_index, clip, top, left );
+	
+	obj.innerHTML = _GetImgTag_QS( itemno, sex ).toLowerCase();
+}
+
+// QSAavatarViewer class
+function QSAvatarViewer( strQSView, objID, clip_x1, clip_y1, clip_x2, clip_y2 )
+{
+	this._Core = new AvatarCore( strQSView );
+	this._ID = objID;
+	this._clip_x1 = clip_x1;
+	this._clip_y1 = clip_y1;
+	this._clip_x2 = clip_x2;
+	this._clip_y2 = clip_y2;
+
+	this._sclip = _clipStr( clip_y1, clip_x2, clip_y2, clip_x1 );
+	this._stop = ( clip_y1 == null ) ? "0" : ( clip_y1*-1 ).toString();
+	this._sleft = ( clip_x1 == null ) ? "0" : ( clip_x1*-1 ).toString();
+	
+	this.write = function ()
+	{
+		_WriteQSAvatar( this._Core, this._ID, this._clip_x1, this._clip_y1, this._clip_x2, this._clip_y2 );
+	};
+	this.writeNR = function ()
+	{
+		_WriteQSAvatarWithoutItem( this._Core, this._ID, this._clip_x1, this._clip_y1, this._clip_x2, this._clip_y2 );
+	};
+	this.getStrQSView = function ()
+	{
+		return this._Core.getStrQAView();
+	};
+	this.setStrQSView = function ( strQSView )
+	{
+		this._Core.setStrQAView( strQSView );
+		this._refresh();
+	};
+	this.getSex = function ()
+	{
+		return this._Core.Sex;
+	};
+	this.setSex = function ( sex /* "1":male "2":female */ )
+	{
+		this._Core.Sex = sex;
+		this.unsetAll();
+	};
+	this.setSlot = function ( slot, itemno, fullset )
+	{
+		if ( itemno == 0 )
+		{
+			if ( slot == 0 ) this._Core.Fullset = "0";
+			this._Core.Slot[ slot ] = 0;
+		}
+		else if ( this._Core.Slot[ slot ] == itemno ) 
+		{
+			if ( fullset ) this._Core.Fullset = "0";
+			this._Core.Slot[ slot ] = 0;
+		}
+		else
+		{
+			if ( slot == 0 ) this._Core.Fullset = fullset ? "1" : "0";
+			this._Core.Slot[ slot ] = itemno;
+			
+			if ( this._Core.Fullset == "1" )
+			{
+				if ( slot ==  0 )
+					this._Core.Slot[ 1 ] = this._Core.Slot[ 2 ] = this._Core.Slot[ 4 ] = 0;
+				else if ( slot != 3 )
+				{
+					this._Core.Slot[ 0 ] = 0;
+					this._Core.Fullset = "0";
+				}
+			}
+		}
+		
+		this._refresh();
+	};
+	this.addItemNo = function ( itemno, attr )
+	{
+		var slot = _GetQSSlot( itemno, attr );
+		if ( slot == -1 || slot == 3 ) return false;
+		
+		this.setSlot( slot, itemno, ( attr&0x800000 )!=0 );
+		
+		return true;
+	};
+	this.unsetAll = function ()
+	{
+		for ( var i in this._Core.Slot )
+			this._Core.Slot[ i ] = 0;
+		this._Core.Jeni = "0";
+
+		this._refresh();
+	};
+	this.getSlot = function ()
+	{
+		return this._Core.Slot;
+	};
+	this.moveToSlot = function  ( itemno, attr )
+	{
+		var slot = _GetQSSlot( itemno, attr );
+		
+		var isfullset = ( ( attr&0x800000 ) != 0 );
+		
+		if ( slot == -1 ) 
+		{
+			alert( "슬라임이 입을 수 있는 아이템이 아닙니다." );
+			return -1;
+		}
+		
+		if ( slot == 0 )
+		{
+			if ( isfullset && this._Core.Slot[ 1 ]+this._Core.Slot[ 2 ]+this._Core.Slot[ 4 ] != 0 )
+			{
+				alert( "이 아이템을 착용하시려면\n기능1 아이템을 제외한 입고 있는 아이템을\n모두 벗으셔야 합니다." );
+				return -1;
+			}
+		}
+		else if ( slot != 3 && this._Core.Fullset == "1" )
+		{
+			alert( "세트 아이템을 먼저 벗으세요." );
+			return -1;
+		}
+		
+		var result = this._Core.Slot[ slot ];
+
+		if ( isfullset ) this._Core.Fullset = "1";
+		this._Core.Slot[ slot ] = itemno;
+
+		this._refresh();
+		
+		return result;
+	};
+	this.removeFromSlot = function  ( slot )
+	{
+		var result = this._Core.Slot[ slot ];
+
+		if ( slot == 0 ) this._Core.Fullset = "0";
+		this._Core.Slot[ slot ] = 0;
+		
+		this._refresh();
+		
+		return result;
+	};
+	this.getIList = function ()
+	{
+		return this._Core.getIList();
+	};
+	this.diffItem = function ( strQSView_origin )
+	{
+		return this._Core.diffItem( strQSView_origin )
+	};
+	this.changeSex = function ()
+	{
+		this.setSex( ( this._Core.Sex == "1" ) ? "2" : "1" );
+	};
+	
+	this.setEventHandler = function ( strevent, func )
+	{
+		var parent = document.getElementById( this._ID );
+		if ( parent == null ) return false;
+
+		parent[ strevent ] = func;
+		return true;
+	};
+	this.setStyle = function ( strstyle, value )
+	{
+		var parent = document.getElementById( this._ID );
+		if ( parent == null ) return false;
+
+		parent.style[ strstyle ] = value;
+		return true;
+	};
+	this.hasItem = function( itemno ) { return this._Core.hasItem( itemno ); }
+	
+	this._refresh = function ()
+	{
+		var parent = document.getElementById( this._ID );
+		if ( parent == null ) return;
+		
+		for ( var i=0; i<parent.childNodes.length; ++i )
+			parent.childNodes[ i ].innerHTML = "";
+
+		//땜빵
+		if ( this._Core.Fullset == "0" )
+		{
+			var obj = document.getElementById( this._ID+"_0" );
+			if ( obj == null )
+				obj = _CreateLayer( parent, this._ID+"_0", 0, this._sclip, this._stop, this._sleft );	
+			if ( this._Core.Slot[ 4 ] == 0 )
+				obj.innerHTML = _GetImgTag_QSBase( this._Core.Sex ).toLowerCase();
+			else
+				obj.innerHTML = _GetImgTag_QS( this._Core.Slot[ 4 ], this._Core.Sex ).toLowerCase();
+		}
+		
+		for ( var i in _QS_DrawOrder )
+			if ( this._Core.Slot[ _QS_DrawOrder[ i ] ] != 0 )
+				_RefreshQS( this._ID, this._ID+"_"+( Number( i )+1 ), this._Core.Slot[ _QS_DrawOrder[ i ] ], this._Core.Sex, ( Number( i )+1 )*100, this._sclip, this._stop, this._sleft );
+	};
+}
+
+
+
+// QMAvatarViewer class
+function QMAvatarViewer( itemno, straction,  objID, clip_x1, clip_y1, clip_x2, clip_y2 )
+{
+	this._itemno = itemno;
+	this._action = straction;
+	
+	this._ID = objID;
+	this._clip_x1 = clip_x1;
+	this._clip_y1 = clip_y1;
+	this._clip_x2 = clip_x2;
+	this._clip_y2 = clip_y2;
+
+	this._sclip = _clipStr( clip_y1, clip_x2, clip_y2, clip_x1 );
+	this._stop = ( clip_y1 == null ) ? "0" : ( clip_y1*-1 ).toString();
+	this._sleft = ( clip_x1 == null ) ? "0" : ( clip_x1*-1 ).toString();
+	
+	this.write = function ()
+	{
+		_WriteQMAvatar( this._itemno, this._action, this._ID, this._clip_x1, this._clip_y1, this._clip_x2, this._clip_y2 );
+	};
+	this.writeNR = function ()
+	{
+		_WriteQMAvatarWithoutItem( this._itemno, this._action, this._ID, this._clip_x1, this._clip_y1, this._clip_x2, this._clip_y2 );
+	};
+	this.setItem = function ( itemno )
+	{
+		this._itemno = itemno;
+		this._refresh();
+	};
+	this.setAction = function ( straction )
+	{
+		this._action = straction;
+		this._refresh();
+	};
+	this.getItem = function ()
+	{
+		return this._itemno;
+	};
+	this.getAction = function ()
+	{
+		return this._action;
+	};
+	this.addItemNo = function ( itemno, attr )
+	{
+		if ( Math.floor( ( itemno%1000000 )/10000 ) != 67 || ( attr&0x200000 ) == 0 ) return false;
+
+		this._action = "044";
+		this._itemno = ( this._itemno == itemno || itemno == 0 ) ? 0 : itemno;
+
+		this._refresh();
+		
+		return true;
+	};
+	this.setEventHandler = function ( strevent, func )
+	{
+		var parent = document.getElementById( this._ID );
+		if ( parent == null ) return false;
+
+		parent[ strevent ] = func;
+		return true;
+	};
+	this.setStyle = function ( strstyle, value )
+	{
+		var parent = document.getElementById( this._ID );
+		if ( parent == null ) return false;
+
+		parent.style[ strstyle ] = value;
+		return true;
+	};
+	this.getStrQMView = function ()
+	{
+		return "strQMView:" + ( ( this._action==null ) ? "044" : this._action ) + "|" + this._itemno;
+	};
+	this.setStrQMView = function ( strQMView )
+	{
+		var body = strQMView.split( "|" );
+		if ( body.length != 2 ) return false;
+		
+		var hdr = body[ 0 ].split( ":" );
+		if ( body.length != 2 || hdr[ 0 ] != "strQMView" ) return false;
+		
+		this._action = hdr[ 1 ];
+		this._itemno = Number( body[ 1 ] );
+		this._refresh();
+
+		return true;
+	};
+	this.getIList = function ()
+	{
+		if ( this._itemno == 0 )
+			return "IList:0|"
+		else
+			return "IList:1|" + this._itemno + ",1|";
+	};
+	this.diffItem = function ( strQMView_orign )
+	{
+		var body = strQMView_orign.split( "|" );
+		if ( body.length != 2 ) return "";
+		
+		var origin_itemno = Number( body[ 1 ] );
+		if ( this._itemno != origin_itemno && this._itemno != 0 )
+			return "IList:1|" + this._itemno + ",1|";
+		else 
+			return "IList:0|"
+	};
+	this.changeSex = function()
+	{
+		var sex = Math.floor( this._itemno / 1000000 );
+		sex = ( sex == 1 ) ? 2 : 1;
+		this._itemno = ( this._itemno % 1000000 ) + ( sex * 1000000 );
+		this._refresh();
+	}
+	this.hasItem = function( itemno ) { return ( this._itemno == itemno ) }
+	
+	this._refresh = function ()
+	{
+		var obj = document.getElementById( this._ID+"_0" );
+		
+		if ( obj == null ) return;
+		
+		if ( this._itemno == 0 )
+			obj.innerHTML = "";
+		else 
+		{
+			var action = ( this._action == null ) ? "044" : this._action;
+			obj.innerHTML = _GetImgTag_QM( this._itemno, action ).toLowerCase();
+		}
+	};
+}
+
+// MultiAvatarViewer
+function MultiAvatarViewer( strQAView, strQSView, strQMView, codetype, id, Avatar_ID )
+{
+	this.Avatar_ID = Avatar_ID;
+	this.isLoad = false;
+	this._AVString_Origin = new Array( null, '', '', '' );
+	this._AVArray = new Array( null, new QPAvatarViewer( strQAView, id+"1" ), new QSAvatarViewer( strQSView, id+"2" ), new QMAvatarViewer( 0, null, id+"3" ) );
+	this._AVArray[ 3 ].setStrQMView( strQMView );
+	this._CodeType = codetype;
+	this._ID = id;
+
+	this.write = function()
+	{
+		document.writeln( "<div id='"+this._ID+"_1"+"' style='position:relative'>" );
+		this._AVArray[ 1 ].write();
+		document.writeln( "</div>" );
+		
+		document.writeln( "<div id='"+this._ID+"_2"+"' style='position:relative; width:154px; margin:0 auto;'>" );
+		document.writeln( "<table border=0 cellspacing=0 cellpadding=0 background='https://web.archive.org/web/20141031215227/http://qplay.nx.com/image/shop/back_slime.gif' width=154 height=132><tr><td valign=bottom align=center style='padding:0 0 10px 0'>" );
+		document.writeln( "<table border=0 cellspacing=0 cellpadding=0><tr><td>" );
+		this._AVArray[ 2 ].write();
+		document.writeln( "</td></tr></table>" );
+		document.writeln( "</td></tr></table>" );
+		document.writeln( "</div>" );
+		
+		document.writeln( "<div id='"+this._ID+"_3"+"' style='position:relative; width:154px; margin:0 auto;'>" );
+		document.writeln( "<table border=0 cellspacing=0 cellpadding=0 background='https://web.archive.org/web/20141031215227/http://qplay.nx.com/image/shop/back_cupimon.gif' width=154 height=132><tr><td valign=bottom align=center style='padding:0 0 10px 0'>" );
+		document.writeln( "<table border=0 cellspacing=0 cellpadding=0><tr><td>" );
+		this._AVArray[ 3 ].write();
+		document.writeln( "</td></tr></table>" );
+		document.writeln( "</td></tr></table>" );
+		document.writeln( "</div>" );
+		
+		this.setCodeType( this._CodeType );	
+		this.SetDefault();
+	}
+	
+	this.writeNR = function()
+	{
+		document.writeln( "<div id='"+this._ID+"_1"+"' style='position:relative; width:154px; margin:0 auto;'>" );
+		this._AVArray[ 1 ].writeNR();
+		document.writeln( "</div>" );
+		
+		document.writeln( "<div id='"+this._ID+"_2"+"' style='position:relative; width:154px; margin:0 auto;'>" );
+		document.writeln( "<table border=0 cellspacing=0 cellpadding=0 background='https://web.archive.org/web/20141031215227/http://qplay.nx.com/image/shop/back_slime.gif' width=154 height=132><tr><td valign=bottom align=center style='padding:0 0 10px 0'>" );
+		document.writeln( "<table border=0 cellspacing=0 cellpadding=0><tr><td>" );
+		this._AVArray[ 2 ].writeNR();
+		document.writeln( "</td></tr></table>" );
+		document.writeln( "</td></tr></table>" );
+		document.writeln( "</div>" );
+		
+		document.writeln( "<div id='"+this._ID+"_3"+"' style='position:relative; width:154px; margin:0 auto;'>" );
+		document.writeln( "<table border=0 cellspacing=0 cellpadding=0 background='https://web.archive.org/web/20141031215227/http://qplay.nx.com/image/shop/back_cupimon.gif' width=154 height=132><tr><td valign=bottom align=center style='padding:0 0 10px 0'>" );
+		document.writeln( "<table border=0 cellspacing=0 cellpadding=0><tr><td>" );
+		this._AVArray[ 3 ].writeNR();
+		document.writeln( "</td></tr></table>" );
+		document.writeln( "</td></tr></table>" );
+		document.writeln( "</div>" );
+		
+		this.setCodeType( this._CodeType );	
+		this.SetDefault();
+	}
+	
+	this.setAction = function( straction )
+	{
+		this._AVArray[ 3 ].setAction( straction );
+	}
+		
+	this.SetDefault = function()
+	{
+		if( !this.isLoad )
+		{
+			this._AVString_Origin[ 1 ] = this.getAViewByCodeType( 1 );
+			this._AVString_Origin[ 2 ] = this.getAViewByCodeType( 2 );
+			this._AVString_Origin[ 3 ] = this.getAViewByCodeType( 3 );
+			this.isLoad = true;
+		}
+	}
+	
+	this.setOrigin = function()
+	{
+		if( this._CodeType == 1 )
+		{
+			this.setStrQAView( this._AVString_Origin[ 1 ] );
+			this.setEffect( 0 );
+		}
+		else if( this._CodeType == 2 )
+		{
+			this.setStrQSView( this._AVString_Origin[ 2 ] );
+		}
+			
+	}
+	
+	this.setCodeType = function( codetype )
+	{
+		this._CodeType = codetype;
+		
+		for ( var i=1; i<4; ++i )
+		{
+			var obj = document.getElementById( this._ID+"_"+i );
+			if ( obj != null )
+				obj.style.display = ( i==codetype ) ? "block" : "none";
+		}
+	}
+	
+	this.getCodeType = function()
+	{
+		return this._CodeType;
+	}
+	
+	this.addItemNoByCodeType = function( codetype, itemno, attr, effectattr )
+	{
+		return this._AVArray[ codetype ].addItemNo( itemno, attr, effectattr );
+	}
+	
+	this.addItemNo = function( itemno, attr, effectattr )
+	{
+		for ( var i=1; i<4; ++i )
+		{
+			if ( this._AVArray[ i ].hasItem( itemno ) && this._CodeType != i )
+			{
+				this.setCodeType( i );
+				return true;
+			}
+						
+			if ( this._AVArray[ i ].addItemNo( itemno, attr, effectattr ) ) 
+			{
+				if ( this._CodeType != i )
+					this.setCodeType( i );
+				
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	this.getAViewByCodeType = function( codetype )
+	{
+		switch( codetype )
+		{
+		case 1: return this._AVArray[ 1 ].getStrQAView();
+		case 2: return this._AVArray[ 2 ].getStrQSView();
+		case 3: return this._AVArray[ 3 ].getStrQMView();
+		}
+	}
+	
+	this.getAView = function()
+	{
+		return this.getAViewByCodeType( this._CodeType );
+	}
+	
+	this.getIListByCodeType = function( codetype )
+	{
+		return this._AVArray[ codetype ].getIList();
+	}
+	
+	this.getIList = function()
+	{
+		return this.getIListByCodeType( this._CodeType );
+	}
+
+	this.diffItemByCodeType = function( codetype, strAView_origin )
+	{
+		return this._AVArray[ codetype ].diffItem( strAView_origin );
+	}
+
+	this.diffItem = function( strAView_origin )
+	{
+		return this.diffItemByCodeType( this._CodeType, strAView_origin );
+	}
+	
+
+	this._refreshByCodeType = function( codetype )
+	{
+		this._AVArray[ codetype ]._refresh();
+	}
+
+	this._refresh = function()
+	{
+		for ( var i=1; i<4; ++i )
+		{
+			this._refreshByCodeType( i );
+		}
+	}
+	
+	this.changeSex = function()
+	{
+		for ( var i=1; i<4; ++i )
+		{
+			this._AVArray[ i ].changeSex();
+		}
+	}
+	this.getSex = function()
+	{
+		return this._AVArray[ 1 ].getSex();
+	}
+	
+	this.setEffect = function( effectstr )
+	{
+		this._AVArray[ 1 ].setEffect( effectstr ) ;
+	}
+
+	this.setEffectNR = function( effectstr )
+	{
+		var ar = effectstr.split( ":" );
+		this._AVArray[ 1 ]._effect = parseInt( ar[ 0 ] );
+		this._AVArray[ 1 ]._effectattr = parseInt( ar[ 1 ] );
+	}
+	
+	this.setStrQAView = function( strQAView )
+	{
+		this._AVArray[ 1 ].setStrQAView( strQAView );
+	}
+	
+	this.setStrQAViewWithEffect = function( strQAView, effectstr )
+	{
+		this._AVArray[ 1 ].setStrQAViewWithEffect( strQAView, effectstr );
+	}
+	
+	this.setStrQSView = function( strQSView )
+	{
+		this._AVArray[ 2 ].setStrQSView( strQSView );
+	}
+	
+	this.setStrQMView = function( strQMView )
+	{
+		this._AVArray[ 3 ].setStrQMView( strQMView );
+	}
+	
+	this.getEffect = function()
+	{
+		return this._AVArray[ 1 ].getEffect();
+	}
+	
+	this.unsetAllByCodeType = function( codetype )
+	{
+		switch ( codetype )
+		{
+			case 1 : this._AVArray[ 1 ].unsetAll(); break;
+			case 2 : this._AVArray[ 2 ].unsetAll(); break;
+			case 3 : this._AVArray[ 3 ].setStrQMView( "strQMView:044|0" ); break;
+		}
+	}
+	
+	this.unsetAll = function()
+	{
+		switch ( this._CodeType )
+		{
+			case 1 : this._AVArray[ 1 ].unsetAll(); break;
+			case 2 : this._AVArray[ 2 ].unsetAll(); break;
+			case 3 : this._AVArray[ 3 ].setStrQMView( "strQMView:044|0" ); break;
+		}
+	}
+}
+
+
+function Mon( ItemNo )
+{
+	this._ItemNo = ItemNo % 10 ;
+	this.WriteAbility = function Mon_WriteAbility( nAbility )
+	{
+		var strReturn = "";
+		for( var i=0 ; i < nAbility ; i++ )
+			strReturn += "<img src='https://web.archive.org/web/20141031215227/http://s.nx.com/S2/Game/Qplay/2010/icon/ico_ability_on.gif'> ";
+		for( var j=3 ; j > nAbility ; j-- )
+			strReturn += "<img src='https://web.archive.org/web/20141031215227/http://s.nx.com/S2/Game/Qplay/2010/icon/ico_ability_off.gif'> ";
+		return strReturn;
+	};
+	switch( this._ItemNo )
+	{
+		case 1: // 670001
+			this.MonName = "버티고";
+			this.MonAttack = 3;
+			this.MonDefense = 2;
+			this.MonStamina = 2;
+			this.MonAgility = 1;
+			break;
+		case 2: // 670002
+			this.MonName = "워니워니";
+			this.MonAttack = 2;
+			this.MonDefense = 2;
+			this.MonStamina = 2;
+			this.MonAgility = 2;
+			break;
+		case 3: // 670003
+			this.MonName = "씨리안";
+			this.MonAttack = 1;
+			this.MonDefense = 2;
+			this.MonStamina = 3;
+			this.MonAgility = 2;
+			break;
+		case 4: // 670004
+			this.MonName = "레비";
+			this.MonAttack = 2;
+			this.MonDefense = 2;
+			this.MonStamina = 1;
+			this.MonAgility = 3;
+			break;
+		case 5: // 670005
+			this.MonName = "봉다리";
+			this.MonAttack = 2;
+			this.MonDefense = 3;
+			this.MonStamina = 2;
+			this.MonAgility = 1;
+			break;
+		case 6: // 670006
+			this.MonName = "아이";
+			this.MonAttack = 2;
+			this.MonDefense = 2;
+			this.MonStamina = 2;
+			this.MonAgility = 2;
+			break;
+		case 7: // 670007
+			this.MonName = "핑캣";
+			this.MonAttack = 2;
+			this.MonDefense = 2;
+			this.MonStamina = 1;
+			this.MonAgility = 3;
+			break;
+	}
+}
+
+function ViewMonInfo( ItemNo )
+{
+	var objMon = new Mon( Number( ItemNo ) );
+	$( '#divMonName' ).html( objMon.MonName + " LV 1 EXP 1" );
+	$( '#divMonAttack' ).html( "공격" + objMon.WriteAbility( objMon.MonAttack ) );
+	$( '#divMonDefense' ).html( "방어" + objMon.WriteAbility( objMon.MonDefense ) );
+	$( '#divMonStamina' ).html( "체력" + objMon.WriteAbility( objMon.MonStamina ) );
+	$( '#divMonAgility' ).html( "민첩" + objMon.WriteAbility( objMon.MonAgility ) );
+
+	$( '#Monability' ).show();
+}
+
+function ViewMonInfoForMakeup( ItemNo, monLevel )
+{
+	var objMon = new Mon( Number( ItemNo ) );
+	$( '#monName' ).html( objMon.MonName );
+	$( '#monLevel' ).html( '1' );
+	$( '#monExp' ).html( '0' );
+	
+	$( '#divMonAttack' ).html( objMon.WriteAbility( objMon.MonAttack ) );
+	$( '#divMonDefense' ).html( objMon.WriteAbility( objMon.MonDefense ) );
+	$( '#divMonStamina' ).html( objMon.WriteAbility( objMon.MonStamina ) );
+	$( '#divMonAgility' ).html( objMon.WriteAbility( objMon.MonAgility ) );
+
+	var i = 0;
+	jQuery.each( $( '.emoticon img' ), function()
+	{
+		if( monLevel >= $( this ).attr( 'alt' )  )
+		{
+			if( $( this ).attr( 'src').indexOf( '_on.gif' ) == -1 )
+			{
+				$( this ).attr( 'src', $( this ).attr( 'src' ).replace( '.gif', '_on.gif' ) );
+				$( this ).click( function() 
+				{
+					var title = $( this ).attr( 'title' );
+					var action = title.substr( 0, 3 );
+					var desc = title.substr( 4 )
+					Avatar_User.setAction( action );
+					$( '#emoticonDesc' ).html( desc );
+				} );	
+			}
+		}
+		else
+		{
+			$( this ).attr( 'src', $( this ).attr( 'src' ).replace( '_on.gif', '.gif' ) );
+			$( this ).unbind( 'click' );
+		}
+	} );
+}
+
+function SetWearItem()
+{
+	var codetype = Avatar_User.getCodeType();
+	var sex = Avatar_User.getSex();
+
+	var cookieName = Avatar_User.Avatar_ID + '_' + codetype + '_' + sex;
+	setCookieForShop( cookieName, Avatar_User.getAView() );
+	setCookieForShop( cookieName + '_e', Avatar_User.getEffect() );
+}
+							
+function GetWearItem( Avatar_ID )
+{
+	var codetype = Avatar_User.getCodeType();
+	var sex = Avatar_User.getSex();
+	var cookieName = Avatar_ID + '_' + codetype + '_' + sex;
+	var value = getCookiesForShop( cookieName );
+	var valueEffect = getCookiesForShop( cookieName + '_e' );
+
+	if( value != null && value != '' )
+	{
+		if( codetype == 1 )
+		{
+			Avatar_User.setStrQAView( value );
+			if( valueEffect != null && valueEffect != '' )
+				Avatar_User.setEffect( valueEffect );
+		}
+		else if( codetype == 2 )
+		{
+			Avatar_User.setStrQSView( value );
+		}
+	}
+	Avatar_User._refresh();
+}
+
+function fn_TaskOff()
+{
+	Avatar_User.unsetAll();
+	SetWearItem();
+}
+
+function fn_SetOrigin()
+{
+	Avatar_User.setOrigin();
+	SetWearItem();
+}
+
+function setCookieForShop(nameVal, value) {
+	document.cookie = nameVal + "=" + escape( value ) + "; path=/; domain=qplay.nexon.com;";
+}
+
+function getCookiesForShop(nameVal)
+{
+	var numCookie = document.cookie.length;
+	var oven = document.cookie.split( "; " );
+
+	for ( var i = 0; i < oven.length; i++ )
+	{
+		if ( oven[i].indexOf( "=" ) != -1 )
+		{
+			cookieName = oven[i].substring( 0, oven[i].indexOf( "=" ) );
+		} else {
+			cookieName = oven[i];
+		}
+
+		if ( cookieName == nameVal )
+		{
+			if ( oven[i].indexOf( "=" ) != -1 )
+			{
+				cookieVal = oven[i].substr( oven[i].indexOf( "=" ) + 1 );
+			} else {
+				cookieVal = "";
+			}
+			return unescape( cookieVal );
+		}
+	}
+	return "";
+}
+
+
+}
+/*
+     FILE ARCHIVED ON 21:52:27 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:17 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.571
+  exclusion.robots: 0.02
+  exclusion.robots.policy: 0.008
+  esindex: 0.01
+  cdx.remote: 14.837
+  LoadShardBlock: 52.139 (3)
+  PetaboxLoader3.datanode: 99.258 (5)
+  load_resource: 227.381 (2)
+  PetaboxLoader3.resolve: 63.226 (2)
+*/

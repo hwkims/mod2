@@ -1,0 +1,52 @@
+var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
+if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
+{
+  let window = _____WB$wombat$assign$function_____("window");
+  let self = _____WB$wombat$assign$function_____("self");
+  let document = _____WB$wombat$assign$function_____("document");
+  let location = _____WB$wombat$assign$function_____("location");
+  let top = _____WB$wombat$assign$function_____("top");
+  let parent = _____WB$wombat$assign$function_____("parent");
+  let frames = _____WB$wombat$assign$function_____("frames");
+  let opener = _____WB$wombat$assign$function_____("opener");
+
+if( document.getElementById( "formLogin" ) === null ) {
+	document.write( "<FORM name='formLogin' method='post' id='formLogin'></FORM>" );
+}
+
+NgbEVM.RaiseEvent( NgbEVM.k_nEventType_onPageEnd );
+NgbEVM.ReplaceEventHandler();
+
+var google_conversion_id = 977536595;
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+
+if (document.location.host != 'member.nexon.com' && document.location.host != 'user.nexon.com')
+{
+	if( document.location.protocol == "https:" )
+		document.write( '<scr' + 'ipt type="text/javascript" src="https://web.archive.org/web/20141031215228/https://www.googleadservices.com/pagead/conversion.js"></scr' + 'ipt>' );
+	else 
+		document.write( '<scr' + 'ipt type="text/javascript" src="https://web.archive.org/web/20141031215228/http://www.googleadservices.com/pagead/conversion.js"></scr' + 'ipt>' );
+}
+
+}
+/*
+     FILE ARCHIVED ON 21:52:28 Oct 31, 2014 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 00:31:21 Sep 10, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.625
+  exclusion.robots: 0.023
+  exclusion.robots.policy: 0.01
+  esindex: 0.014
+  cdx.remote: 8.505
+  LoadShardBlock: 151.904 (3)
+  PetaboxLoader3.datanode: 88.709 (5)
+  PetaboxLoader3.resolve: 169.447 (3)
+  load_resource: 111.58 (2)
+*/
